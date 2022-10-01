@@ -7,6 +7,6 @@ Previously, I was a Machine Learning Engineer at [Revolut](https://www.revolut.c
 <!-- My academic interests lie in the areas of statistics and machine learning. -->
 
 # Blogs
-[Kernel-Based Distribution Discrepancies](blogs/kernel-based-distribution-discrepancies/main.md)
+[Kernel-Based Distribution Discrepancies](blogs/kernel-based-distribution-discrepancies/main.tex.md)
 
 # Previous Work
