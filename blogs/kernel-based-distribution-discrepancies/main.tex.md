@@ -229,7 +229,7 @@ We can observe the KSD's behaviour as we shift the mean or scale the covariance 
 
 ![Figure 1](figures/ksd_mean_covariance_shift.png) -->
 
-## Visualizing Stein Kernels
+## Visualising Stein Kernels
 
 We can visualise the kernel with respect to its different parameters:
 
@@ -284,6 +284,8 @@ and
 $$\nabla_x \log {p}(x) = - \Sigma^{-1} (x-\mu)$$
 
 The quantity $\nabla_x \log {p}(x)$ is also known as the score of $p(x)$. -->
+
+## Stein Kernel vs KSD 
 
 
 # Appendix 
