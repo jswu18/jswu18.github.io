@@ -1,7 +1,7 @@
 menu:
-- {name: 'About', url: '/about'}
-- {name: 'Blog Posts', url: '/blog-posts'}
 - {name: 'Research', url: '/publications'}
+- {name: 'Blog Posts', url: '/blog-posts'}
+- {name: 'About', url: '/about'}
 # - {name: 'cv', url: '/cv'}
 # - {name: 'contact', url: '/contact'}
 
