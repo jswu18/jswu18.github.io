@@ -16,11 +16,11 @@ menu:
 # - {name: 'Stellar Structures', url: 'stellar-structures'}
 
 social:
+- {icon: 'linkedin', link: 'https://linkedin.com/in/jswu18'}
+- {icon: 'envelope', link: 'mailto:jian.wu.22@ucl.ac.uk'}
 - {icon: 'github', link: 'https://github.com/jswu18'}
 # - {icon: 'twitter', link: 'https://twitter.com/paululele'}
 # - {icon: 'instagram', link: 'https://instagram.com/paululele'}
-- {icon: 'linkedin', link: 'https://linkedin.com/in/jswu18'}
-- {icon: 'telegram', link: 'mailto:jian.wu.22@ucl.ac.uk'}
 
 # contacts:
 # - {
