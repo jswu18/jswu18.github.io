@@ -1,5 +1,7 @@
 featured:
-- {name: 'Kernel Based Distribution Discrepancies', url: 'kernel-based-distribution-discrepancies.html'}
+# - {name: 'Kernel Based Distribution Discrepancies', url: 'kernel-based-distribution-discrepancies.html'}
+- {name: 'Gaussian Processes', url: 'gaussian-processes.html'}
 
 index:
 - {name: 'Kernel Based Distribution Discrepancies', url: 'kernel-based-distribution-discrepancies.html'}
+- {name: 'Gaussian Processes', url: 'gaussian-processes.html'}
