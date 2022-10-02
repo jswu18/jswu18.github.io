@@ -1,5 +1,5 @@
 menu:
-- {name: 'About', url: './about.html'}
+- {name: 'About', url: '/about'}
 - {name: 'Blog Posts', url: '/blog-posts'}
 - {name: 'Research', url: '/publications'}
 # - {name: 'cv', url: '/cv'}
