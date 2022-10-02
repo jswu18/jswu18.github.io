@@ -10,6 +10,8 @@ There are many online posts explaining Gaussian Processes. After reading through
 import math
 import numpy as np
 import matplotlib.pyplot as plt
+
+np.random.seed(0)
 ```
 
 We begin with a basic Gaussian distribution....it is called a Gaussian Process after all! 
@@ -64,14 +66,14 @@ histogram = plt.hist2d(x=samples[:, 0], y=samples[:, 1], bins=50)
 
 For high dimensions, we can plot a single sample with the x-axis representing each dimension of the multi-variate Gaussian
 
-~~~python
+```python
 k = 100
 mu = np.zeros(k)
 covariance = np.eye(k)
 
 sample = np.random.multivariate_normal(mu, covariance)
 fig = plt.plot(sample.transpose())
-~~~
+```
 
 <figure class="image" align="center">
   <img src="gaussian-processes/identity_covariance_sample.png" width="50%">

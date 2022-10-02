@@ -7,7 +7,7 @@ layout: post
 ## What is a Distribution Discrepancy?
 
 
-# Integral Probability Metrics
+## Integral Probability Metrics
 
 One method of comparing two distributions is with the Integral Probability Metrics, defined as:
 
@@ -33,7 +33,7 @@ The witness function exposes the differences between the two distributions. In t
 
 So far we've developed some intution for the IPM definition, in particular the purpose of the transformation $$f$$. This seem like a promising approach to calculating a distribution discrepancy but we might be asking, *how exactly do we evaluate this supremum?* I mentioned for the figure above that it was only a possible witness function and this because computing the actual IPM would require a to search through *all* possible functions $$F$$ to find our actual witness function. As you might imagine, this is not an easy task.
 
-# Maximum Mean Discrepancy
+## Maximum Mean Discrepancy
 
 Because the kernels associated with our RKHS are in the form of expectations, from which we want to maximise their discrepancy, this formulation of the IPM is known as the Maximum Mean Discrepancy (MMD). We can define:
 
@@ -49,9 +49,7 @@ In other words, our restriction states that the largest possible scaling of $$x$
 
 It can be shown that:
 
-$$MMD^2 =  \mathbb{E}_{X, \tilde{X} \sim \mathbb{P}}[k(X,\tilde{X})]-2\mathbb{E}_{X \sim \mathbb{P},Y \sim \mathbb{Q}}[k(X,Y)]+\mathbb{E}_{Y, \tilde{Y} \sim \mathbb{Q}}[k(Y,\tilde{Y})]$$
-
-where $$k$$ is a kernel associated with the chosen RKHS (see [here](##MMD-Derivation) for the derivation).
+$$MMD^2 =  \mathbb{E}_{X, \tilde{X} \sim \mathbb{P}}[k(X,\tilde{X})]-2\mathbb{E}_{X \sim \mathbb{P},Y \sim \mathbb{Q}}[k(X,Y)]+\mathbb{E}_{Y, \tilde{Y} \sim \mathbb{Q}}[k(Y,\tilde{Y})]$$ where $$k$$ is a kernel associated with the chosen RKHS (see [here](###MMD-Derivation) for the derivation).
 
 An unbiased estimate of MMD:
 $$\hat{MMD}^2 = \frac{1}{m(m-1)}\sum_{i=1}^{m}\sum_{j\neq i}^{m}k(x_i, x_j)+\frac{1}{n(n-1)}\sum_{i=1}^{n}\sum_{j\neq i}^{n}k(y_i, y_j)-\frac{2}{mn}\sum_{i=1}^{m}\sum_{j=1}^{n}k(x_i, y_j)$$
@@ -71,7 +69,7 @@ On the other hand, when shifting the mean of the distribution, all polynomial ke
 This motivates the intuition for using an exponential type kernel, which when decomposed, is the power series. By incoporating all possible moments of the signal (distribution), the kernel can be interpreted as a transformation into the Fourier domain. As a Fourier type transform, this also ensures that the kernel is injective (i.e. there is no information loss), maintaining the property $$k(X,Y)=0 \Leftrightarrow X = Y$$. -->
 
 
-## MNIST: The MMD
+### MNIST: The MMD
 
 A property of the MMD is that it only requires samples from $$\mathbb{P}$$ and $$\mathbb{Q}$$. In other words, we don't need to know their underlying distributions! This can be particularly useful when we aren't read to make any assumptions about the generating process of a dataset. As an example, we can compare images from the MNIST dataset to quantify the discrepancy between digits.
 
@@ -84,9 +82,11 @@ We can visualise a heatmap of the MMDs for samples from different digits.
 
 Samples from the same digit have much lower MMDs (the diagonal). We can see higher MMDs when comparing digits that are not as similar when written, such as 0 and 1. On the hand, more similar digits like 7 and 9 have lower MMDs, indicating that the distribution of 7 and 9 must be quite similar. It's incredible that we can quantify the discrepancy between these distributions entirely from their samples.
 
-## MNIST: Choosing a better Kernel
+### MNIST: Choosing a better Kernel
 
-## What if we know $$\mathbb{P}$$?
+A gif of kernel vs heatmap
+
+### What if we already know $$\mathbb{P}$$?
 
 The MNIST example showed us how useful the MMD can be when both $$\mathbb{P}$$ and $$\mathbb{Q}$$ are unknown distributions. But what if we already know the pdf of one of the distributions? In this case, sampling from the known pdf would seem like an inefficient way to calculate a discrepancy. Consider an experiment where we increase the number of samples from $$\mathbb{P}$$:
 
@@ -97,11 +97,11 @@ The MNIST example showed us how useful the MMD can be when both $$\mathbb{P}$$ a
 
 We can see that as we increase the number of samples from $$\mathbb{P}$$, the MMD converges to a limit. This is the Kernel Stein Discrepancy of $$\mathbb{P}$$ and $$\mathbb{Q}$$. When the density function of $$\mathbb{P}$$ is known, the KSD provides a closed-formed expression for our MMD. This makes our discrepancy calculation exact, instead of numerically approximated with $$\mathbb{P}$$ samples. It also eliminates the tedious process of sampling $$\mathbb{P}$$. We will explore the KSD in detail in the next section!
 
-# Kernel Stein Discrepancies
+## Kernel Stein Discrepancies
 
 As we saw in the last section, the KSD computes the descrepancy between a known distribution density and an unknown density that we might only be able to sample from. Before introducing the KSD let's look at the Stein Kernel, $$k_{\mathbb{P}}$$, a special kernel formulation.
 
-## Stein Kernels
+### Stein Kernels
 
 A Stein kernel is defined as:
 
@@ -141,7 +141,7 @@ This means that $$k_{\mathbb{P}}$$ can *uniquely* identify when samples from an 
 
 We can see that $$\mathbb{E}[k_{\mathbb{P}}(X, x)] = 0$$ only for the density where $$X \sim \mathbb{P}_0$$. All other densities of $$k_{\mathbb{P}}(X, x)$$ have non-zero expectations.
 
-## The Kernel Stein Discrepancy
+### The Kernel Stein Discrepancy
 
 Given the properties of the Stein kernel, we might see how it could be helpful for formulating the Kernel Stein Discrepancy. To do this, let's first recall our MMD formulation from before:
 
@@ -190,17 +190,24 @@ $$d^{m, n} = \frac{1}{K} \sum_i^N |KSD^n_i - MMD^{m, n}_{i, i}|$$
 
 where the MMD has $$m$$ samples to approximate $$\mathbb{P}$$ to calculate the discrepancy with $$n$$ samples of $$\mathbb{Q}$$. This is compared to the KSD, which incorporates the closed form of $$\mathbb{P}$$ to calculate the discrepancy with the same $$n$$ samples of $$\mathbb{Q}$$. 
 
-![Figure 1](kernel-based-distribution-discrepancies/ksd_vs_mmd_mean_absolute_difference.png)
+<figure class="image" align="center">
+  <img src="kernel-based-distribution-discrepancies/ksd_vs_mmd_mean_absolute_difference.png" width="80%">
+  <figcaption> </figcaption>
+</figure>
 
 As we can see, by increasing both $$m$$ and $$n$$, $$d^{m, n}$$ approaches zero, meaning that each $$MMD^{m, n}_{i, i}$$ approaches its corresponding $$KSD^n_i$$.
-<!-- 
+
 We can further visualise this by plotting individual trials of samples, showing $$MMD^{m, n}_{i, i}$$ with its corresponding $$KSD^n_i$$.
 
-![Figure 1](kernel-based-distribution-discrepancies/ksd_vs_mmd_per_trial.png)
+<figure class="image" align="center">
+  <img src="kernel-based-distribution-discrepancies/ksd_vs_mmd_per_trial.png" width="100%">
+  <figcaption> </figcaption>
+</figure>
+
 
 We see that for each pair of $$MMD^{m, n}_{i, i}$$ and $$KSD^n_i$$, the MMD plots approach the KSD plot as we increase the number of samples of $$\mathbb{P}$$. The MMD obtains a better approximation of $$\mathbb{P}$$ and approaches the closed form solution of the KSD.
 
-We can also plot the mean MMD values with mean KSD values. The mean MMD is computed by:
+<!-- We can also plot the mean MMD values with mean KSD values. The mean MMD is computed by:
 
 $$MMD^{m, n} = \frac{1}{K}\sum_i^K MMD^{m, n}_{i, i}$$
 
@@ -208,9 +215,9 @@ That is, MMDs are only included where each sample from $$\mathbb{P}$$ has a uniq
 
 ![Figure 1](kernel-based-distribution-discrepancies/mean_ksd_vs_mean_mmd.png)
 
-We can see that the MMD plots converge to the KSD plot, which in turn converges to zero as we increase the number of Q samples. -->
+We can see that the MMD plots converge to the KSD plot, which in turn converges to zero as we increase the number of Q samples. 
 
-<!-- ## KSD Definition
+## KSD Definition
 
 Finally, we can define the Kernel Stein Discrepancy (KSD):
 
@@ -224,9 +231,9 @@ where $$x_k \sim \mathbb{Q}$$ for $$k=1,...,n$$
 
 We can observe the KSD's behaviour as we shift the mean or scale the covariance of $$\mathbb{Q}$$:
 
-![Figure 1](kernel-based-distribution-discrepancies/ksd_mean_covariance_shift.png) -->
+![Figure 1](kernel-based-distribution-discrepancies/ksd_mean_covariance_shift.png)  -->
 
-## Visualising Stein Kernels
+### Visualising Stein Kernels
 
 We can visualise the kernel with respect to its different parameters:
 
@@ -243,9 +250,12 @@ We can also visually compare the Stein Kernels across different seed kernels.
   <figcaption>Stein Kernels for different base kernels</figcaption>
 </figure>
 
-<img src="kernel-based-distribution-discrepancies/base_kernel_param_vs_ksd.gif" width="100%" />
+### Stein Kernel vs KSD 
 
-![Alt Text](kernel-based-distribution-discrepancies/base_kernel_param_vs_ksd.gif)
+<figure class="image" align="center">
+  <img src="kernel-based-distribution-discrepancies/base_kernel_param_vs_ksd.gif" width="100%">
+  <figcaption>Stein Kernels for different base kernels</figcaption>
+</figure>
 
   <!-- <img src="/Users/jameswu/repositories/jswu18.github.io/blogs/kernel-based-distribution-discrepancies/kernel-based-distribution-discrepancies/base_kernel_param_vs_ksd.gif"  -->
 
@@ -284,11 +294,10 @@ $$\nabla_x \log {p}(x) = - \Sigma^{-1} (x-\mu)$$
 
 The quantity $$\nabla_x \log {p}(x)$$ is also known as the score of $$p(x)$$. -->
 
-## Stein Kernel vs KSD 
 
 
-# Appendix 
-## MMD Derivation
+## Appendix 
+### MMD Derivation
 
 Starting with the IPM definition:
 
