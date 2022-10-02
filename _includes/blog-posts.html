@@ -7,7 +7,7 @@
       {% endfor %}
     {% else %}
       {% for item in site.data.blog-posts.index %}
-        <p><a href="{{ item.url }}">{{ item.name }}</a></p>
+        <p><a href="blog-posts/{{ item.url }}">{{ item.name }}</a></p>
       {% endfor %}
     {% endif %}
   </div>
