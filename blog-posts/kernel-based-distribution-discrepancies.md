@@ -2,7 +2,7 @@
 layout: post
 ---
 
-# Kernel-Based Distribution Discrepancies
+# Kernel-based Distribution Discrepancies
 
 ## What is a Distribution Discrepancy?
 
