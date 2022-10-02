@@ -1,0 +1,8 @@
+featured:
+- {name: "Biomedical Named-Entity Recognition (BASc. Thesis)", url: 'uoft-thesis.pdf'}
+
+index:
+- {name: "Biomedical Named-Entity Recognition (BASc. Thesis)", url: 'uoft-thesis.pdf'}
+- {name: 'Power Optimization Using Embedded Automatic Gain Control Algorithm with Photoplethysmography Signal Quality Classification (ICASSP 2020)', url: 'https://www.researchgate.net/publication/341083785_Power_Optimization_Using_Embedded_Automatic_Gain_Control_Algorithm_with_Photoplethysmography_Signal_Quality_Classification'}
+- {name: 'Robust Beat-To-Beat Detection Algorithm for Pulse Rate Variability Analysis from Wrist Photoplethysmography Signals (ICASSP 2018)', url: 'https://ieeexplore.ieee.org/document/8462286'}
+- {name: 'Development and Validation of a 3D-Printed Neuronavigation Headset for Therapeutic Brain Stimulation (Journal of Neural Engineering 2018)', url: 'https://www.researchgate.net/publication/325707455_Development_and_Validation_of_a_3D-Printed_Neuronavigation_Headset_for_Therapeutic_Brain_Stimulation'}
