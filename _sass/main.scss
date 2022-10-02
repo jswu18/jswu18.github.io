@@ -12,3 +12,12 @@ body {
 body a {
   color: $linkColor
 }
+
+/**
+ * Code formatting
+ */
+ pre,
+ code {
+     font-size: 15px;
+     background-color: rgb(200, 200, 200);
+ }
