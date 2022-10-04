@@ -2,119 +2,97 @@
 layout: post
 ---
 
-# Kernel-based Distribution Discrepancies
+# The Kernel Stein Discrepancy
 
-## What is a Distribution Discrepancy?
+## Why Distribution Discrepancies?
 
+<!-- Having worked at Revolut as a machine learning engineer, there was access to swaths of data. For millions of users worldwide, there was data (anonymised ofcourse) on their daily spending, trading behaviours, travel tendancies, and even the details of their app usage. But this vast amount of data can be overwhelming. Ofcourse we observed general trends that could inform the business, but to *really* model terabytes of data, you'd run into one problem very quickly: *intractability*. You will quickly find that modelling such a complex and large dataset just can't scale.
 
-## Integral Probability Metrics
+Approximate inference is a common method of getting around this problem. As the name suggests, instead calculating the *exact* data distribution, we perform inference on an *approximation* of our data. To quantify our apporximation, we need a distribution discrepancy. In its most general form we can denote this as $$D(\mathbb{P}||\mathbb{Q})$$, the discrepancy between two distributions $$\mathbb{P}$$ and $$\mathbb{Q}$$. 
 
-One method of comparing two distributions is with the Integral Probability Metrics, defined as:
+In particular, I'll be introducing the Kernel Stein Discrepancy (KSD). As background, we'll first review one class of distribution discrepancies, the integral probability metric (IPM) and an instance IPMs known as the maximum mean discrepancy (MMD). -->
 
-$$IPM = \sup_{f\in F} \{ \int f(x) d \mathbb{P}(x)-\int f(y) d \mathbb{Q}(y) \}$$
+## Integral Probability Metrics (IPMs): A Review
 
-From the defintion of expectation, $$\mathbb{E}_{x \sim \mathbb{P}}[f(x)] := \int f(x)d\mathbb{P}(x)$$, we can reformulate this to:
+The IPM is defined as:
 
 $$IPM = \sup_{f\in F} \{ \mathbb{E}_{x \sim \mathbb{P}}[f(x)] - \mathbb{E}_{y \sim \mathbb{Q}}[f(y)] \}$$
 
-To better understand what's going on here, let's unpack the expectation in this expression, $$\mathbb{E}_{x \sim \mathbb{P}}[f(x)]$$. We can see that the random variable $$x$$ is first subjected to some transformation $$f$$ . In other words, we could define a new random variable $$z_x \sim f(x)$$ , from which $$x \sim \mathbb{P}$$ . With the same $$f$$ we could do the same and define, $$z_y \sim f(y)$$ , only $$y \sim \mathbb{Q}$$ , our other distribution. So the quantity inside the supremum operator $$\mathbb{E}_{x \sim \mathbb{P}}[f(x)] - \mathbb{E}_{y \sim \mathbb{Q}}[f(y)]$$ is the difference in the expectation of our new random variables $$z_x$$ and $$z_y$$ , which are actually the expectations of $$\mathbb{P}$$ and $$\mathbb{Q}$$ when these distributions are subject to some transformation $$f$$ .
+The IPM is a comparison of two densities after they are mapped to new function space. This new space is defined by the mapping $$f$$. The role of $$f$$ is to expose the differences in density between $$\mathbb{P}$$ and $$\mathbb{Q}$$. For example, if we chose $$f(x) = 0$$, then $$\mathbb{E}_{x \sim \mathbb{P}}[f(x)] - \mathbb{E}_{y \sim \mathbb{Q}}[f(y)]$$ would always be zero, which isn't very helpful for our comparison. So to reveal any and all differences between $$\mathbb{P}$$ and $$\mathbb{Q}$$, we need $$f^*$$, the mapping that *maximises* the discrepancy, $$\mathbb{E}_{x \sim \mathbb{P}}[f(x)] - \mathbb{E}_{y \sim \mathbb{Q}}[f(y)]$$. This is the purpose of $$\sup_{f\in F}$$, the supremum operator.
 
-To compute our quantity $$\mathbb{E}_{x \sim \mathbb{P}}[f(x)] - \mathbb{E}_{y \sim \mathbb{Q}}[f(y)]$$, the transformation $$f$$ seems pretty important. What should $$f$$ be? We know that the IPM provides some idea of discrepancy between $$\mathbb{P}$$ and $$\mathbb{Q}$$, so $$f$$ must play a part in exposing the differences between  $$\mathbb{P}$$ and $$\mathbb{Q}$$. For example if we chose $$f(x) = 0$$, then $$\mathbb{E}_{x \sim \mathbb{P}}[f(x)] - \mathbb{E}_{y \sim \mathbb{Q}}[f(y)]$$ would always be zero, which wouldn't be very helpful for comparing our densities. So to reveal any and all the differences between $$\mathbb{P}$$ and $$\mathbb{Q}$$, we need to choose $$f$$ in a way that *maximises* the quantity $$\mathbb{E}_{x \sim \mathbb{P}}[f(x)] - \mathbb{E}_{y \sim \mathbb{Q}}[f(y)]$$, and this is precisely the goal of $$\sup_{f\in F}$$ the supreumum operator! It indicates that we need to search through the space of all possible functions $$F$$ to find this special $$f$$ that will expose all of the discrepancies between $$\mathbb{P}$$ and $$\mathbb{Q}$$.
-
-The $$f$$ chosen by the supreumum operator has a special name called the witness function and is denoted $$f^*$$. To give some intuition, we can visualise a possible witness function for when $$\mathbb{P}$$ is a Gaussian and $$\mathbb{Q}$$ is a Laplace distribution. 
+This $$f^*$$ is called the witness function. We can visualise a possible witness function when $$\mathbb{P}$$ is Gaussian and $$\mathbb{Q}$$ follows a Laplace distribution:
 
 <figure class="image" align="center">
   <img src="kernel-based-distribution-discrepancies/ipm_witness_function_example.png" width="50%">
   <figcaption>A possible witness function comparing a Gaussian and Laplace Distribution</figcaption>
 </figure>
 
+Notice that when $$f(x)=0$$,  $$p(x) = q(x)$$. Moreover, when $$p(x) > q(x)$$, $$f(x) > 0$$ and the same vice versa. This increases the quantity $$\mathbb{E}_{x \sim \mathbb{P}}[f(x)] - \mathbb{E}_{y \sim \mathbb{Q}}[f(y)]$$ and ensures that the IPM is non-zero, indicating that $$\mathbb{P} \neq \mathbb{Q}$$ as expected.
 
-The witness function exposes the differences between the two distributions. In the figure above, the locations where $$f(x)=0$$ correspond to locations where $$p(x) = q(x)$$. Moreover, when $$p(x) > q(x)$$, $$f(x) > 0$$ and the same vice versa. This means that the transformations of $$\mathbb{P}$$ and $$\mathbb{Q}$$ under $$f^*$$ will ensure a non-zero IPM indicating that $$\mathbb{P} \neq \mathbb{Q}$$.
 
-So far we've developed some intution for the IPM definition, in particular the purpose of the transformation $$f$$. This seem like a promising approach to calculating a distribution discrepancy but we might be asking, *how exactly do we evaluate this supremum?* I mentioned for the figure above that it was only a possible witness function and this because computing the actual IPM would require a to search through *all* possible functions $$F$$ to find our actual witness function. As you might imagine, this is not an easy task.
+## Maximum Mean Discrepancy: A Review
 
-## Maximum Mean Discrepancy
-
-Because the kernels associated with our RKHS are in the form of expectations, from which we want to maximise their discrepancy, this formulation of the IPM is known as the Maximum Mean Discrepancy (MMD). We can define:
+The supremum in the IPM searches over $$F$$, the space of *all* possible functions. This can be impractical and we often limit our function space to the unit ball of an RKHS. This restriction on the IPM constructs the Maximum Mean Discrepancy (MMD):
 
 $$MMD = \sup_{||f||_H \leq 1 } \{ \int f(x) d \mathbb{P}(x)-\int f(y) d \mathbb{Q}(y) \}$$
 
-where our function space is restricted to the unit ball of our chosen RKHS.
+where $H$ is our RKHS.
 
-<!-- Let's unpack our new restriction on $$||f|| \leq 1$$. The norm of a function is defined as:
+To ensure $$MMD = 0 \Leftrightarrow \mathbb{P} = \mathbb{Q}$$, the kernel must be *characteristic*. This means that the kernel uniquely maps our density function into the RKHS. Characterstic kernels often involve an exponential function, such as the Gaussian Kernel, $$k(x, y) = \exp(-\sigma||x-y||_2^2)$$. This is because the exponential acts as a fourier transform on the probability distribution. The uniqueness property is acheived by incorporating all moments of the distribution.
 
-$$||f|| := \sup \{\frac{||f(x)||}{||x||} : x \in X, x \neq 0\}$$
+Witness functions that discriminate pointwise between samples of $$\mathbb{P}$$ and $$\mathbb{Q}$$ also need to be avoided (i.e. a function with a positive impulse at each $$\mathbb{P}$$ sample and a negative impulse at each $$\mathbb{Q}$$ sample). The unit ball restriction $$\|f\| \leq 1$$, applies a decay on higher frequencies, ensuring the smoothness $$f$$.
 
-In other words, our restriction states that the largest possible scaling of $$x$$ by $$f$$ must not exceed one. -->
+Given $k(\cdot, \cdot)$, the reproducing kernel associated with our RKHS (usually the RKHS is defined from our choice of reproducing kernel), it can be shown that:
 
-It can be shown that:
+$$MMD^2 =  \mathbb{E}_{X, \tilde{X} \sim \mathbb{P}}[k(X,\tilde{X})]-2\mathbb{E}_{X \sim \mathbb{P},Y \sim \mathbb{Q}}[k(X,Y)]+\mathbb{E}_{Y, \tilde{Y} \sim \mathbb{Q}}[k(Y,\tilde{Y})]$$ 
 
-$$MMD^2 =  \mathbb{E}_{X, \tilde{X} \sim \mathbb{P}}[k(X,\tilde{X})]-2\mathbb{E}_{X \sim \mathbb{P},Y \sim \mathbb{Q}}[k(X,Y)]+\mathbb{E}_{Y, \tilde{Y} \sim \mathbb{Q}}[k(Y,\tilde{Y})]$$ where $$k$$ is a kernel associated with the chosen RKHS (see [here](###MMD-Derivation) for the derivation).
+see [here](###MMD-Derivation) for a derivation.
 
-An unbiased estimate of MMD:
+An unbiased estimate of the MMD:
 $$\hat{MMD}^2 = \frac{1}{m(m-1)}\sum_{i=1}^{m}\sum_{j\neq i}^{m}k(x_i, x_j)+\frac{1}{n(n-1)}\sum_{i=1}^{n}\sum_{j\neq i}^{n}k(y_i, y_j)-\frac{2}{mn}\sum_{i=1}^{m}\sum_{j=1}^{n}k(x_i, y_j)$$
-
-
-<!-- ## Polynomial Kernels
-
-Here we compare samples from normal distributions of the same mean but different covariances. We can see that for kernels of degree one, the MMD values do not change significantly despite the distributions being compared having different variances.  This is because a linear kernel retains only the first moments of the distributions. However, as we increase the degree of the polynomial kernel, higher moments of the distribution are retained by the kernel mean embedding, and the differences in covariances is reflected in the MMD.
-
-![Figure 1](kernel-based-distribution-discrepancies/mmd_polynomial_kernels_covariance_shift.png)
-
-On the other hand, when shifting the mean of the distribution, all polynomial kernels will pick this up as this shift changes the first moment of the distribution. 
-
-![Figure 1](kernel-based-distribution-discrepancies/mmd_polynomial_kernels_mean_shift.png)
-
-
-This motivates the intuition for using an exponential type kernel, which when decomposed, is the power series. By incoporating all possible moments of the signal (distribution), the kernel can be interpreted as a transformation into the Fourier domain. As a Fourier type transform, this also ensures that the kernel is injective (i.e. there is no information loss), maintaining the property $$k(X,Y)=0 \Leftrightarrow X = Y$$. -->
-
 
 ### MNIST: The MMD
 
-A property of the MMD is that it only requires samples from $$\mathbb{P}$$ and $$\mathbb{Q}$$. In other words, we don't need to know their underlying distributions! This can be particularly useful when we aren't read to make any assumptions about the generating process of a dataset. As an example, we can compare images from the MNIST dataset to quantify the discrepancy between digits.
-
-We can visualise a heatmap of the MMDs for samples from different digits. 
+The MMD only requires $$\mathbb{P}$$ and $$\mathbb{Q}$$ samples, making no assumptions about their underlying distributions. This is useful because we don't need to assume the data generating process. An example is the MNIST dataset, where we can quantify the discrepancy between images of digits. A heatmap of the MMDs for samples from different digits:
 
 <figure class="image" align="center">
   <img src="kernel-based-distribution-discrepancies/mnist_mmd_digit_comparison.png" width="50%">
   <figcaption>MNIST MMD Digit Comparison</figcaption>
 </figure>
 
-Samples from the same digit have much lower MMDs (the diagonal). We can see higher MMDs when comparing digits that are not as similar when written, such as 0 and 1. On the hand, more similar digits like 7 and 9 have lower MMDs, indicating that the distribution of 7 and 9 must be quite similar. It's incredible that we can quantify the discrepancy between these distributions entirely from their samples.
+Samples from the same digit have lower MMDs (the diagonal) and we have higher MMDs for digits that are not as similar, such as 0 and 1. More similar digits like 7 and 9 have lower MMDs.
 
-### MNIST: Choosing a better Kernel
+### MNIST: Kernel Selection
 
-A gif of kernel vs heatmap
+Our kernel defines the RKHS from which we acquire our witness function. If a poor kernel is chosen, the corresponding RKHS might be a poor function space for discriminating $$\mathbb{P}$$ and $$\mathbb{Q}$$. We can visualise how  the kernel function affects our MNIST heatmap:
 
-### What if we already know $$\mathbb{P}$$?
 
-The MNIST example showed us how useful the MMD can be when both $$\mathbb{P}$$ and $$\mathbb{Q}$$ are unknown distributions. But what if we already know the pdf of one of the distributions? In this case, sampling from the known pdf would seem like an inefficient way to calculate a discrepancy. Consider an experiment where we increase the number of samples from $$\mathbb{P}$$:
+### MMD -> KSD?
 
-<figure class="image" align="center">
-  <img src="kernel-based-distribution-discrepancies/mmd_approximates_ksd.png" width="50%">
-  <figcaption>The MMD is a numerical estimate of the KSD</figcaption>
-</figure>
-
-We can see that as we increase the number of samples from $$\mathbb{P}$$, the MMD converges to a limit. This is the Kernel Stein Discrepancy of $$\mathbb{P}$$ and $$\mathbb{Q}$$. When the density function of $$\mathbb{P}$$ is known, the KSD provides a closed-formed expression for our MMD. This makes our discrepancy calculation exact, instead of numerically approximated with $$\mathbb{P}$$ samples. It also eliminates the tedious process of sampling $$\mathbb{P}$$. We will explore the KSD in detail in the next section!
+The MNIST example shows that when $$\mathbb{P}$$ and $$\mathbb{Q}$$ are unknown, the MMD is very effective. However, we often have samples from an unknown $$\mathbb{Q}$$ and we want to compare it to a known $$\mathbb{P}$$. In this case, the MMD would have us sampling both $$\mathbb{P}$$ and $$\mathbb{Q}$$, a pretty inefficient approach. The Kernel Stein Discrepancy solves this problem by incoporating the density of $$\mathbb{P}$$ into the discrepancy calculation.
 
 ## Kernel Stein Discrepancies
 
-As we saw in the last section, the KSD computes the descrepancy between a known distribution density and an unknown density that we might only be able to sample from. Before introducing the KSD let's look at the Stein Kernel, $$k_{\mathbb{P}}$$, a special kernel formulation.
+The KSD quantifies the descrepancy between a known density $$\mathbb{P}$$ and an unknown density $$\mathbb{Q}$$, that we can sample. Before introducing the KSD let's introduce the Stein Kernel, $$k_{\mathbb{P}}$$, a special kernel formulation.
 
 ### Stein Kernels
 
-A Stein kernel is defined as:
+The Stein kernel is defined as:
 
 $$k_{\mathbb{P}}(x, y) = \nabla_x \log {p}(x)^T \nabla_x \log {p}(y)^T k(x, y) 
 + \nabla_x \log {p}(y)^T \nabla_x k(x, y)
 + \nabla_x \log {p}(x)^T \nabla_y k(x, y)
 + \langle \nabla_x k(x, \cdot), \nabla_y k(\cdot, y) \rangle$$
 
-where $$p(x)$$ is the density function of a distribution $$\mathbb{P}$$ and $$k(x,y)$$ can be any kernel function, such as the Gaussian kernel we've looked at before.
+where $$p(x)$$ is the density function of a distribution $$\mathbb{P}$$ and $$k(x,y)$$ can be any kernel function, such as the Gaussian kernel we mentioned before.
 
 The quantity $$\langle \nabla_x k(x, \cdot), \nabla_y k(\cdot, y) \rangle$$ can be expanded to:
 
 $$\langle \nabla_x k(x, \cdot), \nabla_y k(\cdot, y) \rangle = \sum_{i=1}^d \frac{\partial k(x,y)}{\partial x_i \partial y_i} = Tr(\nabla_x \nabla_y k(x, y))$$
+
+- intuition behind this formulation
+
+### Stein Kernel Convergence
 
 The Stein kernel may seem like a more complicated expression than the kernels that we've looked at before, but it also has a very special and simple property. For any $$x \in \mathbb{R}^d$$:
 
@@ -163,27 +141,6 @@ The KSD can be derived from the MMD using a Stein Kernel. But it's important to 
 
 If we ever need to compare a set of samples $$X \sim \mathbb{Q}$$ to a known distribution, it makes more sense to use the KSD. It incorporates the full $$\mathbb{P}$$ distribution within its formulation, whereas for the MMD, only a  finite number of samples from $$\mathbb{P}$$ are included in the calculation.
 
-<!-- To explore this, we will draw varying number of samples from $$\mathbb{P}$$ and $$\mathbb{Q}$$ for $$K$$ trials, for which we will compute mean KSD and MMD values for comparison.
-
-For notation:
-
-$$X^{m}_i \sim \mathbb{P}$$ 
-
-a set of $$m$$ samples drawn from $$\mathbb{P}$$ for the $$i$$th trial.
-
-$$Y^{n}_j \sim \mathbb{Q}$$ 
-
-a set of $$n$$ samples drawn from $$\mathbb{Q}$$ for the $$j$$th trial.
-
-$$KSD^n_j = ksd(Y^{n}_j)$$
-
-the KSD computed using $$Y^{n}_j \sim \mathbb{Q}$$.
-
-
-$$MMD^{m, n}_{i, j} = mmd(X^{m}_i, Y^{n}_j)$$
-
-the MMD computed using $$X^{m}_i \sim \mathbb{P}$$ and $$Y^{n}_j \sim \mathbb{Q}$$. -->
-
 First, to show that the MMD converges to the KSD, we will compute the mean absolute difference:
 
 $$d^{m, n} = \frac{1}{K} \sum_i^N |KSD^n_i - MMD^{m, n}_{i, i}|$$
@@ -207,32 +164,6 @@ We can further visualise this by plotting individual trials of samples, showing 
 
 We see that for each pair of $$MMD^{m, n}_{i, i}$$ and $$KSD^n_i$$, the MMD plots approach the KSD plot as we increase the number of samples of $$\mathbb{P}$$. The MMD obtains a better approximation of $$\mathbb{P}$$ and approaches the closed form solution of the KSD.
 
-<!-- We can also plot the mean MMD values with mean KSD values. The mean MMD is computed by:
-
-$$MMD^{m, n} = \frac{1}{K}\sum_i^K MMD^{m, n}_{i, i}$$
-
-That is, MMDs are only included where each sample from $$\mathbb{P}$$ has a unique sample from $$\mathbb{Q}$$ (i.e. from the same $$i^{th}$$ trial).
-
-![Figure 1](kernel-based-distribution-discrepancies/mean_ksd_vs_mean_mmd.png)
-
-We can see that the MMD plots converge to the KSD plot, which in turn converges to zero as we increase the number of Q samples. 
-
-## KSD Definition
-
-Finally, we can define the Kernel Stein Discrepancy (KSD):
-
-$$KSD_k^2[\mathbb{Q}, T, G_k] = \mathbb{E}_{X, \tilde{X} \sim \mathbb{Q}}[k_{\mathbb{P}}(X, \tilde{X})]$$
-
-Moreover, the unbiased estimate:
-
-$$\hat{KSD}_k^2[Q_n, T, G_k] = \frac{1}{n(n-1)} \sum_{i=1}^n \sum_{j\neq i}^n k_{\mathbb{P}}(x_i, x_j)$$
-
-where $$x_k \sim \mathbb{Q}$$ for $$k=1,...,n$$
-
-We can observe the KSD's behaviour as we shift the mean or scale the covariance of $$\mathbb{Q}$$:
-
-![Figure 1](kernel-based-distribution-discrepancies/ksd_mean_covariance_shift.png)  -->
-
 ### Visualising Stein Kernels
 
 We can visualise the kernel with respect to its different parameters:
@@ -250,51 +181,17 @@ We can also visually compare the Stein Kernels across different seed kernels.
   <figcaption>Stein Kernels for different base kernels</figcaption>
 </figure>
 
-### Stein Kernel vs KSD 
+# Applications of the KSD
 
-<figure class="image" align="center">
-  <img src="kernel-based-distribution-discrepancies/base_kernel_param_vs_ksd.gif" width="100%">
-  <figcaption>Stein Kernels for different base kernels</figcaption>
-</figure>
+- minimum distance applications
+- density estimation
+- mcmc convergence diagnosis
+- bayesian inference
+- hypothesis testing
 
-  <!-- <img src="/Users/jameswu/repositories/jswu18.github.io/blogs/kernel-based-distribution-discrepancies/kernel-based-distribution-discrepancies/base_kernel_param_vs_ksd.gif"  -->
+# Limitations of the KSD
 
-<!-- ![Alt Text](Users/jameswu/repositories/jswu18.github.io/blogs/kernel-based-distribution-discrepancies/kernel-based-distribution-discrepancies/base_kernel_param_vs_ksd.gif) -->
-
-<!-- 
-## $$\mathbb{P}$$ Distributions
-
-To begin, we need to define a known distribution. We assume the distribution is of the form:
-
-$$p(x; \theta) = \frac{1}{z(\theta)}\tilde{p}(x)$$
-
-where $$\theta$$ are the parameters of the distribution
-
-### Multi-Variate Gaussian
-
-As an example, we will use the multi-variate Gaussian:
-
-$$p(x) = p(x; \mu, \Sigma) = \frac{1}{(2\pi)^{n/2}|\Sigma|^{1/2}} \exp(-\frac{1}{2}(x-\mu)^T \Sigma^{-1}(x-\mu))$$
-
-where:
-
-$$\tilde{p}(x) = \exp(-\frac{1}{2}(x-\mu)^T \Sigma^{-1}(x-\mu))$$
-
-and 
-
-$$z(\theta) = (2\pi)^{n/2}|\Sigma|^{1/2}$$
-
-We can derive:
-
-$$\log {p}(x) = -\frac{1}{2}(x-\mu)^T \Sigma^{-1}(x-\mu) - \log (z(\theta))$$
-
-and
-
-$$\nabla_x \log {p}(x) = - \Sigma^{-1} (x-\mu)$$
-
-The quantity $$\nabla_x \log {p}(x)$$ is also known as the score of $$p(x)$$. -->
-
-
+multimodal
 
 ## Appendix 
 ### MMD Derivation
