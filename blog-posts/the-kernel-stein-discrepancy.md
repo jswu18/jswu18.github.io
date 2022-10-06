@@ -24,7 +24,6 @@ This $$f^*$$ is called the witness function. We can visualise a possible witness
 
 <figure class="image" align="center">
   <img src="the-kernel-stein-discrepancy/ipm_witness_function_example.png" width="40%">
-  <figcaption>A possible witness function comparing a Gaussian and Laplace Distribution</figcaption>
 </figure>
 
 Notice that when $$f(x)=0$$,  $$p(x) = q(x)$$. Moreover, when $$p(x) > q(x)$$, $$f(x) > 0$$ and the same vice versa. This increases the quantity $$\mathbb{E}_{x \sim \mathbb{P}}[f(x)] - \mathbb{E}_{y \sim \mathbb{Q}}[f(y)]$$ and ensures that the IPM is non-zero, indicating that $$\mathbb{P} \neq \mathbb{Q}$$ as expected.
@@ -54,7 +53,6 @@ The MMD only requires $$\mathbb{P}$$ and $$\mathbb{Q}$$ samples, making no assum
 
 <figure class="image" align="center">
   <img src="the-kernel-stein-discrepancy/mnist_mmd_digit_comparison.png" width="40%">
-  <figcaption>MNIST MMD Digit Comparison</figcaption>
 </figure>
 
 Samples from the same digit have lower MMDs (the diagonal) and we have higher MMDs for digits that are not as similar, such as zero and one. More similar digits like seven and nine have lower MMDs.
@@ -128,8 +126,6 @@ Note that $$\nabla_x k(x, y) = \langle \nabla_x f(x), f(y) \rangle$$:
 $$k_{\mathbb{P}}(x, y) = \mathcal{A}_\mathbb{P}^y (\nabla_x \log p(x)^T k(x, y) + \langle \nabla_x f(x), f(y) \rangle)$$
 
 Applying $$\mathcal{A}_\mathbb{P}^y$$:
-
-$$k_{\mathbb{P}}(x, y) = \nabla_y \log p(y)^T(\nabla_x \log p(x)^T k(x, y) + \nabla_x k(x, y)) + \nabla_y ( \nabla_x \log p(x)^T k(x, y) + \langle \nabla_x f(x), f(y) \rangle)$$
 
 $$k_{\mathbb{P}}(x, y) = \nabla_y \log p(y)^T\nabla_x \log p(x)^T k(x, y) + \nabla_y \log p(y)^T\nabla_x k(x, y) + \nabla_x \log p(x)^T \nabla_y k(x, y) +  \langle \nabla_x f(x), \nabla_y f(y)\rangle$$
 

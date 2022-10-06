@@ -4,7 +4,7 @@ layout: post
 
 # Gaussian Processes
 
-There are many online posts explaining Gaussian Processes. After reading through quite a few of these, here is a way of introducing the topic that I found quite helpful and intuitive for myself. This post will include python code from the following packages:
+There are many online posts explaining Gaussian Processes. After reading through few of these, here's a way of introducing the topic that I found quite helpful and intuitive for myself. This post will include python code from the following packages:
 
 ```python
 import math
@@ -64,7 +64,7 @@ histogram = plt.hist2d(x=samples[:, 0], y=samples[:, 1], bins=50)
 ## Identity Covariance
 
 
-For high dimensions, we can plot a single sample with the x-axis representing each dimension of the multi-variate Gaussian
+For high dimensions, we can plot a single sample with the x-axis representing each dimension of the multi-variate Gaussian. At this point, this plot looks a bit nonsensical as it's just random noise.
 
 ```python
 k = 100
@@ -120,7 +120,7 @@ fig = plt.plot(x, [RBF(0, i, sigma, lengthscale) for i in (x)])
 ### RBF Covariance
 
 
-Using the kernel function to compute each element in the covariance matrix, we can generate a multi-variate Gaussian which can have desireable properties, such as smooth curves in this case.
+Using the kernel function to compute each element in the covariance matrix, we can generate a multi-variate Gaussian which can have desireable properties, such as smooth curves in this case. Just by changing the structure of the covariance matrix, our samples already look more interesting.
 
 ```python
 k = 40
@@ -319,7 +319,7 @@ im = ax.imshow(covariance)
 ## Conditioning
 
 
-Because up until now, we've essentially only been working with high dimensional Gaussian distributions, we can "train" them by conditining them on existing data. This collapses the distribution and can provide meaningful predictions for extrapolation and interpolation purposes. We can use the formula for conditioning multi-variate Gaussians:
+Because up until now, we've essentially only been working with high dimensional Gaussian distributions, we can "train" them by conditioning them on existing data. This collapses the distribution and can provide meaningful predictions for extrapolation and interpolation purposes. We can use the formula for conditioning multi-variate Gaussians:
 
 
 $$X|Y \sim N(\mu_X+\Sigma_{XY}\Sigma_{YY}^{-1}(Y-\mu_Y), \Sigma_{XX}-\Sigma_{XY}\Sigma_{YY}^{-1}\Sigma_{YX})$$

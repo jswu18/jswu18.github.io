@@ -40,7 +40,7 @@
 
       <div class="row g-5 mb-5">
   <div class="col-md-12">
-    <!-- <h3 class="fw-bold border-bottom pb-3 mb-5"></h3> -->
+    <!-- <h3 class="fs- fw-bold"></h3> -->
     <h1 id="the-kernel-stein-discrepancy">The Kernel Stein Discrepancy</h1>
 
 <h2 id="why-distribution-discrepancies">Why Distribution Discrepancies?</h2>
@@ -63,7 +63,6 @@ In particular, I'll be introducing the Kernel Stein Discrepancy (KSD). As backgr
 
 <figure class="image" align="center">
   <img src="the-kernel-stein-discrepancy/ipm_witness_function_example.png" width="40%" />
-  <figcaption>A possible witness function comparing a Gaussian and Laplace Distribution</figcaption>
 </figure>
 
 <p>Notice that when \(f(x)=0\),  \(p(x) = q(x)\). Moreover, when \(p(x) &gt; q(x)\), \(f(x) &gt; 0\) and the same vice versa. This increases the quantity \(\mathbb{E}_{x \sim \mathbb{P}}[f(x)] - \mathbb{E}_{y \sim \mathbb{Q}}[f(y)]\) and ensures that the IPM is non-zero, indicating that \(\mathbb{P} \neq \mathbb{Q}\) as expected.</p>
@@ -92,7 +91,6 @@ In particular, I'll be introducing the Kernel Stein Discrepancy (KSD). As backgr
 
 <figure class="image" align="center">
   <img src="the-kernel-stein-discrepancy/mnist_mmd_digit_comparison.png" width="40%" />
-  <figcaption>MNIST MMD Digit Comparison</figcaption>
 </figure>
 
 <p>Samples from the same digit have lower MMDs (the diagonal) and we have higher MMDs for digits that are not as similar, such as zero and one. More similar digits like seven and nine have lower MMDs.</p>
@@ -166,8 +164,6 @@ In particular, I'll be introducing the Kernel Stein Discrepancy (KSD). As backgr
 \[k_{\mathbb{P}}(x, y) = \mathcal{A}_\mathbb{P}^y (\nabla_x \log p(x)^T k(x, y) + \langle \nabla_x f(x), f(y) \rangle)\]
 
 <p>Applying \(\mathcal{A}_\mathbb{P}^y\):</p>
-
-\[k_{\mathbb{P}}(x, y) = \nabla_y \log p(y)^T(\nabla_x \log p(x)^T k(x, y) + \nabla_x k(x, y)) + \nabla_y ( \nabla_x \log p(x)^T k(x, y) + \langle \nabla_x f(x), f(y) \rangle)\]
 
 \[k_{\mathbb{P}}(x, y) = \nabla_y \log p(y)^T\nabla_x \log p(x)^T k(x, y) + \nabla_y \log p(y)^T\nabla_x k(x, y) + \nabla_x \log p(x)^T \nabla_y k(x, y) +  \langle \nabla_x f(x), \nabla_y f(y)\rangle\]
 
