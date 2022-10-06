@@ -62,7 +62,7 @@ In particular, I'll be introducing the Kernel Stein Discrepancy (KSD). As backgr
 <p>This \(f^*\) is called the witness function. We can visualise a possible witness function when \(\mathbb{P}\) is Gaussian and \(\mathbb{Q}\) follows a Laplace distribution:</p>
 
 <figure class="image" align="center">
-  <img src="kernel-based-distribution-discrepancies/ipm_witness_function_example.png" width="40%" />
+  <img src="the-kernel-stein-discrepancy/ipm_witness_function_example.png" width="40%" />
   <figcaption>A possible witness function comparing a Gaussian and Laplace Distribution</figcaption>
 </figure>
 
@@ -91,7 +91,7 @@ In particular, I'll be introducing the Kernel Stein Discrepancy (KSD). As backgr
 <p>The MMD only requires \(\mathbb{P}\) and \(\mathbb{Q}\) samples, making no assumptions about their underlying distributions. This is useful when we don’t have strong intuitions about the data generating process. An example is the MNIST dataset, where we can quantify the discrepancy between digits directly from the image samples. A heatmap of the MMDs:</p>
 
 <figure class="image" align="center">
-  <img src="kernel-based-distribution-discrepancies/mnist_mmd_digit_comparison.png" width="40%" />
+  <img src="the-kernel-stein-discrepancy/mnist_mmd_digit_comparison.png" width="40%" />
   <figcaption>MNIST MMD Digit Comparison</figcaption>
 </figure>
 
@@ -102,7 +102,7 @@ In particular, I'll be introducing the Kernel Stein Discrepancy (KSD). As backgr
 <p>The kernel defines the RKHS from which we acquire our witness function. If a poor kernel is chosen, the corresponding RKHS might provide a poor function space for discriminating \(\mathbb{P}\) and \(\mathbb{Q}\). We can visualise how  the kernel function affects our MNIST heatmap:</p>
 
 <figure class="image" align="center">
-  <img src="kernel-based-distribution-discrepancies/mnist_kernel.gif" width="80%" />
+  <img src="the-kernel-stein-discrepancy/mnist_kernel.gif" width="80%" />
 </figure>
 
 <h2 id="kernel-stein-discrepancies-ksd">Kernel Stein Discrepancies (KSD)</h2>
@@ -190,7 +190,7 @@ In particular, I'll be introducing the Kernel Stein Discrepancy (KSD). As backgr
 <p>We can numerically verify the Stein identity by plotting the distribution of expectations of samples of \(k_{\mathbb{P}}(X, x)\). The below plot compares \(Y \sim \mathbb{P}\) and \(Y \sim \mathbb{Q}\), where \(\mathbb{Q}\) is a Laplace distribution. For \(\mathbb{P}\), the distribution centers around zero, while the distribution for \(\mathbb{Q}\) has a non-zero mean. Moreover, the effect of the law of large numbers shows how the histograms narrow as the sample size increases.</p>
 
 <figure class="image" align="center">
-  <img src="kernel-based-distribution-discrepancies/stein_convergence.gif" width="60%" />
+  <img src="the-kernel-stein-discrepancy/stein_convergence.gif" width="60%" />
 </figure>
 
 <h3 id="the-kernel-stein-discrepancy-1">The Kernel Stein Discrepancy</h3>
@@ -206,7 +206,7 @@ In particular, I'll be introducing the Kernel Stein Discrepancy (KSD). As backgr
 <p>We derived the KSD from the MMD formulation, cancelling terms using the Stein identity. We can in some ways view the KSD is an instance of the MMD using a Stein kernel. If we computed the MMD with a Stein kernel, we can see its convergence to the KSD via the law of large numbers (i.e. \(\mathbb{E}_{X \sim \mathbb{P}}[k_{\mathbb{P}}(X, \tilde{X})] \rightarrow 0\) and \(\mathbb{E}_{X \sim \mathbb{P}, Y \sim \mathbb{Q}}[k_{\mathbb{P}}(X, Y)] \rightarrow 0\)).</p>
 
 <figure class="image" align="center">
-  <img src="kernel-based-distribution-discrepancies/ksd_vs_mmd_per_trial.png" width="100%" />
+  <img src="the-kernel-stein-discrepancy/ksd_vs_mmd_per_trial.png" width="100%" />
   <figcaption> </figcaption>
 </figure>
 
@@ -215,14 +215,14 @@ In particular, I'll be introducing the Kernel Stein Discrepancy (KSD). As backgr
 <p>We can visualise the kernel with respect to its different parameters:</p>
 
 <figure class="image" align="center">
-  <img src="kernel-based-distribution-discrepancies/kernel_dist_vs_base_kernel_params.png" width="100%" />
+  <img src="the-kernel-stein-discrepancy/kernel_dist_vs_base_kernel_params.png" width="100%" />
   <figcaption>Stein Kernels for different base distributions</figcaption>
 </figure>
 
 <p>We can also visually compare the Stein Kernels across different seed kernels.</p>
 
 <figure class="image" align="center">
-  <img src="kernel-based-distribution-discrepancies/kernel_dist_vs_base_kernel_type.png" width="100%" />
+  <img src="the-kernel-stein-discrepancy/kernel_dist_vs_base_kernel_type.png" width="100%" />
   <figcaption>Stein Kernels for different base kernels</figcaption>
 </figure>
 
