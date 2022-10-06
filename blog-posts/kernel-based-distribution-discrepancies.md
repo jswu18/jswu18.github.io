@@ -63,6 +63,9 @@ Samples from the same digit have lower MMDs (the diagonal) and we have higher MM
 
 The kernel defines the RKHS from which we acquire our witness function. If a poor kernel is chosen, the corresponding RKHS might provide a poor function space for discriminating $$\mathbb{P}$$ and $$\mathbb{Q}$$. We can visualise how  the kernel function affects our MNIST heatmap:
 
+<figure class="image" align="center">
+  <img src="kernel-based-distribution-discrepancies/mnist_kernel.gif" width="80%">
+</figure>
 
 ## Kernel Stein Discrepancies (KSD)
 
@@ -149,20 +152,19 @@ where $$x \in \mathbb{R}^d$$.
 We can numerically verify the Stein identity by plotting the distribution of expectations of samples of $$k_{\mathbb{P}}(X, x)$$. The below plot compares $$Y \sim \mathbb{P}$$ and $$Y \sim \mathbb{Q}$$, where $$\mathbb{Q}$$ is a Laplace distribution. For $$\mathbb{P}$$, the distribution centers around zero, while the distribution for $$\mathbb{Q}$$ has a non-zero mean. Moreover, the effect of the law of large numbers shows how the histograms narrow as the sample size increases. 
 
 <figure class="image" align="center">
-  <img src="kernel-based-distribution-discrepancies/stein_convergence.gif" width="50%">
-  <figcaption>Stein Kernels for different base kernels</figcaption>
+  <img src="kernel-based-distribution-discrepancies/stein_convergence.gif" width="60%">
 </figure>
 
 
 ### The Kernel Stein Discrepancy
 
-We have essentially arrived at the KSD formulation. Formally, it is defined:
+We have essentially arrived at the KSD formulation. Formally, it is defined as:
 
 $$KSD^2 = \mathbb{E}_{X, \tilde{X} \sim \mathbb{Q}}[k_{\mathbb{P}}(X, \tilde{X})]$$
 
 where $$k_{\mathbb{P}}$$ is the Stein kernel.
 
-### MMD -> KSD 
+### MMD $$\Rightarrow$$ KSD 
 
 We derived the KSD from the MMD formulation, cancelling terms using the Stein identity. We can in some ways view the KSD is an instance of the MMD using a Stein kernel. If we computed the MMD with a Stein kernel, we can see its convergence to the KSD via the law of large numbers (i.e. $$\mathbb{E}_{X \sim \mathbb{P}}[k_{\mathbb{P}}(X, \tilde{X})] \rightarrow 0$$ and $$\mathbb{E}_{X \sim \mathbb{P}, Y \sim \mathbb{Q}}[k_{\mathbb{P}}(X, Y)] \rightarrow 0$$).
 

@@ -101,6 +101,10 @@ In particular, I'll be introducing the Kernel Stein Discrepancy (KSD). As backgr
 
 <p>The kernel defines the RKHS from which we acquire our witness function. If a poor kernel is chosen, the corresponding RKHS might provide a poor function space for discriminating \(\mathbb{P}\) and \(\mathbb{Q}\). We can visualise how  the kernel function affects our MNIST heatmap:</p>
 
+<figure class="image" align="center">
+  <img src="kernel-based-distribution-discrepancies/mnist_kernel.gif" width="80%" />
+</figure>
+
 <h2 id="kernel-stein-discrepancies-ksd">Kernel Stein Discrepancies (KSD)</h2>
 
 <p>The MNIST example showed that when \(\mathbb{P}\) and \(\mathbb{Q}\) are unknown, the MMD is very effective. However, we often have samples from an unknown \(\mathbb{Q}\) that we want to compare to a known \(\mathbb{P}\). In this case, the MMD would have us sampling both \(\mathbb{P}\) and \(\mathbb{Q}\), a pretty inefficient approach. The Kernel Stein Discrepancy (KSD) solves this problem by incorporating the density function of \(\mathbb{P}\) into the discrepancy calculation. The KSD quantifies the descrepancy between a known density \(\mathbb{P}\) and an unknown density \(\mathbb{Q}\) that we can sample.</p>
@@ -186,19 +190,18 @@ In particular, I'll be introducing the Kernel Stein Discrepancy (KSD). As backgr
 <p>We can numerically verify the Stein identity by plotting the distribution of expectations of samples of \(k_{\mathbb{P}}(X, x)\). The below plot compares \(Y \sim \mathbb{P}\) and \(Y \sim \mathbb{Q}\), where \(\mathbb{Q}\) is a Laplace distribution. For \(\mathbb{P}\), the distribution centers around zero, while the distribution for \(\mathbb{Q}\) has a non-zero mean. Moreover, the effect of the law of large numbers shows how the histograms narrow as the sample size increases.</p>
 
 <figure class="image" align="center">
-  <img src="kernel-based-distribution-discrepancies/stein_convergence.gif" width="50%" />
-  <figcaption>Stein Kernels for different base kernels</figcaption>
+  <img src="kernel-based-distribution-discrepancies/stein_convergence.gif" width="60%" />
 </figure>
 
 <h3 id="the-kernel-stein-discrepancy-1">The Kernel Stein Discrepancy</h3>
 
-<p>We have essentially arrived at the KSD formulation. Formally, it is defined:</p>
+<p>We have essentially arrived at the KSD formulation. Formally, it is defined as:</p>
 
 \[KSD^2 = \mathbb{E}_{X, \tilde{X} \sim \mathbb{Q}}[k_{\mathbb{P}}(X, \tilde{X})]\]
 
 <p>where \(k_{\mathbb{P}}\) is the Stein kernel.</p>
 
-<h3 id="mmd---ksd">MMD -&gt; KSD</h3>
+<h3 id="mmd-rightarrow-ksd">MMD \(\Rightarrow\) KSD</h3>
 
 <p>We derived the KSD from the MMD formulation, cancelling terms using the Stein identity. We can in some ways view the KSD is an instance of the MMD using a Stein kernel. If we computed the MMD with a Stein kernel, we can see its convergence to the KSD via the law of large numbers (i.e. \(\mathbb{E}_{X \sim \mathbb{P}}[k_{\mathbb{P}}(X, \tilde{X})] \rightarrow 0\) and \(\mathbb{E}_{X \sim \mathbb{P}, Y \sim \mathbb{Q}}[k_{\mathbb{P}}(X, Y)] \rightarrow 0\)).</p>
 
