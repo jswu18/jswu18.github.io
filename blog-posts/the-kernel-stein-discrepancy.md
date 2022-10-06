@@ -23,7 +23,7 @@ The IPM is a comparison of two densities after they are mapped to a new function
 This $$f^*$$ is called the witness function. We can visualise a possible witness function when $$\mathbb{P}$$ is Gaussian and $$\mathbb{Q}$$ follows a Laplace distribution:
 
 <figure class="image" align="center">
-  <img src="the-kernel-stein-discrepancy/ipm_witness_function_example.png" width="40%">
+  <img src="the-kernel-stein-discrepancy/ipm_witness_function_example.png" width="60%">
 </figure>
 
 Notice that when $$f(x)=0$$,  $$p(x) = q(x)$$. Moreover, when $$p(x) > q(x)$$, $$f(x) > 0$$ and the same vice versa. This increases the quantity $$\mathbb{E}_{x \sim \mathbb{P}}[f(x)] - \mathbb{E}_{y \sim \mathbb{Q}}[f(y)]$$ and ensures that the IPM is non-zero, indicating that $$\mathbb{P} \neq \mathbb{Q}$$ as expected.
