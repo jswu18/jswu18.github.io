@@ -10,7 +10,7 @@ Approximate inference is a common method of getting around this problem. As the 
 
 In particular, I'll be introducing the Kernel Stein Discrepancy (KSD). As background, we'll first review one class of distribution discrepancies, the integral probability metric (IPM) and an instance IPMs known as the maximum mean discrepancy (MMD). -->
 
-# Integral Probability Metrics (IPMs): A Quick Review
+## Integral Probability Metrics (IPMs): A Quick Review
 
 The IPM is defined as:
 
@@ -27,7 +27,7 @@ This $$f^*$$ is called the witness function. We can visualise a possible witness
 Notice that when $$f(x)=0$$,  $$p(x) = q(x)$$. Moreover, when $$p(x) > q(x)$$, $$f(x) > 0$$ and the same vice versa. This increases the quantity $$\mathbb{E}_{x \sim \mathbb{P}}[f(x)] - \mathbb{E}_{y \sim \mathbb{Q}}[f(y)]$$ and ensures that the IPM is non-zero, indicating that $$\mathbb{P} \neq \mathbb{Q}$$ as expected.
 
 
-# Maximum Mean Discrepancy (MMD): A Quick Review
+## Maximum Mean Discrepancy (MMD): A Quick Review
 
 The supremum in the IPM is over $$F$$, the space of *all* possible functions. This can be impractical to evaluate and we often limit our function space to the unit ball of an RKHS. This restriction on the IPM constructs the Maximum Mean Discrepancy (MMD):
 
@@ -45,7 +45,7 @@ An unbiased estimate of the MMD:
 
 $$\hat{MMD}^2 = \frac{1}{m(m-1)}\sum_{i=1}^{m}\sum_{j\neq i}^{m}k(x_i, x_j)+\frac{1}{n(n-1)}\sum_{i=1}^{n}\sum_{j\neq i}^{n}k(y_i, y_j)-\frac{2}{mn}\sum_{i=1}^{m}\sum_{j=1}^{n}k(x_i, y_j)$$
 
-## MNIST Example
+### MNIST Example
 
 The MMD only requires $$\mathbb{P}$$ and $$\mathbb{Q}$$ samples, making no assumptions about their underlying distributions. This is useful when we don't have strong intuitions about the data generating process. An example is the MNIST dataset, where we can quantify the discrepancy between digits directly from the image samples. A heatmap of the MMDs:
 
@@ -55,19 +55,19 @@ The MMD only requires $$\mathbb{P}$$ and $$\mathbb{Q}$$ samples, making no assum
 
 Samples from the same digit have lower MMDs (the diagonal) and we have higher MMDs for digits that are not as similar, such as zero and one. More similar digits like seven and nine have lower MMDs.
 
-## Kernel Selection
+### Kernel Selection
 
 The kernel defines the RKHS from which we acquire our witness function. If a poor kernel is chosen, the corresponding RKHS might provide a poor function space for discriminating $$\mathbb{P}$$ and $$\mathbb{Q}$$. We can visualise how  the kernel function affects our MNIST heatmap:
 
 <figure class="image" align="center">
-  <img src="the-kernel-stein-discrepancy/mnist_kernel.gif" width="80%">
+  <img src="the-kernel-stein-discrepancy/mnist_kernel.gif" width="70%">
 </figure>
 
-# Kernel Stein Discrepancies (KSD)
+## Kernel Stein Discrepancies (KSD)
 
 The MNIST example showed that when $$\mathbb{P}$$ and $$\mathbb{Q}$$ are unknown, the MMD is very effective. However, we often have samples from an unknown $$\mathbb{Q}$$ that we want to compare to a known $$\mathbb{P}$$. In this case, the MMD would have us sampling both $$\mathbb{P}$$ and $$\mathbb{Q}$$, a pretty inefficient approach. The Kernel Stein Discrepancy (KSD) solves this problem by incorporating the density function of $$\mathbb{P}$$ into the discrepancy calculation. The KSD quantifies the descrepancy between a known density $$\mathbb{P}$$ and an unknown density $$\mathbb{Q}$$ that we can sample.
 
-## The Stein Identity
+### The Stein Identity
 
 Suppose we want to find an operator $$\mathcal{A_\mathbb{P}}$$ such that:
 
@@ -85,7 +85,7 @@ $$SD = \sup_{\|f\|_{RKHS} \leq 1 } \{\mathbb{E}_{y \sim \mathbb{Q}}[(\mathcal{A}
 
 Unlike the MMD, the Stein discrepancy only has a single estimator, which is over the samples of $$\mathbb{Q}$$. But how is $$\mathbb{P}$$ involved? Surely a discrepancy between $$\mathbb{P}$$ and $$\mathbb{Q}$$ should also include information about $$\mathbb{P}$$! 
 
-## Stein Operators
+### Stein Operators
 
 Given that our mapping $$f$$ was unchanged from our MMD, the density $$\mathbb{P}$$ must be incorporated in our Stein operator $$\mathcal{A}$$. Understanding Stein operators that satisfy the Stein equation remains an open problem, but there have been many formulations of $$\mathcal{A}$$. One formulation is the Langevin Stein operator: 
 
@@ -97,7 +97,7 @@ $$SD = \sup_{\|f\|_{RKHS} \leq 1 } \{\mathbb{E}_{y \sim \mathbb{Q}}[(\mathcal{A_
 
 Now that we have concrete examples of Stein operators, let's discuss how to computationally apply $$(\mathcal{A_{\mathbb{P}}}f)$$ to our $$\mathbb{Q}$$ samples.
 
-## Stein Kernels
+### Stein Kernels
 
 We know that kernel are defined:
 
@@ -135,7 +135,7 @@ $$k_{\mathbb{P}}(x, y) = \nabla_y \log p(y)^T\nabla_x \log p(x)^T k(x, y) + \nab
 
 It is a modification of a base kernel $$k$$ with $$p(x)$$, the density function of $$\mathbb{P}$$.
 
-## Numerical Convergence
+### Numerical Convergence
 
 We can modify our Stein identity with our Stein Kernel:
 
@@ -158,7 +158,7 @@ $$KSD^2 = \mathbb{E}_{X, \tilde{X} \sim \mathbb{Q}}[k_{\mathbb{P}}(X, \tilde{X})
 
 where $$k_{\mathbb{P}}$$ is the Stein kernel.
 
-## MMD $$\Rightarrow$$ KSD 
+### MMD $$\Rightarrow$$ KSD 
 
 We derived the KSD from the MMD formulation, cancelling terms using the Stein identity. We can in some ways view the KSD is an instance of the MMD using a Stein kernel. If we computed the MMD with a Stein kernel, we can see its convergence to the KSD via the law of large numbers (i.e. $$\mathbb{E}_{X \sim \mathbb{P}}[k_{\mathbb{P}}(X, \tilde{X})] \rightarrow 0$$ and $$\mathbb{E}_{X \sim \mathbb{P}, Y \sim \mathbb{Q}}[k_{\mathbb{P}}(X, Y)] \rightarrow 0$$).
 
@@ -167,11 +167,11 @@ We derived the KSD from the MMD formulation, cancelling terms using the Stein id
   <figcaption> </figcaption>
 </figure>
 
-## Visualising Stein Kernels
+### Visualising Stein Kernels
 
 Because of their complex formulation, it can be difficult to have an intuitive understanding of Stein kernels. Visualisations may help build an understanding of what's going on.
 
-### Laplace Distribution
+#### Laplace Distribution
 
 Let's first plot the distribution and base kernel for our Stein kernel evaluated at $$k(x, 0)$$:
 
@@ -196,7 +196,7 @@ Combining each term, we can visualise the Stein kernel:
   <img src="the-kernel-stein-discrepancy/laplace_stein_kernel.png" width="80%">
 </figure>
 
-### Cauchy Distribution
+#### Cauchy Distribution
 
 Let's also visaulise the Stein kernel for a fat-tailed distribution, base kernel that is wider, and evaluating at $$k(x, y=1)$$. In this example, the resulting Stein kernel is quite complex, but we can see how it is constructed with a series of simpler components.
 
