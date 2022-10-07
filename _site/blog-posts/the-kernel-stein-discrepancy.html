@@ -43,15 +43,13 @@
     <!-- <h3 class="fs- fw-bold"></h3> -->
     <h1 id="the-kernel-stein-discrepancy">The Kernel Stein Discrepancy</h1>
 
-<h2 id="why-distribution-discrepancies">Why Distribution Discrepancies?</h2>
-
 <!-- Having worked at Revolut as a machine learning engineer, there was access to swaths of data. For millions of users worldwide, there was data (anonymised ofcourse) on their daily spending, trading behaviours, travel tendancies, and even the details of their app usage. But this vast amount of data can be overwhelming. Ofcourse we observed general trends that could inform the business, but to *really* model terabytes of data, you'd run into one problem very quickly: *intractability*. You will quickly find that modelling such a complex and large dataset just can't scale.
 
 Approximate inference is a common method of getting around this problem. As the name suggests, instead calculating the *exact* data distribution, we perform inference on an *approximation* of our data. To quantify our apporximation, we need a distribution discrepancy. In its most general form we can denote this as $$D(\mathbb{P}||\mathbb{Q})$$, the discrepancy between two distributions $$\mathbb{P}$$ and $$\mathbb{Q}$$. 
 
 In particular, I'll be introducing the Kernel Stein Discrepancy (KSD). As background, we'll first review one class of distribution discrepancies, the integral probability metric (IPM) and an instance IPMs known as the maximum mean discrepancy (MMD). -->
 
-<h2 id="integral-probability-metrics-ipms-a-quick-review">Integral Probability Metrics (IPMs): A Quick Review</h2>
+<h1 id="integral-probability-metrics-ipms-a-quick-review">Integral Probability Metrics (IPMs): A Quick Review</h1>
 
 <p>The IPM is defined as:</p>
 
@@ -67,7 +65,7 @@ In particular, I'll be introducing the Kernel Stein Discrepancy (KSD). As backgr
 
 <p>Notice that when \(f(x)=0\),  \(p(x) = q(x)\). Moreover, when \(p(x) &gt; q(x)\), \(f(x) &gt; 0\) and the same vice versa. This increases the quantity \(\mathbb{E}_{x \sim \mathbb{P}}[f(x)] - \mathbb{E}_{y \sim \mathbb{Q}}[f(y)]\) and ensures that the IPM is non-zero, indicating that \(\mathbb{P} \neq \mathbb{Q}\) as expected.</p>
 
-<h2 id="maximum-mean-discrepancy-mmd-a-quick-review">Maximum Mean Discrepancy (MMD): A Quick Review</h2>
+<h1 id="maximum-mean-discrepancy-mmd-a-quick-review">Maximum Mean Discrepancy (MMD): A Quick Review</h1>
 
 <p>The supremum in the IPM is over \(F\), the space of <em>all</em> possible functions. This can be impractical to evaluate and we often limit our function space to the unit ball of an RKHS. This restriction on the IPM constructs the Maximum Mean Discrepancy (MMD):</p>
 
@@ -85,7 +83,7 @@ In particular, I'll be introducing the Kernel Stein Discrepancy (KSD). As backgr
 
 \[\hat{MMD}^2 = \frac{1}{m(m-1)}\sum_{i=1}^{m}\sum_{j\neq i}^{m}k(x_i, x_j)+\frac{1}{n(n-1)}\sum_{i=1}^{n}\sum_{j\neq i}^{n}k(y_i, y_j)-\frac{2}{mn}\sum_{i=1}^{m}\sum_{j=1}^{n}k(x_i, y_j)\]
 
-<h3 id="mnist-example">MNIST Example</h3>
+<h2 id="mnist-example">MNIST Example</h2>
 
 <p>The MMD only requires \(\mathbb{P}\) and \(\mathbb{Q}\) samples, making no assumptions about their underlying distributions. This is useful when we don’t have strong intuitions about the data generating process. An example is the MNIST dataset, where we can quantify the discrepancy between digits directly from the image samples. A heatmap of the MMDs:</p>
 
@@ -95,7 +93,7 @@ In particular, I'll be introducing the Kernel Stein Discrepancy (KSD). As backgr
 
 <p>Samples from the same digit have lower MMDs (the diagonal) and we have higher MMDs for digits that are not as similar, such as zero and one. More similar digits like seven and nine have lower MMDs.</p>
 
-<h3 id="kernel-selection">Kernel Selection</h3>
+<h2 id="kernel-selection">Kernel Selection</h2>
 
 <p>The kernel defines the RKHS from which we acquire our witness function. If a poor kernel is chosen, the corresponding RKHS might provide a poor function space for discriminating \(\mathbb{P}\) and \(\mathbb{Q}\). We can visualise how  the kernel function affects our MNIST heatmap:</p>
 
@@ -103,41 +101,41 @@ In particular, I'll be introducing the Kernel Stein Discrepancy (KSD). As backgr
   <img src="the-kernel-stein-discrepancy/mnist_kernel.gif" width="80%" />
 </figure>
 
-<h2 id="kernel-stein-discrepancies-ksd">Kernel Stein Discrepancies (KSD)</h2>
+<h1 id="kernel-stein-discrepancies-ksd">Kernel Stein Discrepancies (KSD)</h1>
 
 <p>The MNIST example showed that when \(\mathbb{P}\) and \(\mathbb{Q}\) are unknown, the MMD is very effective. However, we often have samples from an unknown \(\mathbb{Q}\) that we want to compare to a known \(\mathbb{P}\). In this case, the MMD would have us sampling both \(\mathbb{P}\) and \(\mathbb{Q}\), a pretty inefficient approach. The Kernel Stein Discrepancy (KSD) solves this problem by incorporating the density function of \(\mathbb{P}\) into the discrepancy calculation. The KSD quantifies the descrepancy between a known density \(\mathbb{P}\) and an unknown density \(\mathbb{Q}\) that we can sample.</p>
 
-<h3 id="the-stein-identity">The Stein Identity</h3>
+<h2 id="the-stein-identity">The Stein Identity</h2>
 
-<p>Suppose we want a find an operator \(\mathcal{A_\mathbb{P}}\) such that:</p>
+<p>Suppose we want to find an operator \(\mathcal{A_\mathbb{P}}\) such that:</p>
 
 \[\mathbb{E}_{x \sim \mathbb{P}}([(\mathcal{A}f)(X)] = 0,  \forall f \Leftrightarrow X \sim \mathbb{P}\]
 
-<p>This is known as the Stein identity. Any operator \(\mathcal{A}\) that satisfies the Stein identity is called a Stein operator. The existence of \(\mathcal{A}\) would be a powerful tool. \(\mathcal{A}\) would define a Hilbert space where \(\mathbb{P}\) density always maps to zero. An unknown distribution \(\mathbb{Q}\) would only map to zero if \(\mathbb{P} = \mathbb{Q}\).</p>
+<p>This is known as the Stein identity. Any operator \(\mathcal{A}\) that satisfies the Stein identity is called a Stein operator. The existence of \(\mathcal{A}\) would be a powerful tool. \(\mathcal{A}\) would define a Hilbert space where the density of \(\mathbb{P}\) always maps to zero. An unknown distribution \(\mathbb{Q}\) would only map to zero when it is equal to \(\mathbb{P}\).</p>
 
 <p>For the MMD, \(f\) mapped our densities to an RKHS uniquely defined by our choice of kernel \(k(\cdot, \cdot)\). \(\mathcal{A}\) represents a modification of \(f\) to ensure that the Stein identity is satisifed. Modifying our MMD with \(\mathcal{A_\mathbb{P}}\):</p>
 
 \[\sup_{\|f\|_{RKHS} \leq 1 } \{ \mathbb{E}_{x \sim \mathbb{P}}[(\mathcal{A}f)(x)] - \mathbb{E}_{y \sim \mathbb{Q}}[(\mathcal{A}f)(y)] \}\]
 
-<p>Notice that if we’re able to find some \(\mathcal{A}\) satisfying the Stein identity, the term \(\mathbb{E}_{x \sim \mathbb{P}}[(\mathcal{A_\mathbb{P}}f)(x)]\) is zero, from our Stein identity, leaving us with a single expectation over \(\mathbb{Q}\). This is the Stein discrepancy:</p>
+<p>Notice that if we’re able to find an \(\mathcal{A}\) that satisfies the Stein identity, the term \(\mathbb{E}_{x \sim \mathbb{P}}[(\mathcal{A_\mathbb{P}}f)(x)]\) becomes zero, leaving us with a single expectation over \(\mathbb{Q}\). This is the Stein discrepancy:</p>
 
 \[SD = \sup_{\|f\|_{RKHS} \leq 1 } \{\mathbb{E}_{y \sim \mathbb{Q}}[(\mathcal{A}f)(y)] \}\]
 
-<p>Unlike the MMD, the Stein discrepancy has a single estimator over samples from \(\mathbb{Q}\). But how is \(\mathbb{P}\) involved? Surely a discrepancy between \(\mathbb{P}\) and \(\mathbb{Q}\) should also include information about \(\mathbb{P}\)!</p>
+<p>Unlike the MMD, the Stein discrepancy only has a single estimator, which is over the samples of \(\mathbb{Q}\). But how is \(\mathbb{P}\) involved? Surely a discrepancy between \(\mathbb{P}\) and \(\mathbb{Q}\) should also include information about \(\mathbb{P}\)!</p>
 
-<h3 id="stein-operators">Stein Operators</h3>
+<h2 id="stein-operators">Stein Operators</h2>
 
 <p>Given that our mapping \(f\) was unchanged from our MMD, the density \(\mathbb{P}\) must be incorporated in our Stein operator \(\mathcal{A}\). Understanding Stein operators that satisfy the Stein equation remains an open problem, but there have been many formulations of \(\mathcal{A}\). One formulation is the Langevin Stein operator:</p>
 
 \[(\mathcal{A}f)(x) := \langle \nabla_x \log p(x), f(x) \rangle + \nabla_x f(x)\]
 
-<p>where \(p(x)\) is the density function of \(\mathbb{P}\). This is often known as <em>the</em> Stein operator in machine learning. As we expected, \(\mathbb{P}\) is still present in our Stein discrepancy with the density function embedded into our Stein operator. We will denote the Stein operator \(\mathcal{A_{\mathbb{P}}}\) to indicate this explicitly:</p>
+<p>where \(p(x)\) is the density function of \(\mathbb{P}\). In machine learning, this is often known as <em>the</em> Stein operator. As we expected, \(\mathbb{P}\) is still present in our Stein discrepancy, embedded into our Stein operator. We will denote the Stein operator \(\mathcal{A_{\mathbb{P}}}\) to indicate this explicitly:</p>
 
 \[SD = \sup_{\|f\|_{RKHS} \leq 1 } \{\mathbb{E}_{y \sim \mathbb{Q}}[(\mathcal{A_{\mathbb{P}}}f)(y)] \}\]
 
 <p>Now that we have concrete examples of Stein operators, let’s discuss how to computationally apply \((\mathcal{A_{\mathbb{P}}}f)\) to our \(\mathbb{Q}\) samples.</p>
 
-<h3 id="stein-kernels">Stein Kernels</h3>
+<h2 id="stein-kernels">Stein Kernels</h2>
 
 <p>We know that kernel are defined:</p>
 
@@ -175,7 +173,7 @@ In particular, I'll be introducing the Kernel Stein Discrepancy (KSD). As backgr
 
 <p>It is a modification of a base kernel \(k\) with \(p(x)\), the density function of \(\mathbb{P}\).</p>
 
-<h3 id="numerical-convergence">Numerical Convergence</h3>
+<h2 id="numerical-convergence">Numerical Convergence</h2>
 
 <p>We can modify our Stein identity with our Stein Kernel:</p>
 
@@ -189,7 +187,7 @@ In particular, I'll be introducing the Kernel Stein Discrepancy (KSD). As backgr
   <img src="the-kernel-stein-discrepancy/stein_convergence.gif" width="60%" />
 </figure>
 
-<h3 id="the-kernel-stein-discrepancy-1">The Kernel Stein Discrepancy</h3>
+<h2 id="the-kernel-stein-discrepancy-1">The Kernel Stein Discrepancy</h2>
 
 <p>We have essentially arrived at the KSD formulation. Formally, it is defined as:</p>
 
@@ -197,7 +195,7 @@ In particular, I'll be introducing the Kernel Stein Discrepancy (KSD). As backgr
 
 <p>where \(k_{\mathbb{P}}\) is the Stein kernel.</p>
 
-<h3 id="mmd-rightarrow-ksd">MMD \(\Rightarrow\) KSD</h3>
+<h2 id="mmd-rightarrow-ksd">MMD \(\Rightarrow\) KSD</h2>
 
 <p>We derived the KSD from the MMD formulation, cancelling terms using the Stein identity. We can in some ways view the KSD is an instance of the MMD using a Stein kernel. If we computed the MMD with a Stein kernel, we can see its convergence to the KSD via the law of large numbers (i.e. \(\mathbb{E}_{X \sim \mathbb{P}}[k_{\mathbb{P}}(X, \tilde{X})] \rightarrow 0\) and \(\mathbb{E}_{X \sim \mathbb{P}, Y \sim \mathbb{Q}}[k_{\mathbb{P}}(X, Y)] \rightarrow 0\)).</p>
 
@@ -206,20 +204,48 @@ In particular, I'll be introducing the Kernel Stein Discrepancy (KSD). As backgr
   <figcaption> </figcaption>
 </figure>
 
-<h3 id="visualising-stein-kernels">Visualising Stein Kernels</h3>
+<h2 id="visualising-stein-kernels">Visualising Stein Kernels</h2>
 
-<p>We can visualise the kernel with respect to its different parameters:</p>
+<p>Because of their complex formulation, it can be difficult to have an intuitive understanding of Stein kernels. Visualisations may help build an understanding of what’s going on.</p>
+
+<h3 id="laplace-distribution">Laplace Distribution</h3>
+
+<p>Let’s first plot the distribution and base kernel for our Stein kernel evaluated at \(k(x, 0)\):</p>
 
 <figure class="image" align="center">
-  <img src="the-kernel-stein-discrepancy/kernel_dist_vs_base_kernel_params.png" width="100%" />
-  <figcaption>Stein Kernels for different base distributions</figcaption>
+  <img src="the-kernel-stein-discrepancy/laplace_and_imq_kernel.png" width="80%" />
 </figure>
 
-<p>We can also visually compare the Stein Kernels across different seed kernels.</p>
+<p>Recall the Stein kernel:</p>
+
+\[k_{\mathbb{P}}(x, y) = \nabla_y \log p(y)^T\nabla_x \log p(x)^T k(x, y) + \nabla_y \log p(y)^T\nabla_x k(x, y) + \nabla_x \log p(x)^T \nabla_y k(x, y) +  Tr(\nabla_x \nabla_y k(x,y))\]
+
+<p>Plotting each term in the Stein kernel:</p>
 
 <figure class="image" align="center">
-  <img src="the-kernel-stein-discrepancy/kernel_dist_vs_base_kernel_type.png" width="100%" />
-  <figcaption>Stein Kernels for different base kernels</figcaption>
+  <img src="the-kernel-stein-discrepancy/laplace_stein_kernel_decomposed.png" width="80%" />
+</figure>
+
+<p>Combining each term, we can visualise the Stein kernel:</p>
+
+<figure class="image" align="center">
+  <img src="the-kernel-stein-discrepancy/laplace_stein_kernel.png" width="80%" />
+</figure>
+
+<h3 id="cauchy-distribution">Cauchy Distribution</h3>
+
+<p>Let’s also visaulise the Stein kernel for a fat-tailed distribution, base kernel that is wider, and evaluating at \(k(x, y=1)\). In this example, the resulting Stein kernel is quite complex, but we can see how it is constructed with a series of simpler components.</p>
+
+<figure class="image" align="center">
+  <img src="the-kernel-stein-discrepancy/cauchy_and_imq_kernel.png" width="80%" />
+</figure>
+
+<figure class="image" align="center">
+  <img src="the-kernel-stein-discrepancy/cauchy_stein_kernel_decomposed.png" width="80%" />
+</figure>
+
+<figure class="image" align="center">
+  <img src="the-kernel-stein-discrepancy/cauchy_stein_kernel.png" width="80%" />
 </figure>
 
 <h1 id="applications-of-the-ksd">Applications of the KSD</h1>
