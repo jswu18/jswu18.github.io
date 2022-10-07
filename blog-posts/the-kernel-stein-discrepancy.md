@@ -143,14 +143,14 @@ $$\mathbb{E}_{X \sim \mathbb{P}}[k_{\mathbb{P}}(x, X)] = 0 \Leftrightarrow X \si
 
 where $$x \in \mathbb{R}^d$$.
 
-We can numerically verify the Stein identity by plotting the distribution of expectations of samples of $$k_{\mathbb{P}}(X, x)$$. The below plot compares $$Y \sim \mathbb{P}$$ and $$Y \sim \mathbb{Q}$$, where $$\mathbb{Q}$$ is a Laplace distribution. For $$\mathbb{P}$$, the distribution centers around zero, while the distribution for $$\mathbb{Q}$$ has a non-zero mean. Moreover, the effect of the law of large numbers shows how the histograms narrow as the sample size increases. 
+We can numerically verify the Stein identity by plotting the distribution of expectations of samples of $$k_{\mathbb{P}}(X, x)$$. The below plot compares $$X \sim \mathbb{P}$$ and $$X \sim \mathbb{Q}$$, where $$\mathbb{Q}$$ is a Laplace distribution. For $$\mathbb{P}$$, the distribution centers around zero, while the distribution for $$\mathbb{Q}$$ has a non-zero mean. Moreover, the effect of the law of large numbers shows how the histograms narrow as the sample size increases. 
 
 <figure class="image" align="center">
   <img src="the-kernel-stein-discrepancy/stein_convergence.gif" width="60%">
 </figure>
 
 
-## The Kernel Stein Discrepancy
+### The Kernel Stein Discrepancy
 
 We have essentially arrived at the KSD formulation. Formally, it is defined as:
 
@@ -163,7 +163,7 @@ where $$k_{\mathbb{P}}$$ is the Stein kernel.
 We derived the KSD from the MMD formulation, cancelling terms using the Stein identity. We can in some ways view the KSD is an instance of the MMD using a Stein kernel. If we computed the MMD with a Stein kernel, we can see its convergence to the KSD via the law of large numbers, $$\mathbb{E}_{X \sim \mathbb{P}}[k_{\mathbb{P}}(X, \tilde{X})] \rightarrow 0$$ and $$\mathbb{E}_{X \sim \mathbb{P}, Y \sim \mathbb{Q}}[k_{\mathbb{P}}(X, Y)] \rightarrow 0$$.
 
 <figure class="image" align="center">
-  <img src="the-kernel-stein-discrepancy/ksd_vs_mmd_per_trial.png" width="100%">
+  <img src="the-kernel-stein-discrepancy/ksd_vs_mmd.png" width="50%">
   <figcaption> </figcaption>
 </figure>
 
@@ -173,7 +173,7 @@ Because of their complex formulation, it can be difficult to have an intuitive u
 
 #### Laplace Distribution
 
-Let's first plot the distribution and base kernel for our Stein kernel evaluated at $$k(x, 0)$$:
+Let's first plot the distribution and base kernel for our Stein kernel, evaluated at $$k(x, 0)$$:
 
 <figure class="image" align="center">
   <img src="the-kernel-stein-discrepancy/laplace_and_imq_kernel.png" width="80%">
@@ -183,14 +183,13 @@ Recall the Stein kernel:
 
 $$k_{\mathbb{P}}(x, y) = \nabla_y \log p(y)^T\nabla_x \log p(x)^T k(x, y) + \nabla_y \log p(y)^T\nabla_x k(x, y) + \nabla_x \log p(x)^T \nabla_y k(x, y) +  Tr(\nabla_x \nabla_y k(x,y))$$
 
-Plotting each term in the Stein kernel:
+Each term in the Stein kernel is a product of a distribution component and kernel component. Plotting each component and their product to construct each term:
 
 <figure class="image" align="center">
   <img src="the-kernel-stein-discrepancy/laplace_stein_kernel_decomposed.png" width="80%">
 </figure>
 
-Combining each term, we can visualise the Stein kernel:
-
+Combining the terms, we can visualise the Stein kernel:
 
 <figure class="image" align="center">
   <img src="the-kernel-stein-discrepancy/laplace_stein_kernel.png" width="80%">
@@ -198,7 +197,7 @@ Combining each term, we can visualise the Stein kernel:
 
 #### Cauchy Distribution
 
-Let's also visaulise the Stein kernel for a fat-tailed distribution, base kernel that is wider, and evaluating at $$k(x, y=1)$$:
+Let's also visualise the Stein kernel for a fat-tailed distribution, base kernel that is wider, and evaluating at $$k(x, y=5)$$:
 
 <figure class="image" align="center">
   <img src="the-kernel-stein-discrepancy/cauchy_and_imq_kernel.png" width="80%">
@@ -227,6 +226,10 @@ Let's also visaulise the Stein kernel for a fat-tailed distribution, base kernel
 # Limitations of the KSD
 
 multimodal
+
+<figure class="image" align="center">
+  <img src="the-kernel-stein-discrepancy/base_kernel_param_vs_ksd.gif" width="100%">
+</figure>
 
 ## Appendix 
 ### MMD Derivation
