@@ -160,7 +160,7 @@ where $$k_{\mathbb{P}}$$ is the Stein kernel.
 
 ### MMD $$\Rightarrow$$ KSD 
 
-We derived the KSD from the MMD formulation, cancelling terms using the Stein identity. We can in some ways view the KSD is an instance of the MMD using a Stein kernel. If we computed the MMD with a Stein kernel, we can see its convergence to the KSD via the law of large numbers (i.e. $$\mathbb{E}_{X \sim \mathbb{P}}[k_{\mathbb{P}}(X, \tilde{X})] \rightarrow 0$$ and $$\mathbb{E}_{X \sim \mathbb{P}, Y \sim \mathbb{Q}}[k_{\mathbb{P}}(X, Y)] \rightarrow 0$$).
+We derived the KSD from the MMD formulation, cancelling terms using the Stein identity. We can in some ways view the KSD is an instance of the MMD using a Stein kernel. If we computed the MMD with a Stein kernel, we can see its convergence to the KSD via the law of large numbers, $$\mathbb{E}_{X \sim \mathbb{P}}[k_{\mathbb{P}}(X, \tilde{X})] \rightarrow 0$$ and $$\mathbb{E}_{X \sim \mathbb{P}, Y \sim \mathbb{Q}}[k_{\mathbb{P}}(X, Y)] \rightarrow 0$$.
 
 <figure class="image" align="center">
   <img src="the-kernel-stein-discrepancy/ksd_vs_mmd_per_trial.png" width="100%">
@@ -169,7 +169,7 @@ We derived the KSD from the MMD formulation, cancelling terms using the Stein id
 
 ### Visualising Stein Kernels
 
-Because of their complex formulation, it can be difficult to have an intuitive understanding of Stein kernels. Visualisations may help build an understanding of what's going on.
+Because of their complex formulation, it can be difficult to have an intuitive understanding of Stein kernels. Visualisations may help build an understanding of what's going on. The resulting Stein kernel can be quite complex, but we can see how they are constructed with a series of simpler components.
 
 #### Laplace Distribution
 
@@ -198,7 +198,7 @@ Combining each term, we can visualise the Stein kernel:
 
 #### Cauchy Distribution
 
-Let's also visaulise the Stein kernel for a fat-tailed distribution, base kernel that is wider, and evaluating at $$k(x, y=1)$$. In this example, the resulting Stein kernel is quite complex, but we can see how it is constructed with a series of simpler components.
+Let's also visaulise the Stein kernel for a fat-tailed distribution, base kernel that is wider, and evaluating at $$k(x, y=1)$$:
 
 <figure class="image" align="center">
   <img src="the-kernel-stein-discrepancy/cauchy_and_imq_kernel.png" width="80%">
