@@ -163,7 +163,7 @@ where $$k_{\mathbb{P}}$$ is the Stein kernel.
 We derived the KSD from the MMD formulation, cancelling terms using the Stein identity. We can in some ways view the KSD is an instance of the MMD using a Stein kernel. If we computed the MMD with a Stein kernel, we can see its convergence to the KSD via the law of large numbers, $$\mathbb{E}_{X \sim \mathbb{P}}[k_{\mathbb{P}}(X, \tilde{X})] \rightarrow 0$$ and $$\mathbb{E}_{X \sim \mathbb{P}, Y \sim \mathbb{Q}}[k_{\mathbb{P}}(X, Y)] \rightarrow 0$$.
 
 <figure class="image" align="center">
-  <img src="the-kernel-stein-discrepancy/ksd_vs_mmd.png" width="50%">
+  <img src="the-kernel-stein-discrepancy/mmd_to_ksd_convergence.gif" width="50%">
   <figcaption> </figcaption>
 </figure>
 
@@ -175,24 +175,16 @@ Because of their complex formulation, it can be difficult to have an intuitive u
 
 Let's first plot the distribution and base kernel for our Stein kernel, evaluated at $$k(x, 0)$$:
 
-<figure class="image" align="center">
-  <img src="the-kernel-stein-discrepancy/laplace_and_imq_kernel.png" width="80%">
-</figure>
-
 Recall the Stein kernel:
 
 $$k_{\mathbb{P}}(x, y) = \nabla_y \log p(y)^T\nabla_x \log p(x)^T k(x, y) + \nabla_y \log p(y)^T\nabla_x k(x, y) + \nabla_x \log p(x)^T \nabla_y k(x, y) +  Tr(\nabla_x \nabla_y k(x,y))$$
 
 Each term in the Stein kernel is a product of a distribution component and kernel component. Plotting each component and their product to construct each term:
 
-<figure class="image" align="center">
-  <img src="the-kernel-stein-discrepancy/laplace_stein_kernel_decomposed.png" width="80%">
-</figure>
-
 Combining the terms, we can visualise the Stein kernel:
 
 <figure class="image" align="center">
-  <img src="the-kernel-stein-discrepancy/laplace_stein_kernel.png" width="80%">
+  <img src="the-kernel-stein-discrepancy/laplace_stein_kernel_decomposed.gif" width="80%">
 </figure>
 
 #### Cauchy Distribution
@@ -200,28 +192,20 @@ Combining the terms, we can visualise the Stein kernel:
 Let's also visualise the Stein kernel for a fat-tailed distribution, base kernel that is wider, and evaluating at $$k(x, y=5)$$:
 
 <figure class="image" align="center">
-  <img src="the-kernel-stein-discrepancy/cauchy_and_imq_kernel.png" width="80%">
-</figure>
-
-<figure class="image" align="center">
-  <img src="the-kernel-stein-discrepancy/cauchy_stein_kernel_decomposed.png" width="80%">
-</figure>
-
-<figure class="image" align="center">
-  <img src="the-kernel-stein-discrepancy/cauchy_stein_kernel.png" width="80%">
+  <img src="the-kernel-stein-discrepancy/cauchy_stein_kernel_decomposed.gif" width="80%">
 </figure>
 
 
 
 # Applications of the KSD
 
+- variational inference/bayesian inference
 - check quality of sampling algos
   - mcmc convergence diagnosis
   - importance sampling -> instead of sampling a complex dist P, sample from Q, a simpler dist, and weight samples accordingly
-- minimum distance applications
 - density estimation
-- bayesian inference
 - hypothesis testing
+- https://en.wikipedia.org/wiki/Stein_discrepancy#Applications_of_Stein_discrepancy
 
 # Limitations of the KSD
 
