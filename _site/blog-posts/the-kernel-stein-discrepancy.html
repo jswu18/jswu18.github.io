@@ -70,13 +70,13 @@ In particular, I'll be introducing the Kernel Stein Discrepancy (KSD). As backgr
 
 <p>This is a powerful tool that we can build on through inference on \(\theta\). We can finding the best params \(\theta\) from a distribution family \(P_{\theta}, \theta \in \Theta\) to represent the data and by extension, the data generating process$$:</p>
 
-\[\argmin_{\theta \in \Theta} KSD_{P_\theta}(\{x_i\}_{i=1}^{N})\]
+\[\arg \min_{\theta \in \Theta} KSD_{P_\theta}(\{x_i\}_{i=1}^{N})\]
 
 <p>where \(x_i \sim \mathbb{Q}\), the unknown distribution or data generating process that we want to approximate.</p>
 
 <p>We can also perform inference on a more expressive set of distributions by defining \(T\), a measure transport on a simple distribution \(P\):</p>
 
-\[\argmin_{T \in \mathcal{T}} KSD_{T_{\#}Q}(\{x_i\}_{i=1}^{N})\]
+\[\arg \min_{T \in \mathcal{T}} KSD_{(T_{\#}P)}(\{x_i\}_{i=1}^{N})\]
 
 <p>where \(\mathcal{T}\) is our space of measure transports.</p>
 
@@ -108,7 +108,7 @@ In particular, I'll be introducing the Kernel Stein Discrepancy (KSD). As backgr
 
 \[MMD^2 =  \mathbb{E}_{X, \tilde{X} \sim \mathbb{P}}[k(X,\tilde{X})]-2\mathbb{E}_{X \sim \mathbb{P},Y \sim \mathbb{Q}}[k(X,Y)]+\mathbb{E}_{Y, \tilde{Y} \sim \mathbb{Q}}[k(Y,\tilde{Y})]\]
 
-<p>see <a href="https://www.revolut.com">here</a> for a derivation. Usually the RKHS is defined from our choice of reproducing kernel.</p>
+<p>where the derivation can be found in the Appendix. Usually the RKHS is defined by our choice of reproducing kernel.</p>
 
 <p>An unbiased estimate of the MMD:</p>
 

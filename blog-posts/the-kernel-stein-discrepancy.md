@@ -31,13 +31,13 @@ $$KSD_{P_\theta}(\{x_i\}_{i=1}^{N})$$
 
 This is a powerful tool that we can build on through inference on $$\theta$$. We can finding the best params $$\theta$$ from a distribution family $$P_{\theta}, \theta \in \Theta$$ to represent the data and by extension, the data generating process$$:
 
-$$\argmin_{\theta \in \Theta} KSD_{P_\theta}(\{x_i\}_{i=1}^{N})$$
+$$\arg \min_{\theta \in \Theta} KSD_{P_\theta}(\{x_i\}_{i=1}^{N})$$
 
 where $$x_i \sim \mathbb{Q}$$, the unknown distribution or data generating process that we want to approximate.
 
 We can also perform inference on a more expressive set of distributions by defining $$T$$, a measure transport on a simple distribution $$P$$:
 
-$$\argmin_{T \in \mathcal{T}} KSD_{T_{\#}Q}(\{x_i\}_{i=1}^{N})$$
+$$\arg \min_{T \in \mathcal{T}} KSD_{(T_{\#}P)}(\{x_i\}_{i=1}^{N})$$
 
 where $$\mathcal{T}$$ is our space of measure transports. 
 
@@ -70,7 +70,7 @@ Given $$k(\cdot, \cdot)$$, the reproducing kernel associated with our RKHS, it c
 
 $$MMD^2 =  \mathbb{E}_{X, \tilde{X} \sim \mathbb{P}}[k(X,\tilde{X})]-2\mathbb{E}_{X \sim \mathbb{P},Y \sim \mathbb{Q}}[k(X,Y)]+\mathbb{E}_{Y, \tilde{Y} \sim \mathbb{Q}}[k(Y,\tilde{Y})]$$ 
 
-see <a href="https://www.revolut.com">here</a> for a derivation. Usually the RKHS is defined from our choice of reproducing kernel.
+where the derivation can be found in the Appendix. Usually the RKHS is defined by our choice of reproducing kernel.
 
 An unbiased estimate of the MMD:
 
