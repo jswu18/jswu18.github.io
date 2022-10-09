@@ -152,11 +152,11 @@ In particular, I'll be introducing the Kernel Stein Discrepancy (KSD). As backgr
 
 \[SD = \sup_{\|f\|_{RKHS} \leq 1 } \{\mathbb{E}_{y \sim \mathbb{Q}}[(\mathcal{A}f)(y)] \}\]
 
-<p>Unlike the MMD, the Stein discrepancy only has a single estimator, which is over the samples of \(\mathbb{Q}\). But how is \(\mathbb{P}\) involved? Surely a discrepancy between \(\mathbb{P}\) and \(\mathbb{Q}\) should also include information about \(\mathbb{P}\)!</p>
+<p>Unlike the MMD, the Stein discrepancy only has a single estimator, which is over the samples of \(\mathbb{Q}\). But how is \(\mathbb{P}\) involved? Surely a discrepancy between \(\mathbb{P}\) and \(\mathbb{Q}\) should also include information about \(\mathbb{P}\)! Given that our mapping \(f\) was unchanged from our MMD, the density \(\mathbb{P}\) must be incorporated in our Stein operator \(\mathcal{A}\).</p>
 
 <h3 id="stein-operators">Stein Operators</h3>
 
-<p>Given that our mapping \(f\) was unchanged from our MMD, the density \(\mathbb{P}\) must be incorporated in our Stein operator \(\mathcal{A}\). Understanding Stein operators that satisfy the Stein equation remains an open problem, but there have been many formulations of \(\mathcal{A}\). One formulation is the Langevin Stein operator:</p>
+<p>Understanding Stein operators that satisfy the Stein equation remains an open problem, but there have been many formulations of \(\mathcal{A}\). One formulation is the Langevin Stein operator:</p>
 
 \[(\mathcal{A}f)(x) := \langle \nabla_x \log p(x), f(x) \rangle + \nabla_x f(x)\]
 
