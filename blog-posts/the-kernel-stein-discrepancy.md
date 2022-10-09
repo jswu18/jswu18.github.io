@@ -149,12 +149,12 @@ Unpacking the Langevin Stein operator:
 $$\dfrac{1}{p(x)} \dfrac{d}{dx}(f(x)p(x)) = \dfrac{1}{p(x)}(p(x)\dfrac{d}{dx}(f(x))+ f(x)\dfrac{d}{dx}(p(x)))$$
 
 Expanding:
+
 $$\dfrac{d}{dx}(f(x))+ f(x)\dfrac{1}{p(x)}\dfrac{d}{dx}(p(x))$$
 
 Knowing that $$\dfrac{d}{dx} \log(f(x)) = \dfrac{f'(x)}{f(x)}$$:
 
 $$\dfrac{d}{dx}(f(x))+ f(x)\dfrac{d}{dx}(\log p(x))$$
-
 
 Defining the second term as a dot product, we have the formulation of the Langevin Stein operator that will be used:
 
