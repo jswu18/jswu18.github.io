@@ -16,7 +16,7 @@ The Kernel Stein Discrepancy (KSD) calculates the discrepancy between a known di
 
 $$KSD_{\mathbb{P}}(\{x_i\}_{i=1}^{N})$$
 
-The existence of such a statistical quantity has become a popular area of research due to its usefulness in many applications in statistics and machine learning. Thus, we will first briefly describe a few applications to help motivate the topic. We will then build our formulation of the KSD through the lens of integral probability metrics (IPMs) and the maximum mean discrepancy (MMD). 
+Due to its usefulness in many applications of statistics and machine learning, the existence of such a statistical quantity has been the source of many popular research areas. Thus, we will first briefly describe a few applications to help motivate the topic. We will then build our formulation of the KSD through the lens of integral probability metrics (IPMs) and the maximum mean discrepancy (MMD). 
 
 ### KSD for Sampling Techniques
 
