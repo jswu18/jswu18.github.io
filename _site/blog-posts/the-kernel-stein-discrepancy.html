@@ -160,45 +160,15 @@ In particular, I'll be introducing the Kernel Stein Discrepancy (KSD). As backgr
 
 \[(\mathcal{A}f)(x) := \dfrac{1}{p(x)} \dfrac{d}{dx}(f(x)p(x))\]
 
-<p>where \(p(x)\) is the density function of \(\mathbb{P}\). In machine learning, this is often known as <em>the</em> Stein operator. As we expected, \(\mathbb{P}\) is still present in our Stein discrepancy, embedded into our Stein operator. We will denote the Stein operator \(\mathcal{A_{\mathbb{P}}}\) to indicate this explicitly:</p>
+<p>where \(p(x)\) is the density function of \(\mathbb{P}\). In machine learning, this is often known as <em>the</em> Stein operator. A proof of the Langevin Stein operator satisifying the Stein Identity is in the Appendix. As we expected, \(\mathbb{P}\) is still present in our Stein discrepancy, embedded into our Stein operator. We will denote the Stein operator \(\mathcal{A_{\mathbb{P}}}\) to indicate this explicitly:</p>
 
 \[SD = \sup_{\|f\|_{RKHS} \leq 1 } \{\mathbb{E}_{y \sim \mathbb{Q}}[(\mathcal{A_{\mathbb{P}}}f)(y)] \}\]
 
-<p>Inserting into the Stein identity, we can check that it holds:</p>
+<p>From the definition of the Langevin Stein operator, we can the derive the Langevin Stein operator that we will use for the rest of this article:</p>
 
-\[\mathbb{E}_{x \sim \mathbb{P}}[\dfrac{1}{p(x)}\dfrac{d}{dx}(f(x)p(x))]\]
+\[(\mathcal{A_{\mathbb{P}}}f)(x) = \langle \nabla_x \log p(x), f(x) \rangle + \nabla_x f(x)\]
 
-<p>From the definition of the expectation:</p>
-
-\[\int p(x) \dfrac{1}{p(x)}\dfrac{d}{dx}(f(x)p(x))dx\]
-
-<p>Cancelling terms:</p>
-
-\[\int \dfrac{d}{dx}(f(x)p(x))dx\]
-
-<p>We end up with the result:</p>
-
-\[[f(x)p(x)]_{-\infty}^{\infty}\]
-
-<p>Assuming that as \(x \rightarrow \infty\) the quantities \(p(x) \rightarrow 0\) and \(f(x) \rightarrow 0\), we have satisfied the Stein Identity.</p>
-
-<p>Unpacking the Langevin Stein operator:</p>
-
-\[\dfrac{1}{p(x)} \dfrac{d}{dx}(f(x)p(x)) = \dfrac{1}{p(x)}(p(x)\dfrac{d}{dx}f(x)+ f(x)\dfrac{d}{dx}p(x)\]
-
-<p>Expanding:</p>
-
-\[\dfrac{d}{dx}f(x)+ f(x)\dfrac{1}{p(x)}\dfrac{d}{dx}p(x)\]
-
-<p>Knowing that \(\dfrac{d}{dx} \log(f(x)) = \dfrac{f'(x)}{f(x)}\):</p>
-
-\[\dfrac{d}{dx}(f(x))+ f(x)\dfrac{d}{dx}\log p(x)\]
-
-<p>Defining the second term as a dot product, we have the formulation of the Langevin Stein operator that will be used:</p>
-
-\[(\mathcal{A}f)(x) = \langle \nabla_x \log p(x), f(x) \rangle + \nabla_x f(x)\]
-
-<p>Now that we have a concrete example of a Stein operator, let’s discuss how to computationally apply \((\mathcal{A_{\mathbb{P}}}f)\) to our \(\mathbb{Q}\) samples.</p>
+<p>Again, this derivation is in the Appendix. Now that we have a concrete example of a Stein operator, let’s discuss how to use \((\mathcal{A_{\mathbb{P}}}f)\) on our \(\mathbb{Q}\) samples.</p>
 
 <h3 id="stein-kernels">Stein Kernels</h3>
 
@@ -293,7 +263,7 @@ In particular, I'll be introducing the Kernel Stein Discrepancy (KSD). As backgr
   <img src="the-kernel-stein-discrepancy/cauchy_stein_kernel_decomposed.gif" width="80%" />
 </figure>
 
-<h2 id="conclusions">Conclusions</h2>
+<h2 id="some-last-thoughts">Some Last Thoughts</h2>
 
 <h2 id="links">Links</h2>
 
@@ -389,6 +359,44 @@ In particular, I'll be introducing the Kernel Stein Discrepancy (KSD). As backgr
 <p>Knowing that \(\|\mu_{\mathbb{P}}\|^2_H = \langle \mathbb{E}[k(\cdot, X)], \mathbb{E}[k(\cdot, \tilde{X})]\rangle = \mathbb{E}[k(X, \tilde{X})]\) and \(\langle \mu_{\mathbb{P}}, \mu_{\mathbb{P}} \rangle_H = \langle\mathbb{E}[k(\cdot, X)], \mathbb{E}[k(\cdot, Y)]\rangle = \mathbb{E}[k(X, Y)]\), we can substitute and achieve our desired result:</p>
 
 \[MMD^2 =  \mathbb{E}_{X, \tilde{X} \sim \mathbb{P}}[k(X,\tilde{X})]-2\mathbb{E}_{X \sim \mathbb{P},Y \sim \mathbb{Q}}[k(X,Y)]+\mathbb{E}_{Y, \tilde{Y} \sim \mathbb{Q}}[k(Y,\tilde{Y})]\]
+
+<h3 id="stein-identity-proof-for-the-langevin-stein-kernel">Stein Identity Proof for the Langevin Stein Kernel</h3>
+
+<p>Inserting into the Stein identity, we can check that it holds:</p>
+
+\[\mathbb{E}_{x \sim \mathbb{P}}[\dfrac{1}{p(x)}\dfrac{d}{dx}(f(x)p(x))]\]
+
+<p>From the definition of the expectation:</p>
+
+\[\int p(x) \dfrac{1}{p(x)}\dfrac{d}{dx}(f(x)p(x))dx\]
+
+<p>Cancelling terms:</p>
+
+\[\int \dfrac{d}{dx}(f(x)p(x))dx\]
+
+<p>We end up with the result:</p>
+
+\[[f(x)p(x)]_{-\infty}^{\infty}\]
+
+<p>Assuming that as \(x \rightarrow \infty\) the quantities \(p(x) \rightarrow 0\) and \(f(x) \rightarrow 0\), we have satisfied the Stein Identity.</p>
+
+<h3 id="langevin-stein-operator-derivation">Langevin Stein Operator Derivation</h3>
+
+<p>Unpacking the Langevin Stein operator:</p>
+
+\[\dfrac{1}{p(x)} \dfrac{d}{dx}(f(x)p(x)) = \dfrac{1}{p(x)}(p(x)\dfrac{d}{dx}f(x)+ f(x)\dfrac{d}{dx}p(x)\]
+
+<p>Expanding:</p>
+
+\[\dfrac{d}{dx}f(x)+ f(x)\dfrac{1}{p(x)}\dfrac{d}{dx}p(x)\]
+
+<p>Knowing that \(\dfrac{d}{dx} \log(f(x)) = \dfrac{f'(x)}{f(x)}\):</p>
+
+\[\dfrac{d}{dx}(f(x))+ f(x)\dfrac{d}{dx}\log p(x)\]
+
+<p>Defining the second term as a dot product, we have our desired formulation of the Langevin Stein operator:</p>
+
+\[(\mathcal{A}f)(x) = \langle \nabla_x \log p(x), f(x) \rangle + \nabla_x f(x)\]
 
   </div>
 </div>

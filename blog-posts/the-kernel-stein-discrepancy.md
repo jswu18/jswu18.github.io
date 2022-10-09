@@ -122,45 +122,15 @@ Understanding Stein operators that satisfy the Stein equation remains an open pr
 
 $$(\mathcal{A}f)(x) := \dfrac{1}{p(x)} \dfrac{d}{dx}(f(x)p(x))$$
 
-where $$p(x)$$ is the density function of $$\mathbb{P}$$. In machine learning, this is often known as *the* Stein operator. As we expected, $$\mathbb{P}$$ is still present in our Stein discrepancy, embedded into our Stein operator. We will denote the Stein operator $$\mathcal{A_{\mathbb{P}}}$$ to indicate this explicitly: 
+where $$p(x)$$ is the density function of $$\mathbb{P}$$. In machine learning, this is often known as *the* Stein operator. A proof of the Langevin Stein operator satisifying the Stein Identity is in the Appendix. As we expected, $$\mathbb{P}$$ is still present in our Stein discrepancy, embedded into our Stein operator. We will denote the Stein operator $$\mathcal{A_{\mathbb{P}}}$$ to indicate this explicitly: 
 
 $$SD = \sup_{\|f\|_{RKHS} \leq 1 } \{\mathbb{E}_{y \sim \mathbb{Q}}[(\mathcal{A_{\mathbb{P}}}f)(y)] \}$$
 
-Inserting into the Stein identity, we can check that it holds:
+From the definition of the Langevin Stein operator, we can the derive the Langevin Stein operator that we will use for the rest of this article:
 
-$$\mathbb{E}_{x \sim \mathbb{P}}[\dfrac{1}{p(x)}\dfrac{d}{dx}(f(x)p(x))]$$
+$$(\mathcal{A_{\mathbb{P}}}f)(x) = \langle \nabla_x \log p(x), f(x) \rangle + \nabla_x f(x)$$
 
-From the definition of the expectation:
-
-$$\int p(x) \dfrac{1}{p(x)}\dfrac{d}{dx}(f(x)p(x))dx$$
-
-Cancelling terms:
-
-$$\int \dfrac{d}{dx}(f(x)p(x))dx$$
-
-We end up with the result:
-
-$$[f(x)p(x)]_{-\infty}^{\infty}$$
-
-Assuming that as $$x \rightarrow \infty$$ the quantities $$p(x) \rightarrow 0$$ and $$f(x) \rightarrow 0$$, we have satisfied the Stein Identity.
-
-Unpacking the Langevin Stein operator: 
-
-$$\dfrac{1}{p(x)} \dfrac{d}{dx}(f(x)p(x)) = \dfrac{1}{p(x)}(p(x)\dfrac{d}{dx}f(x)+ f(x)\dfrac{d}{dx}p(x)$$
-
-Expanding:
-
-$$\dfrac{d}{dx}f(x)+ f(x)\dfrac{1}{p(x)}\dfrac{d}{dx}p(x)$$
-
-Knowing that $$\dfrac{d}{dx} \log(f(x)) = \dfrac{f'(x)}{f(x)}$$:
-
-$$\dfrac{d}{dx}(f(x))+ f(x)\dfrac{d}{dx}\log p(x)$$
-
-Defining the second term as a dot product, we have the formulation of the Langevin Stein operator that will be used:
-
-$$(\mathcal{A}f)(x) = \langle \nabla_x \log p(x), f(x) \rangle + \nabla_x f(x)$$
-
-Now that we have a concrete example of a Stein operator, let's discuss how to computationally apply $$(\mathcal{A_{\mathbb{P}}}f)$$ to our $$\mathbb{Q}$$ samples.
+Again, this derivation is in the Appendix. Now that we have a concrete example of a Stein operator, let's discuss how to use $$(\mathcal{A_{\mathbb{P}}}f)$$ on our $$\mathbb{Q}$$ samples.
 
 ### Stein Kernels
 
@@ -257,7 +227,7 @@ Another breakdown of a Stein kernel with a Cauchy distribution and inverse multi
   <img src="the-kernel-stein-discrepancy/cauchy_stein_kernel_decomposed.gif" width="80%">
 </figure>
 
-## Conclusions
+## Some Last Thoughts
 
 ## Links
 
@@ -356,3 +326,42 @@ $$MMD^2 = \|\mu_{\mathbb{P}}\|^2 - 2|\langle \mu_{\mathbb{P}}, \mu_{\mathbb{Q}} 
 Knowing that $$\|\mu_{\mathbb{P}}\|^2_H = \langle \mathbb{E}[k(\cdot, X)], \mathbb{E}[k(\cdot, \tilde{X})]\rangle = \mathbb{E}[k(X, \tilde{X})]$$ and $$\langle \mu_{\mathbb{P}}, \mu_{\mathbb{P}} \rangle_H = \langle\mathbb{E}[k(\cdot, X)], \mathbb{E}[k(\cdot, Y)]\rangle = \mathbb{E}[k(X, Y)]$$, we can substitute and achieve our desired result:
 
 $$MMD^2 =  \mathbb{E}_{X, \tilde{X} \sim \mathbb{P}}[k(X,\tilde{X})]-2\mathbb{E}_{X \sim \mathbb{P},Y \sim \mathbb{Q}}[k(X,Y)]+\mathbb{E}_{Y, \tilde{Y} \sim \mathbb{Q}}[k(Y,\tilde{Y})]$$
+
+### Stein Identity Proof for the Langevin Stein Kernel
+
+Inserting into the Stein identity, we can check that it holds:
+
+$$\mathbb{E}_{x \sim \mathbb{P}}[\dfrac{1}{p(x)}\dfrac{d}{dx}(f(x)p(x))]$$
+
+From the definition of the expectation:
+
+$$\int p(x) \dfrac{1}{p(x)}\dfrac{d}{dx}(f(x)p(x))dx$$
+
+Cancelling terms:
+
+$$\int \dfrac{d}{dx}(f(x)p(x))dx$$
+
+We end up with the result:
+
+$$[f(x)p(x)]_{-\infty}^{\infty}$$
+
+Assuming that as $$x \rightarrow \infty$$ the quantities $$p(x) \rightarrow 0$$ and $$f(x) \rightarrow 0$$, we have satisfied the Stein Identity.
+
+
+### Langevin Stein Operator Derivation
+
+Unpacking the Langevin Stein operator: 
+
+$$\dfrac{1}{p(x)} \dfrac{d}{dx}(f(x)p(x)) = \dfrac{1}{p(x)}(p(x)\dfrac{d}{dx}f(x)+ f(x)\dfrac{d}{dx}p(x)$$
+
+Expanding:
+
+$$\dfrac{d}{dx}f(x)+ f(x)\dfrac{1}{p(x)}\dfrac{d}{dx}p(x)$$
+
+Knowing that $$\dfrac{d}{dx} \log(f(x)) = \dfrac{f'(x)}{f(x)}$$:
+
+$$\dfrac{d}{dx}(f(x))+ f(x)\dfrac{d}{dx}\log p(x)$$
+
+Defining the second term as a dot product, we have our desired formulation of the Langevin Stein operator:
+
+$$(\mathcal{A}f)(x) = \langle \nabla_x \log p(x), f(x) \rangle + \nabla_x f(x)$$
