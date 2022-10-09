@@ -18,13 +18,13 @@ $$KSD_{\mathbb{P}}(\{x_i\}_{i=1}^{N})$$
 
 The existence of such a statistical quantity has become a popular area of research due to its usefulness in many applications in statistics and machine learning. Thus, we will first briefly describe a few applications to help motivate the topic. We will then build our formulation of the KSD through the lens of integral probability metrics (IPMs) and the maximum mean discrepancy (MMD). 
 
-### Sampling Techniques: An Application
+### The KSD for Sampling Techniques
 
 For many complex distributions, sampling techniques (i.e. MCMC) are important tools for tractablility. Through the development of many such techniques, we need to ensure that these samplers generate samples genuinely representative of the underlying distribution. The KSD can evaluate the quality of the sampler, ensuring that it isn't biased. For a given distribution $$\mathbb{P}$$ and $$N$$ samples $$\{x_i\}_{i=1}^{N}$$ from our sampler, we can also calculate $$KSD_{\mathbb{P}}(\{x_i\}_{i=1}^{N})$$. We can use this to determine the convergence of $$\{x_i\}_{i=1}^{N}$$ as $$N \rightarrow \infty$$. 
 
 In addition to evaluating sampler quality, the KSD can also be used "correct" the samples of a biased sampler! This correction can be done by applying weight to each sample and minimising the KSD with respect to these sample weights. We can therefore continue to use a biased sampler that might be more computationally efficient by simply reweighting its samples with the KSD.
 
-### Goodness of Fit and Approximate Inference: An Application
+### The KSD for Goodness of Fit and Approximate Inference
 The goodness of fit of a statistical model is fundamental to hypothesis testing in statistics. It involves quantifying the discrepancy between an observed dataset $$D = \{x_i\}_{i=1}^{N}$$ and a statistical model $$P_\theta$$. The KSD lends itself very well to hypothesis testing where we can compute:
 
 $$KSD_{P_\theta}(\{x_i\}_{i=1}^{N})$$
