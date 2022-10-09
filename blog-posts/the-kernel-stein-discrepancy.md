@@ -209,7 +209,7 @@ Because of their complex formulation, it can be difficult to have an intuitive u
 $$k_{\mathbb{P}}(x, y) = \nabla_y \log p(y)^T\nabla_x \log p(x) k(x, y) + \nabla_y \log p(y)^T\nabla_x k(x, y) + \nabla_x \log p(x)^T \nabla_y k(x, y) +  Tr(\nabla_x \nabla_y k(x,y))$$
 
 
-Plotting the distribution and base kernel in our Stein kernel, we can see how the inidivudal components contribute to the final shape of the kernel. Below, we first plot the distribution and base kernel $$k(x,y=y')$$. This is followed by a breakdown of each term in the Stein kernel, a product of a distribution component and kernel component. Finally, the resulting Stein kernel is visualised as the combination of the four terms. 
+Below, we first plot the distribution and base kernel $$k(x,y=y')$$. This is followed by a breakdown of the terms in the Stein kernel, each calculated through the product of a distribution component and a kernel component. Finally, the resulting Stein kernel is visualised as the sum of the four terms. 
 
 Here is breakdown of a Stein kernel with a Laplace distribution and Gaussian base kernel:
 
