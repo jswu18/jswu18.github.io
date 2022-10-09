@@ -345,7 +345,7 @@ We end up with the result:
 
 $$[f(x)p(x)]_{-\infty}^{\infty}$$
 
-Assuming that as $$x \rightarrow \infty$$ the quantities $$p(x) \rightarrow 0$$ and $$f(x) \rightarrow 0$$, we have satisfied the Stein Identity.
+Assuming that as $$x \rightarrow \pm\infty$$ the quantities $$p(x) \rightarrow 0$$ and $$f(x) \rightarrow 0$$, we have satisfied the Stein Identity.
 
 
 ### Langevin Stein Operator Derivation
