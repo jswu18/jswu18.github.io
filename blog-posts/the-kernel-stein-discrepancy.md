@@ -12,7 +12,7 @@ In particular, I'll be introducing the Kernel Stein Discrepancy (KSD). As backgr
 
 ## Motivations
 
-The Kernel Stein Discrepancy (KSD) calculates the discrepancy between a known distribution $$\mathbb{P}$$ and an unknown distribution $$\mathbb{Q}$$ that we can only sample, $$\{x_i\}_{i=1}^{N}$$. We can denote this as:
+The Kernel Stein Discrepancy (KSD) calculates the discrepancy between a known distribution $$\mathbb{P}$$ and an unknown distribution $$\mathbb{Q}$$ that we can only sample, where N samples from $$\mathbb{Q}$$ are denoted $$\{x_i\}_{i=1}^{N}$$. We can express the KSD as:
 
 $$KSD_{\mathbb{P}}(\{x_i\}_{i=1}^{N})$$
 
