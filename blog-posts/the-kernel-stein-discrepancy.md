@@ -217,7 +217,7 @@ Here is breakdown of a Stein kernel with a Laplace distribution and Gaussian bas
   <img src="the-kernel-stein-discrepancy/laplace_stein_kernel_decomposed.gif" width="80%">
 </figure>
 
-This is another breakdown of a Stein kernel, but with a Cauchy distribution and inverse multi-quadratic base kernel:
+Another breakdown of a Stein kernel with a Cauchy distribution and inverse multi-quadratic base kernel:
 
 <figure class="image" align="center">
   <img src="the-kernel-stein-discrepancy/cauchy_stein_kernel_decomposed.gif" width="80%">
