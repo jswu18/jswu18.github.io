@@ -102,7 +102,7 @@ The MNIST example showed that when $$\mathbb{P}$$ and $$\mathbb{Q}$$ are unknown
 
 Suppose we want to find an operator $$\mathcal{A_\mathbb{P}}$$ such that:
 
-$$\mathbb{E}_{x \sim \mathbb{P}}([(\mathcal{A}f)(X)] = 0,  \forall f \Leftrightarrow X \sim \mathbb{P}$$ 
+$$\mathbb{E}_{x \sim \mathbb{P}}[(\mathcal{A}f)(X)] = 0,  \forall f \Leftrightarrow X \sim \mathbb{P}$$ 
 
 This is known as the Stein identity. Any operator $$\mathcal{A}$$ that satisfies the Stein identity is called a Stein operator. The existence of $$\mathcal{A}$$ would be a powerful tool. $$\mathcal{A}$$ would define a Hilbert space where the density of $$\mathbb{P}$$ always maps to zero. An unknown distribution $$\mathbb{Q}$$ would only map to zero when it is equal to $$\mathbb{P}$$.
 
@@ -120,13 +120,47 @@ Unlike the MMD, the Stein discrepancy only has a single estimator, which is over
 
 Understanding Stein operators that satisfy the Stein equation remains an open problem, but there have been many formulations of $$\mathcal{A}$$. One formulation is the Langevin Stein operator: 
 
-$$(\mathcal{A}f)(x) := \langle \nabla_x \log p(x), f(x) \rangle + \nabla_x f(x)$$
+$$(\mathcal{A}f)(x) := \dfrac{1}{p(x)} \dfrac{d}{dx}(f(x)p(x))$$
 
 where $$p(x)$$ is the density function of $$\mathbb{P}$$. In machine learning, this is often known as *the* Stein operator. As we expected, $$\mathbb{P}$$ is still present in our Stein discrepancy, embedded into our Stein operator. We will denote the Stein operator $$\mathcal{A_{\mathbb{P}}}$$ to indicate this explicitly: 
 
 $$SD = \sup_{\|f\|_{RKHS} \leq 1 } \{\mathbb{E}_{y \sim \mathbb{Q}}[(\mathcal{A_{\mathbb{P}}}f)(y)] \}$$
 
-Now that we have concrete examples of Stein operators, let's discuss how to computationally apply $$(\mathcal{A_{\mathbb{P}}}f)$$ to our $$\mathbb{Q}$$ samples.
+Inserting into the Stein identity, we can check that it holds:
+
+$$\mathbb{E}_{x \sim \mathbb{P}}[\dfrac{1}{p(x)}\dfrac{d}{dx}(f(x)p(x))]$$
+
+From the definition of the expectation:
+
+$$\int p(x) \dfrac{1}{p(x)}\dfrac{d}{dx}(f(x)p(x))dx$$
+
+Cancelling terms:
+
+$$\int \dfrac{d}{dx}(f(x)p(x))dx$$
+
+We end up with the result:
+
+$$[f(x)p(x)]_{-\infty}^{\infty}$$
+
+Assuming that as $$x \rightarrow \infty$$ the quantities $$p(x) \rightarrow 0$$ and $$f(x) \rightarrow 0$$, we have satisfied the Stein Identity.
+
+Unpacking the Langevin Stein operator: 
+
+$$\dfrac{1}{p(x)} \dfrac{d}{dx}(f(x)p(x)) = \dfrac{1}{p(x)}(p(x)\dfrac{d}{dx}(f(x))+ f(x)\dfrac{d}{dx}(p(x)))$$
+
+Expanding:
+$$\dfrac{d}{dx}(f(x))+ f(x)\dfrac{1}{p(x)}\dfrac{d}{dx}(p(x))$$
+
+Knowing that $$\dfrac{d}{dx} \log(f(x)) = \dfrac{f'(x)}{f(x)}$$:
+
+$$\dfrac{d}{dx}(f(x))+ f(x)\dfrac{d}{dx}(\log p(x))$$
+
+
+Defining the second term as a dot product, we have the formulation of the Langevin Stein operator that will be used:
+
+$$(\mathcal{A}f)(x) = \langle \nabla_x \log p(x), f(x) \rangle + \nabla_x f(x)$$
+
+Now that we have a concrete example of a Stein operator, let's discuss how to computationally apply $$(\mathcal{A_{\mathbb{P}}}f)$$ to our $$\mathbb{Q}$$ samples.
 
 ### Stein Kernels
 
