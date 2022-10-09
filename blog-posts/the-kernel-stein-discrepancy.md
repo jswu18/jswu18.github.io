@@ -6,9 +6,40 @@ layout: post
 
 <!-- Having worked at Revolut as a machine learning engineer, there was access to swaths of data. For millions of users worldwide, there was data (anonymised ofcourse) on their daily spending, trading behaviours, travel tendancies, and even the details of their app usage. But this vast amount of data can be overwhelming. Ofcourse we observed general trends that could inform the business, but to *really* model terabytes of data, you'd run into one problem very quickly: *intractability*. You will quickly find that modelling such a complex and large dataset just can't scale.
 
-Approximate inference is a common method of getting around this problem. As the name suggests, instead calculating the *exact* data distribution, we perform inference on an *approximation* of our data. To quantify our apporximation, we need a distribution discrepancy. In its most general form we can denote this as $$D(\mathbb{P}||\mathbb{Q})$$, the discrepancy between two distributions $$\mathbb{P}$$ and $$\mathbb{Q}$$. 
+Approximate inference is a common method of getting around this problem. As the name suggests, instead calculating the *exact* data distribution, we perform inference on an *approximation* of our data. To quantify our apporximation, we need a distribution discrepancy. In its most general form we can denote this as $$D(\mathbb{P}\|\mathbb{Q})$$, the discrepancy between two distributions $$\mathbb{P}$$ and $$\mathbb{Q}$$. 
 
 In particular, I'll be introducing the Kernel Stein Discrepancy (KSD). As background, we'll first review one class of distribution discrepancies, the integral probability metric (IPM) and an instance IPMs known as the maximum mean discrepancy (MMD). -->
+
+## Motivations
+
+The Kernel Stein Discrepancy (KSD) calculates the discrepancy between a known distribution $$\mathbb{P}$$ and an unknown distribution $$\mathbb{Q}$$ that we can only sample, $$\{x_i\}_{i=1}^{N}$$. We can denote this as:
+
+$$KSD_{\mathbb{P}}(\{x_i\}_{i=1}^{N})$$
+
+The existence of such a statistical quantity has become a popular area of research due to its usefulness in many applications in statistics and machine learning. Thus, we will first briefly describe a few applications to help motivate the topic. We will then build our formulation of the KSD through the lens of integral probability metrics (IPMs) and the maximum mean discrepancy (MMD). 
+
+### Sampling Techniques: An Application
+
+For many complex distributions, sampling techniques (i.e. MCMC) are important tools for tractablility. Through the development of many such techniques, we need to ensure that these samplers generate samples genuinely representative of the underlying distribution. The KSD can evaluate the quality of the sampler, ensuring that it isn't biased. For a given distribution $$\mathbb{P}$$ and $$N$$ samples $$\{x_i\}_{i=1}^{N}$$ from our sampler, we can also calculate $$KSD_{\mathbb{P}}(\{x_i\}_{i=1}^{N})$$. We can use this to determine the convergence of $$\{x_i\}_{i=1}^{N}$$ as $$N \rightarrow \infty$$. 
+
+In addition to evaluating sampler quality, the KSD can also be used "correct" the samples of a biased sampler! This correction can be done by applying weight to each sample and minimising the KSD with respect to these sample weights. We can therefore continue to use a biased sampler that might be more computationally efficient by simply reweighting its samples with the KSD.
+
+### Goodness of Fit and Approximate Inference: An Application
+The goodness of fit of a statistical model is fundamental to hypothesis testing in statistics. It involves quantifying the discrepancy between an observed dataset $$D = \{x_i\}_{i=1}^{N}$$ and a statistical model $$P_\theta$$. The KSD lends itself very well to hypothesis testing where we can compute:
+
+$$KSD_{P_\theta}(\{x_i\}_{i=1}^{N})$$
+
+This is a powerful tool that we can build on through inference on $$\theta$$. We can finding the best params $$\theta$$ from a distribution family $$P_{\theta}, \theta \in \Theta$$ to represent the data and by extension, the data generating process$$:
+
+$$\argmin_{\theta \in \Theta} KSD_{P_\theta}(\{x_i\}_{i=1}^{N})$$
+
+where $$x_i \sim \mathbb{Q}$$, the unknown distribution or data generating process that we want to approximate.
+
+We can also perform inference on a more expressive set of distributions by defining $$T$$, a measure transport on a simple distribution $$P$$:
+
+$$\argmin_{T \in \mathcal{T}} KSD_{T_{\#}Q}(\{x_i\}_{i=1}^{N})$$
+
+where $$\mathcal{T}$$ is our space of measure transports. 
 
 ## Integral Probability Metrics (IPMs): A Quick Review
 
@@ -27,13 +58,13 @@ This $$f^*$$ is called the witness function. We can visualise a possible witness
 Notice that when $$f(x)=0$$,  $$p(x) = q(x)$$. Moreover, when $$p(x) > q(x)$$, $$f(x) > 0$$ and the same vice versa. This increases the quantity $$\mathbb{E}_{x \sim \mathbb{P}}[f(x)] - \mathbb{E}_{y \sim \mathbb{Q}}[f(y)]$$ and ensures that the IPM is non-zero, indicating that $$\mathbb{P} \neq \mathbb{Q}$$ as expected.
 
 
-## Maximum Mean Discrepancy (MMD): A Quick Review
+## The Maximum Mean Discrepancy (MMD): A Quick Review
 
 The supremum in the IPM is over $$F$$, the space of *all* possible functions. This can be impractical to evaluate and we often limit our function space to the unit ball of an RKHS. This restriction on the IPM constructs the Maximum Mean Discrepancy (MMD):
 
-$$MMD = \sup_{||f||_{RKHS} \leq 1 } \{ \mathbb{E}_{x \sim \mathbb{P}}[f(x)] - \mathbb{E}_{y \sim \mathbb{Q}}[f(y)] \}$$
+$$MMD = \sup_{\|f\|_{RKHS} \leq 1 } \{ \mathbb{E}_{x \sim \mathbb{P}}[f(x)] - \mathbb{E}_{y \sim \mathbb{Q}}[f(y)] \}$$
 
-where $$RKHS$$ is our reproducing kernel Hilbert space. To ensure $$MMD = 0 \Leftrightarrow \mathbb{P} = \mathbb{Q}$$, the kernel must be *characteristic*. This means that the kernel uniquely maps our density function into the RKHS. Characterstic kernels often involve an exponential function, such as the Gaussian Kernel, $$k(x, y) = \exp(-\sigma\|x-y\|_2^2)$$. This is because the exponential acts as a fourier transform on the probability distribution. The uniqueness property is acheived by incorporating all moments of the distribution into the mapping. Witness functions that are able to discriminate pointwise between samples of $$\mathbb{P}$$ and $$\mathbb{Q}$$ also need to be avoided (i.e. a function with a positive impulse at each $$\mathbb{P}$$ sample and a negative impulse at each $$\mathbb{Q}$$ sample). The unit ball restriction $$\|f\| \leq 1$$, applies a decay on higher frequencies, ensuring the smoothness of $$f$$.
+where $$RKHS$$ is our reproducing kernel Hilbert space. To ensure $$MMD = 0 \Leftrightarrow \mathbb{P} = \mathbb{Q}$$, the kernel must be *characteristic*. This means that the kernel uniquely maps our density function into the RKHS. Characterstic kernels often involve an exponential function, such as the Gaussian Kernel, $$k(x, y) = \exp(-\sigma\|x-y\|_2^2)$$ where the exponential acts as a fourier transform on the probability distribution. The uniqueness property is acheived by incorporating all moments of the distribution into the mapping. Witness functions that are able to discriminate pointwise between samples of $$\mathbb{P}$$ and $$\mathbb{Q}$$ also need to be avoided (i.e. a function with a positive impulse at each $$\mathbb{P}$$ sample and a negative impulse at each $$\mathbb{Q}$$ sample). The unit ball restriction $$\|f\| \leq 1$$, applies a decay on higher frequencies, ensuring the smoothness of $$f$$.
 
 Given $$k(\cdot, \cdot)$$, the reproducing kernel associated with our RKHS, it can be shown that:
 
@@ -50,7 +81,7 @@ $$\hat{MMD}^2 = \frac{1}{m(m-1)}\sum_{i=1}^{m}\sum_{j\neq i}^{m}k(x_i, x_j)+\fra
 The MMD only requires $$\mathbb{P}$$ and $$\mathbb{Q}$$ samples, making no assumptions about their underlying distributions. This is useful when we don't have strong intuitions about the data generating process. An example is the MNIST dataset, where we can quantify the discrepancy between digits directly from the image samples. A heatmap of the MMDs:
 
 <figure class="image" align="center">
-  <img src="the-kernel-stein-discrepancy/mnist_mmd_digit_comparison.png" width="40%">
+  <img src="the-kernel-stein-discrepancy/mnist_mmd_digit_comparison.png" width="35%">
 </figure>
 
 Samples from the same digit have lower MMDs (the diagonal) and we have higher MMDs for digits that are not as similar, such as zero and one. More similar digits like seven and nine have lower MMDs.
@@ -63,7 +94,7 @@ The kernel defines the RKHS from which we acquire our witness function. If a poo
   <img src="the-kernel-stein-discrepancy/mnist_kernel.gif" width="70%">
 </figure>
 
-## Kernel Stein Discrepancies (KSD)
+## Stein Discrepancies
 
 The MNIST example showed that when $$\mathbb{P}$$ and $$\mathbb{Q}$$ are unknown, the MMD is very effective. However, we often have samples from an unknown $$\mathbb{Q}$$ that we want to compare to a known $$\mathbb{P}$$. In this case, the MMD would have us sampling both $$\mathbb{P}$$ and $$\mathbb{Q}$$, a pretty inefficient approach. The Kernel Stein Discrepancy (KSD) solves this problem by incorporating the density function of $$\mathbb{P}$$ into the discrepancy calculation. The KSD quantifies the descrepancy between a known density $$\mathbb{P}$$ and an unknown density $$\mathbb{Q}$$ that we can sample.
 
@@ -117,21 +148,21 @@ where $$\mathcal{A}_\mathbb{P}^x$$ indicates $$\mathcal{A}_\mathbb{P}$$ applied 
 
 Applying $$\mathcal{A}_\mathbb{P}^x$$:
 
-$$k_{\mathbb{P}}(x, y) = \mathcal{A}_\mathbb{P}^y (\nabla_x \log p(x)^T k(x, y) + \nabla_x k(x, y))$$
+$$k_{\mathbb{P}}(x, y) = \mathcal{A}_\mathbb{P}^y (\nabla_x \log p(x) k(x, y) + \nabla_x k(x, y))$$
 
 Note that $$\nabla_x k(x, y) = \langle \nabla_x f(x), f(y) \rangle$$:
 
-$$k_{\mathbb{P}}(x, y) = \mathcal{A}_\mathbb{P}^y (\nabla_x \log p(x)^T k(x, y) + \langle \nabla_x f(x), f(y) \rangle)$$
+$$k_{\mathbb{P}}(x, y) = \mathcal{A}_\mathbb{P}^y (\nabla_x \log p(x) k(x, y) + \langle \nabla_x f(x), f(y) \rangle)$$
 
 Applying $$\mathcal{A}_\mathbb{P}^y$$:
 
-$$k_{\mathbb{P}}(x, y) = \nabla_y \log p(y)^T\nabla_x \log p(x)^T k(x, y) + \nabla_y \log p(y)^T\nabla_x k(x, y) + \nabla_x \log p(x)^T \nabla_y k(x, y) +  \langle \nabla_x f(x), \nabla_y f(y)\rangle$$
+$$k_{\mathbb{P}}(x, y) = \nabla_y \log p(y)^T\nabla_x \log p(x) k(x, y) + \nabla_y \log p(y)^T\nabla_x k(x, y) + \nabla_x \log p(x)^T \nabla_y k(x, y) +  \langle \nabla_x f(x), \nabla_y f(y)\rangle$$
 
 We can rewrite $$\langle \nabla_x f(x), \nabla_y f(y)\rangle = \sum_i \frac{\partial k(x,y)}{\partial x_i \partial y_i} = Tr(\nabla_x \nabla_y k(x,y))$$. 
 
 Thus the Stein Kernel is:
 
-$$k_{\mathbb{P}}(x, y) = \nabla_y \log p(y)^T\nabla_x \log p(x)^T k(x, y) + \nabla_y \log p(y)^T\nabla_x k(x, y) + \nabla_x \log p(x)^T \nabla_y k(x, y) +  Tr(\nabla_x \nabla_y k(x,y))$$
+$$k_{\mathbb{P}}(x, y) = \nabla_y \log p(y)^T\nabla_x \log p(x) k(x, y) + \nabla_y \log p(y)^T\nabla_x k(x, y) + \nabla_x \log p(x)^T \nabla_y k(x, y) +  Tr(\nabla_x \nabla_y k(x,y))$$
 
 It is a modification of a base kernel $$k$$ with $$p(x)$$, the density function of $$\mathbb{P}$$.
 
@@ -143,20 +174,24 @@ $$\mathbb{E}_{X \sim \mathbb{P}}[k_{\mathbb{P}}(x, X)] = 0 \Leftrightarrow X \si
 
 where $$x \in \mathbb{R}^d$$.
 
-We can numerically verify the Stein identity by plotting the distribution of expectations of samples of $$k_{\mathbb{P}}(X, x)$$. The below plot compares $$X \sim \mathbb{P}$$ and $$X \sim \mathbb{Q}$$, where $$\mathbb{Q}$$ is a Laplace distribution. For $$\mathbb{P}$$, the distribution centers around zero, while the distribution for $$\mathbb{Q}$$ has a non-zero mean. Moreover, the effect of the law of large numbers shows how the histograms narrow as the sample size increases. 
+We can numerically verify the Langevin Stein operator as a valid operator for our Stein identity by plotting the distribution of expectations of samples of $$k_{\mathbb{P}}(X, x)$$. The below plot compares $$X \sim \mathbb{P}$$ and $$X \sim \mathbb{Q}$$, where $$\mathbb{Q}$$ is a Laplace distribution. For $$\mathbb{P}$$, the distribution centers around zero, while the distribution for $$\mathbb{Q}$$ has a non-zero mean. Moreover, the effect of the law of large numbers shows how the histograms narrow as the sample size increases. 
 
 <figure class="image" align="center">
-  <img src="the-kernel-stein-discrepancy/stein_convergence.gif" width="60%">
+  <img src="the-kernel-stein-discrepancy/stein_convergence.gif" width="50%">
 </figure>
 
 
-### The Kernel Stein Discrepancy
+### The Kernel Stein Discrepancy (KSD)
 
 We have essentially arrived at the KSD formulation. Formally, it is defined as:
 
 $$KSD^2 = \mathbb{E}_{X, \tilde{X} \sim \mathbb{Q}}[k_{\mathbb{P}}(X, \tilde{X})]$$
 
 where $$k_{\mathbb{P}}$$ is the Stein kernel.
+
+An unbiased estimate:
+
+$$\hat{KSD}^2 = \frac{1}{m(m-1)}\sum_{i=1}^{m}\sum_{j\neq i}^{m}k_{\mathbb{P}}(x_i, x_j)$$
 
 ### MMD $$\Rightarrow$$ KSD 
 
@@ -169,51 +204,37 @@ We derived the KSD from the MMD formulation, cancelling terms using the Stein id
 
 ### Visualising Stein Kernels
 
-Because of their complex formulation, it can be difficult to have an intuitive understanding of Stein kernels. Visualisations may help build an understanding of what's going on. The resulting Stein kernel can be quite complex, but we can see how they are constructed with a series of simpler components.
+Because of their complex formulation, it can be difficult to have an intuitive understanding of Stein kernels. Visualisations may help build an understanding of what's going on. The resulting Stein kernel can be quite complex, but we can see how they are constructed with a series of simpler components. As a point of reference for the visualisations below, recall the Stein kernel:
 
-#### Laplace Distribution
+$$k_{\mathbb{P}}(x, y) = \nabla_y \log p(y)^T\nabla_x \log p(x) k(x, y) + \nabla_y \log p(y)^T\nabla_x k(x, y) + \nabla_x \log p(x)^T \nabla_y k(x, y) +  Tr(\nabla_x \nabla_y k(x,y))$$
 
-Let's first plot the distribution and base kernel for our Stein kernel, evaluated at $$k(x, 0)$$:
 
-Recall the Stein kernel:
+Plotting the distribution and base kernel in our Stein kernel, we can see how the inidivudal components contribute to the final shape of the kernel. Below, we first plot the distribution and base kernel $$k(x,y=y')$$. This is followed by a breakdown of each term in the Stein kernel, a product of a distribution component and kernel component. Finally, the resulting Stein kernel is visualised as the combination of the four terms. 
 
-$$k_{\mathbb{P}}(x, y) = \nabla_y \log p(y)^T\nabla_x \log p(x)^T k(x, y) + \nabla_y \log p(y)^T\nabla_x k(x, y) + \nabla_x \log p(x)^T \nabla_y k(x, y) +  Tr(\nabla_x \nabla_y k(x,y))$$
-
-Each term in the Stein kernel is a product of a distribution component and kernel component. Plotting each component and their product to construct each term:
-
-Combining the terms, we can visualise the Stein kernel:
+Here is breakdown of a Stein kernel with a Laplace distribution and Gaussian base kernel:
 
 <figure class="image" align="center">
   <img src="the-kernel-stein-discrepancy/laplace_stein_kernel_decomposed.gif" width="80%">
 </figure>
 
-#### Cauchy Distribution
-
-Let's also visualise the Stein kernel for a fat-tailed distribution, base kernel that is wider, and evaluating at $$k(x, y=5)$$:
+This is another breakdown of a Stein kernel, but with a Cauchy distribution and inverse multi-quadratic base kernel:
 
 <figure class="image" align="center">
   <img src="the-kernel-stein-discrepancy/cauchy_stein_kernel_decomposed.gif" width="80%">
 </figure>
 
+## Conclusions
+
+## Links
+
+http://proceedings.mlr.press/v130/fisher21a/fisher21a.pdf
+
+http://proceedings.mlr.press/v70/gorham17a/gorham17a.pdf
 
 
-# Applications of the KSD
-
-- variational inference/bayesian inference
-- check quality of sampling algos
-  - mcmc convergence diagnosis
-  - importance sampling -> instead of sampling a complex dist P, sample from Q, a simpler dist, and weight samples accordingly
-- density estimation
-- hypothesis testing
-- https://en.wikipedia.org/wiki/Stein_discrepancy#Applications_of_Stein_discrepancy
-
-# Limitations of the KSD
-
-multimodal
-
-<figure class="image" align="center">
+<!-- <figure class="image" align="center">
   <img src="the-kernel-stein-discrepancy/base_kernel_param_vs_ksd.gif" width="100%">
-</figure>
+</figure> -->
 
 ## Appendix 
 ### MMD Derivation
@@ -222,51 +243,51 @@ Starting with the IPM definition:
 
 $$IMP = \sup_{f\in F} \{ \int f(x) d \mathbb{P}(x)-\int f(y) d \mathbb{Q}(y) \}$$
 
-For the MMD we choose $$F:= \{||f||_H \leq 1 \}$$:
+For the MMD we choose $$F:= \{\|f\|_H \leq 1 \}$$:
 
-$$MMD^2 = \left[ \sup_{||f||\leq 1} \{ \int f(x) d \mathbb{P}(x)-\int f(y) d \mathbb{Q}(y) \} \right]^2$$
+$$MMD^2 = \left[ \sup_{\|f\|\leq 1} \{ \int f(x) d \mathbb{P}(x)-\int f(y) d \mathbb{Q}(y) \} \right]^2$$
 
 Given that $$\mathbb{E}_{x \sim \mathbb{P}}[f(x)] = \langle f, \mu_{\mathbb{P}}\rangle_H$$ and $$\mathbb{E}_{x \sim \mathbb{P}}[f(x)] := \int f(x)d\mathbb{P}(x)$$, we can substitute:
 
-$$MMD^2 = \left[ \sup_{||f||\leq 1} \{ \langle f, \mu_{\mathbb{P}}\rangle_H-\langle f, \mu_{\mathbb{Q}}\rangle_H \} \right]^2$$
+$$MMD^2 = \left[ \sup_{\|f\|\leq 1} \{ \langle f, \mu_{\mathbb{P}}\rangle_H-\langle f, \mu_{\mathbb{Q}}\rangle_H \} \right]^2$$
 
 and by linearity,
 
-$$MMD^2 = \left[ \sup_{||f||\leq 1} \{ \langle f, \mu_{\mathbb{P}}-\mu_{\mathbb{Q}}\rangle_H \} \right]^2$$
+$$MMD^2 = \left[ \sup_{\|f\|\leq 1} \{ \langle f, \mu_{\mathbb{P}}-\mu_{\mathbb{Q}}\rangle_H \} \right]^2$$
 
 Claim:
 
-$$\sup\{\langle v, w\rangle: w \in V, ||w|| \leq 1\} = \sup\{\langle v, w\rangle: w \in V, ||w|| = 1\}$$
+$$\sup\{\langle v, w\rangle: w \in V, \|w\| \leq 1\} = \sup\{\langle v, w\rangle: w \in V, \|w\| = 1\}$$
 
-Consider $$w' = \alpha w$$ where $$||w||=1$$ and $$0 \leq \alpha \leq 1$$:
+Consider $$w' = \alpha w$$ where $$\|w\|=1$$ and $$0 \leq \alpha \leq 1$$:
 
-Then $$||w'|| \leq 1$$ and 
+Then $$\|w'\| \leq 1$$ and 
 
 $$\langle v, w'\rangle = \langle v, \alpha w\rangle = \alpha \langle v, w\rangle \leq \langle v, w\rangle$$
 
-Thus $$\langle v, w\rangle$$ for $$||w|| \leq 1$$ is maximised when $$||w||=1$$ and the supremum of $$\langle v, w\rangle$$ for $$||w|| \leq 1$$ will always have $$||w|| = 1$$.
+Thus $$\langle v, w\rangle$$ for $$\|w\| \leq 1$$ is maximised when $$\|w\|=1$$ and the supremum of $$\langle v, w\rangle$$ for $$\|w\| \leq 1$$ will always have $$\|w\| = 1$$.
 
-Back to our MMD derivation, with the result above, we can replace $$||f|| \leq 1$$ with $$||f||=1$$:
+Back to our MMD derivation, with the result above, we can replace $$\|f\| \leq 1$$ with $$\|f\|=1$$:
 
-$$MMD^2 = \left[ \sup_{||f||= 1} \{ \langle f, \mu_{\mathbb{P}}-\mu_{\mathbb{Q}}\rangle_H \} \right]^2$$
+$$MMD^2 = \left[ \sup_{\|f\|= 1} \{ \langle f, \mu_{\mathbb{P}}-\mu_{\mathbb{Q}}\rangle_H \} \right]^2$$
 
-We can also prove that $$||v|| = \sup_{||w||=1} \{ \langle v, w\rangle \}$$:
+We can also prove that $$\|v\| = \sup_{\|w\|=1} \{ \langle v, w\rangle \}$$:
 
 ($$\leq$$):
 
-Let $$w' := \frac{v}{||v||}$$ and knowing $$||v|| = \sqrt{\langle v, w\rangle}$$:
+Let $$w' := \frac{v}{\|v\|}$$ and knowing $$\|v\| = \sqrt{\langle v, w\rangle}$$:
 
-$$||v||^2 = \langle v, v\rangle = ||v||\langle v, \frac{v}{||v||}\rangle = ||v||\langle v, w'\rangle$$
+$$\|v\|^2 = \langle v, v\rangle = \|v\|\langle v, \frac{v}{\|v\|}\rangle = \|v\|\langle v, w'\rangle$$
 
 Moreover,
 
-$$|v||^2 \leq ||v|| \sup \{\langle v, w\rangle : w \in V, ||w||=1\}$$
+$$\|v\|^2 \leq \|v\| \sup \{\langle v, w\rangle : w \in V, \|w\|=1\}$$
 
 Thus,
 
-$$||v||^2 \leq \sup \{\langle v, w\rangle : w \in V, ||w||=1\}$$
+$$\|v\|^2 \leq \sup \{\langle v, w\rangle : w \in V, \|w\|=1\}$$
 
-($$\geq$$):
+($$\geq$$ ):
 
 From the Cauchy-Schqarz inequality:
 
@@ -275,19 +296,19 @@ $$\left\| v \right\| \left\| w \right\| \geq |\langle v, w\rangle|$$
 
 Given that $$\|w\|=1$$:
 
-$$||v|| \geq |\langle v, w\rangle|$$
+$$\|v\| \geq |\langle v, w\rangle|$$
 
 Thus,
 
-$$||v||^2 \geq \sup \{\langle v, w\rangle : w \in V, ||w||=1\}$$
+$$\|v\|^2 \geq \sup \{\langle v, w\rangle : w \in V, \|w\|=1\}$$
 
 Combining the above:
 
-$$||v||^2 = \sup \{\langle v, w\rangle : w \in V, ||w||=1\}$$
+$$\|v\|^2 = \sup \{\langle v, w\rangle : w \in V, \|w\|=1\}$$
 
 Using this result for our MMD expression:
 
-$$MMD^2 = ||\mu_{\mathbb{P}}-\mu_{\mathbb{Q}}||^2_H$$
+$$MMD^2 = \|\mu_{\mathbb{P}}-\mu_{\mathbb{Q}}\|^2_H$$
 
 Expanding,
 
@@ -295,7 +316,7 @@ $$MMD^2 = \langle \mu_{\mathbb{P}}-\mu_{\mathbb{Q}}, \mu_{\mathbb{P}}-\mu_{\math
 
 Simplifying,
 
-$$MMD^2 = ||\mu_{\mathbb{P}}||^2 - 2|\langle \mu_{\mathbb{P}}, \mu_{\mathbb{Q}} \rangle|_H + ||\mu_{\mathbb{Q}}||^2_H$$
+$$MMD^2 = \|\mu_{\mathbb{P}}\|^2 - 2|\langle \mu_{\mathbb{P}}, \mu_{\mathbb{Q}} \rangle|_H + \|\mu_{\mathbb{Q}}\|^2_H$$
 
 
 Knowing that $$\|\mu_{\mathbb{P}}\|^2_H = \langle \mathbb{E}[k(\cdot, X)], \mathbb{E}[k(\cdot, \tilde{X})]\rangle = \mathbb{E}[k(X, \tilde{X})]$$ and $$\langle \mu_{\mathbb{P}}, \mu_{\mathbb{P}} \rangle_H = \langle\mathbb{E}[k(\cdot, X)], \mathbb{E}[k(\cdot, Y)]\rangle = \mathbb{E}[k(X, Y)]$$, we can substitute and achieve our desired result:
