@@ -72,21 +72,13 @@ $$\hat{MMD}^2 = \frac{1}{m(m-1)}\sum_{i=1}^{m}\sum_{j\neq i}^{m}k(x_i, x_j)+\fra
 
 ### MNIST Example
 
-The MMD only requires $$\mathbb{P}$$ and $$\mathbb{Q}$$ samples, making no assumptions about their underlying distributions. This is useful when we don't have strong intuitions about the data generating process. An example is the MNIST dataset, where we can quantify the discrepancy between digits directly from the image samples. A heatmap of the MMDs:
-
-<figure class="image" align="center">
-  <img src="the-kernel-stein-discrepancy/mnist_mmd_digit_comparison.png" width="35%">
-</figure>
-
-Samples from the same digit have lower MMDs (the diagonal) and we have higher MMDs for digits that are not as similar, such as zero and one. More similar digits like seven and nine have lower MMDs.
-
-### Kernel Selection
-
-The kernel defines the RKHS from which we acquire our witness function. If a poor kernel is chosen, the corresponding RKHS might provide a poor function space for discriminating $$\mathbb{P}$$ and $$\mathbb{Q}$$. We can visualise how  the kernel function affects our MNIST heatmap:
+The MMD only requires samples from $$\mathbb{P}$$ and $$\mathbb{Q}$$, making no assumptions about their underlying distributions. This is useful when we don't have strong intuitions about the data generating process. An example is the MNIST dataset, where we can quantify the discrepancy between digits directly from the image samples. Moreover, the kernel chosen for the MMD defines the RKHS from which we acquire our witness function. Visualising the kernel function and the corresponding heatmap of MMD values between digit samples:
 
 <figure class="image" align="center">
   <img src="the-kernel-stein-discrepancy/mnist_kernel.gif" width="70%">
 </figure>
+
+Samples from the same digit have lower MMDs (the diagonal) and we have higher MMDs for digits that are not as similar, such as zero and one. With different kernel parameters, we can see that if a poor kernel is chosen, the corresponding RKHS might provide a poor function space for discriminating $$\mathbb{P}$$ and $$\mathbb{Q}$$. This emphasises the importance of kernel selection for kernel-based discrepancies.
 
 ## Stein Discrepancies
 
