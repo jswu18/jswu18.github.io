@@ -4,12 +4,6 @@ layout: post
 
 # The Kernel Stein Discrepancy
 
-<!-- Having worked at Revolut as a machine learning engineer, there was access to swaths of data. For millions of users worldwide, there was data (anonymised ofcourse) on their daily spending, trading behaviours, travel tendancies, and even the details of their app usage. But this vast amount of data can be overwhelming. Ofcourse we observed general trends that could inform the business, but to *really* model terabytes of data, you'd run into one problem very quickly: *intractability*. You will quickly find that modelling such a complex and large dataset just can't scale.
-
-Approximate inference is a common method of getting around this problem. As the name suggests, instead calculating the *exact* data distribution, we perform inference on an *approximation* of our data. To quantify our apporximation, we need a distribution discrepancy. In its most general form we can denote this as $$D(\mathbb{P}\|\mathbb{Q})$$, the discrepancy between two distributions $$\mathbb{P}$$ and $$\mathbb{Q}$$. 
-
-In particular, I'll be introducing the Kernel Stein Discrepancy (KSD). As background, we'll first review one class of distribution discrepancies, the integral probability metric (IPM) and an instance IPMs known as the maximum mean discrepancy (MMD). -->
-
 ## Motivations
 
 The Kernel Stein Discrepancy (KSD) calculates the discrepancy between a known distribution $$\mathbb{P}$$ and an unknown distribution $$\mathbb{Q}$$ that we can only sample, where N samples from $$\mathbb{Q}$$ are denoted $$\{x_i\}_{i=1}^{N}$$. We can express the KSD as:
@@ -229,18 +223,11 @@ Another breakdown of a Stein kernel with a Cauchy distribution and inverse multi
 
 ## Some Last Thoughts
 
-This has been just a light introduction to Kernel Stein Discrepancies. 
+Hopefully this was a helpful introduction to the KSD and Stein kernels! The visualisations in this blog were generated using my [github repository](https://github.com/jswu18/distribution-discrepancies) for distribution discrepancies. Here are also some links that could be of interest:
 
-## Links
+- [Measuring Sample Quality with Kernels](http://proceedings.mlr.press/v70/gorham17a/gorham17a.pdf)
 
-http://proceedings.mlr.press/v130/fisher21a/fisher21a.pdf
-
-http://proceedings.mlr.press/v70/gorham17a/gorham17a.pdf
-
-
-<!-- <figure class="image" align="center">
-  <img src="the-kernel-stein-discrepancy/base_kernel_param_vs_k_x_0.gif" width="100%">
-</figure> -->
+- [Measure Transport with Kernel Stein Discrepancy](http://proceedings.mlr.press/v130/fisher21a/fisher21a.pdf)
 
 ## Appendix 
 ### MMD Derivation

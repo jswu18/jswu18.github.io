@@ -43,12 +43,6 @@
     <!-- <h3 class="fs- fw-bold"></h3> -->
     <h1 id="the-kernel-stein-discrepancy">The Kernel Stein Discrepancy</h1>
 
-<!-- Having worked at Revolut as a machine learning engineer, there was access to swaths of data. For millions of users worldwide, there was data (anonymised ofcourse) on their daily spending, trading behaviours, travel tendancies, and even the details of their app usage. But this vast amount of data can be overwhelming. Ofcourse we observed general trends that could inform the business, but to *really* model terabytes of data, you'd run into one problem very quickly: *intractability*. You will quickly find that modelling such a complex and large dataset just can't scale.
-
-Approximate inference is a common method of getting around this problem. As the name suggests, instead calculating the *exact* data distribution, we perform inference on an *approximation* of our data. To quantify our apporximation, we need a distribution discrepancy. In its most general form we can denote this as $$D(\mathbb{P}\|\mathbb{Q})$$, the discrepancy between two distributions $$\mathbb{P}$$ and $$\mathbb{Q}$$. 
-
-In particular, I'll be introducing the Kernel Stein Discrepancy (KSD). As background, we'll first review one class of distribution discrepancies, the integral probability metric (IPM) and an instance IPMs known as the maximum mean discrepancy (MMD). -->
-
 <h2 id="motivations">Motivations</h2>
 
 <p>The Kernel Stein Discrepancy (KSD) calculates the discrepancy between a known distribution \(\mathbb{P}\) and an unknown distribution \(\mathbb{Q}\) that we can only sample, where N samples from \(\mathbb{Q}\) are denoted \(\{x_i\}_{i=1}^{N}\). We can express the KSD as:</p>
@@ -265,17 +259,16 @@ In particular, I'll be introducing the Kernel Stein Discrepancy (KSD). As backgr
 
 <h2 id="some-last-thoughts">Some Last Thoughts</h2>
 
-<p>This has been just a light introduction to Kernel Stein Discrepancies.</p>
+<p>Hopefully this was a helpful introduction to the KSD and Stein kernels! The visualisations in this blog were generated using my <a href="https://github.com/jswu18/distribution-discrepancies">github repository</a> for distribution discrepancies. Here are also some links that could be of interest:</p>
 
-<h2 id="links">Links</h2>
-
-<p>http://proceedings.mlr.press/v130/fisher21a/fisher21a.pdf</p>
-
-<p>http://proceedings.mlr.press/v70/gorham17a/gorham17a.pdf</p>
-
-<!-- <figure class="image" align="center">
-  <img src="the-kernel-stein-discrepancy/base_kernel_param_vs_k_x_0.gif" width="100%">
-</figure> -->
+<ul>
+  <li>
+    <p><a href="http://proceedings.mlr.press/v70/gorham17a/gorham17a.pdf">Measuring Sample Quality with Kernels</a></p>
+  </li>
+  <li>
+    <p><a href="http://proceedings.mlr.press/v130/fisher21a/fisher21a.pdf">Measure Transport with Kernel Stein Discrepancy</a></p>
+  </li>
+</ul>
 
 <h2 id="appendix">Appendix</h2>
 <h3 id="mmd-derivation">MMD Derivation</h3>
