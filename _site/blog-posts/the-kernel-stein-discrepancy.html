@@ -68,7 +68,7 @@ In particular, I'll be introducing the Kernel Stein Discrepancy (KSD). As backgr
 
 \[KSD_{P_\theta}(\{x_i\}_{i=1}^{N})\]
 
-<p>This is a powerful tool that we can build on through inference on \(\theta\). We can finding the best params \(\theta\) from a distribution family \(P_{\theta}, \theta \in \Theta\) to represent the data and by extension, the data generating process$$:</p>
+<p>This is a powerful tool that we can build on through inference on \(\theta\). We can finding the best params \(\theta\) from a distribution family \(P_{\theta}, \theta \in \Theta\) to represent the data and by extension, the data generating process:</p>
 
 \[\arg \min_{\theta \in \Theta} KSD_{P_\theta}(\{x_i\}_{i=1}^{N})\]
 
@@ -254,16 +254,18 @@ In particular, I'll be introducing the Kernel Stein Discrepancy (KSD). As backgr
 <p>Here is breakdown of a Stein kernel with a Laplace distribution and Gaussian base kernel:</p>
 
 <figure class="image" align="center">
-  <img src="the-kernel-stein-discrepancy/laplace_stein_kernel_decomposed.gif" width="80%" />
+  <img src="the-kernel-stein-discrepancy/laplace_stein_kernel_decomposed.gif" width="100%" />
 </figure>
 
 <p>Another breakdown of a Stein kernel with a Cauchy distribution and inverse multi-quadratic base kernel:</p>
 
 <figure class="image" align="center">
-  <img src="the-kernel-stein-discrepancy/cauchy_stein_kernel_decomposed.gif" width="80%" />
+  <img src="the-kernel-stein-discrepancy/cauchy_stein_kernel_decomposed.gif" width="100%" />
 </figure>
 
 <h2 id="some-last-thoughts">Some Last Thoughts</h2>
+
+<p>This has been just a light introduction to Kernel Stein Discrepancies.</p>
 
 <h2 id="links">Links</h2>
 
@@ -272,7 +274,7 @@ In particular, I'll be introducing the Kernel Stein Discrepancy (KSD). As backgr
 <p>http://proceedings.mlr.press/v70/gorham17a/gorham17a.pdf</p>
 
 <!-- <figure class="image" align="center">
-  <img src="the-kernel-stein-discrepancy/base_kernel_param_vs_ksd.gif" width="100%">
+  <img src="the-kernel-stein-discrepancy/base_kernel_param_vs_k_x_0.gif" width="100%">
 </figure> -->
 
 <h2 id="appendix">Appendix</h2>

@@ -29,7 +29,7 @@ The goodness of fit of a statistical model is fundamental to hypothesis testing 
 
 $$KSD_{P_\theta}(\{x_i\}_{i=1}^{N})$$
 
-This is a powerful tool that we can build on through inference on $$\theta$$. We can finding the best params $$\theta$$ from a distribution family $$P_{\theta}, \theta \in \Theta$$ to represent the data and by extension, the data generating process$$:
+This is a powerful tool that we can build on through inference on $$\theta$$. We can finding the best params $$\theta$$ from a distribution family $$P_{\theta}, \theta \in \Theta$$ to represent the data and by extension, the data generating process:
 
 $$\arg \min_{\theta \in \Theta} KSD_{P_\theta}(\{x_i\}_{i=1}^{N})$$
 
@@ -218,16 +218,18 @@ Below, we first plot the distribution and base kernel $$k(x,y=y')$$. This is fol
 Here is breakdown of a Stein kernel with a Laplace distribution and Gaussian base kernel:
 
 <figure class="image" align="center">
-  <img src="the-kernel-stein-discrepancy/laplace_stein_kernel_decomposed.gif" width="80%">
+  <img src="the-kernel-stein-discrepancy/laplace_stein_kernel_decomposed.gif" width="100%">
 </figure>
 
 Another breakdown of a Stein kernel with a Cauchy distribution and inverse multi-quadratic base kernel:
 
 <figure class="image" align="center">
-  <img src="the-kernel-stein-discrepancy/cauchy_stein_kernel_decomposed.gif" width="80%">
+  <img src="the-kernel-stein-discrepancy/cauchy_stein_kernel_decomposed.gif" width="100%">
 </figure>
 
 ## Some Last Thoughts
+
+This has been just a light introduction to Kernel Stein Discrepancies. 
 
 ## Links
 
@@ -237,7 +239,7 @@ http://proceedings.mlr.press/v70/gorham17a/gorham17a.pdf
 
 
 <!-- <figure class="image" align="center">
-  <img src="the-kernel-stein-discrepancy/base_kernel_param_vs_ksd.gif" width="100%">
+  <img src="the-kernel-stein-discrepancy/base_kernel_param_vs_k_x_0.gif" width="100%">
 </figure> -->
 
 ## Appendix 
