@@ -139,7 +139,7 @@ $$\mathbb{E}_{X \sim \mathbb{P}}[k_{\mathbb{P}}(x, X)] = 0 \Leftrightarrow X \si
 
 where $$x \in \mathbb{R}^d$$.
 
-We can numerically verify the Langevin Stein operator as a valid operator for our Stein identity by plotting the distribution of expectations of samples of $$k_{\mathbb{P}}(X, x)$$. The below plot compares $$X \sim \mathbb{P}$$ and $$X \sim \mathbb{Q}$$, where $$\mathbb{Q}$$ is a Laplace distribution. For $$\mathbb{P}$$, the distribution centers around zero, while the distribution for $$\mathbb{Q}$$ has a non-zero mean. Moreover, the effect of the law of large numbers shows how the histograms narrow as the sample size increases. 
+We can numerically verify this by plotting the distribution of expectations of samples of $$k_{\mathbb{P}}(X, x)$$. The below plot compares $$X \sim \mathbb{P}$$ and $$X \sim \mathbb{Q}$$, where $$\mathbb{P}$$ is a Gaussian distribution and $$\mathbb{Q}$$ is a Laplace distribution. For $$\mathbb{P}$$, the distribution of the kernel centers around zero, while the distribution for $$\mathbb{Q}$$ has a non-zero mean, as we expect. Moreover, the effect of the law of large numbers shows how the histograms narrow as the sample size increases. 
 
 <figure class="image" align="center">
   <img src="the-kernel-stein-discrepancy/stein_convergence.gif" width="50%">
@@ -169,7 +169,7 @@ We derived the KSD from the MMD formulation, cancelling terms using the Stein id
 
 ### Visualising Stein Kernels
 
-Because of their complex formulation, it can be difficult to have an intuitive understanding of Stein kernels. Visualisations may help build an understanding of what's going on. The resulting Stein kernel can be quite complex, but we can see how they are constructed with a series of simpler components. As a point of reference for the visualisations below, recall the Stein kernel:
+Because of their complex formulation, it can be difficult to have an intuitive understanding of Stein kernels. Visualisations may help build an understanding of what's going on. The resulting Stein kernel can be quite complex, but we can see how they are constructed with a series of simpler components. Recall the Stein kernel:
 
 $$k_{\mathbb{P}}(x, y) = \nabla_y \log p(y)^T\nabla_x \log p(x) k(x, y) + \nabla_y \log p(y)^T\nabla_x k(x, y) + \nabla_x \log p(x)^T \nabla_y k(x, y) +  Tr(\nabla_x \nabla_y k(x,y))$$
 
