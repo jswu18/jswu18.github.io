@@ -34,7 +34,7 @@ We will first introduce the formulation of Stein disrepancies through the lens o
 
 The IPM is defined as:
 
-$$\operatorname{IPM}_F = \sup_{f\in \mathcal{F}} \{ \mathbb{E}_{x \sim \mathbb{P}}[f(x)] - \mathbb{E}_{y \sim \mathbb{Q}}[f(y)] \}$$
+$$\operatorname{IPM}_\mathcal{F} = \sup_{f\in \mathcal{F}} \{ \mathbb{E}_{x \sim \mathbb{P}}[f(x)] - \mathbb{E}_{y \sim \mathbb{Q}}[f(y)] \}$$
 
 It is a comparison of two distribution after they are mapped with $$f$$, used to expose the differences between $$\mathbb{P}$$ and $$\mathbb{Q}$$. In particular, we search for $$f^*$$, called the witness function, a mapping that *maximimally* exposes the differences of $$\mathbb{P}$$ and $$\mathbb{Q}$$. We can visualise possible witness functions when $$\mathbb{P}$$ is Gaussian and $$\mathbb{Q}$$ follows a Laplace distribution:
 
@@ -103,7 +103,7 @@ $$(\mathcal{A}f)(x) := \dfrac{1}{p(x)} \dfrac{d}{dx}(f(x)p(x))$$
 
 where $$p(x)$$ is the density function of $$\mathbb{P}$$. In machine learning, this is often called *the* Stein operator. As we expect, $$\mathbb{P}$$ is still present in our Stein discrepancy, but embedded into our Stein operator. We will denote the Stein operator $$\mathcal{A_{\mathbb{P}}}$$ to indicate this explicitly: 
 
-$$\operatorname{SD} = \sup_{f \in \mathcal{F}} \{\mathbb{E}_{y \sim \mathbb{Q}}[(\mathcal{A_{\mathbb{P}}}f)(y)] \}$$
+$$\operatorname{SD}_\mathcal{F} = \sup_{f \in \mathcal{F}} \{\mathbb{E}_{y \sim \mathbb{Q}}[(\mathcal{A_{\mathbb{P}}}f)(y)] \}$$
 
 From the definition of the Langevin Stein operator, we can rewrite (see the derivation in the Appendix):
 

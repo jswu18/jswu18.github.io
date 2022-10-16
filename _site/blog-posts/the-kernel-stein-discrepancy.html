@@ -73,7 +73,7 @@
 
 <p>The IPM is defined as:</p>
 
-\[\operatorname{IPM}_F = \sup_{f\in \mathcal{F}} \{ \mathbb{E}_{x \sim \mathbb{P}}[f(x)] - \mathbb{E}_{y \sim \mathbb{Q}}[f(y)] \}\]
+\[\operatorname{IPM}_\mathcal{F} = \sup_{f\in \mathcal{F}} \{ \mathbb{E}_{x \sim \mathbb{P}}[f(x)] - \mathbb{E}_{y \sim \mathbb{Q}}[f(y)] \}\]
 
 <p>It is a comparison of two distribution after they are mapped with \(f\), used to expose the differences between \(\mathbb{P}\) and \(\mathbb{Q}\). In particular, we search for \(f^*\), called the witness function, a mapping that <em>maximimally</em> exposes the differences of \(\mathbb{P}\) and \(\mathbb{Q}\). We can visualise possible witness functions when \(\mathbb{P}\) is Gaussian and \(\mathbb{Q}\) follows a Laplace distribution:</p>
 
@@ -138,7 +138,7 @@ Samples from the same digit have lower MMDs (the diagonal) and we have higher MM
 
 <p>where \(p(x)\) is the density function of \(\mathbb{P}\). In machine learning, this is often called <em>the</em> Stein operator. As we expect, \(\mathbb{P}\) is still present in our Stein discrepancy, but embedded into our Stein operator. We will denote the Stein operator \(\mathcal{A_{\mathbb{P}}}\) to indicate this explicitly:</p>
 
-\[\operatorname{SD} = \sup_{f \in \mathcal{F}} \{\mathbb{E}_{y \sim \mathbb{Q}}[(\mathcal{A_{\mathbb{P}}}f)(y)] \}\]
+\[\operatorname{SD}_\mathcal{F} = \sup_{f \in \mathcal{F}} \{\mathbb{E}_{y \sim \mathbb{Q}}[(\mathcal{A_{\mathbb{P}}}f)(y)] \}\]
 
 <p>From the definition of the Langevin Stein operator, we can rewrite (see the derivation in the Appendix):</p>
 
