@@ -95,7 +95,7 @@ This is known as the Stein Identity. Any operator $$\mathcal{A}$$ that satisfies
 
 $$\operatorname{SD}_\mathcal{F} = \sup_{f\in \mathcal{F}} \|\mathbb{E}_{y \sim \mathbb{Q}}[(\mathcal{A}f)(y)] \|$$
 
-Notice that only when $$\mathbb{P} = \mathbb{Q}$$, the Stein discrepancy evaluates to zero, as we expect. For the Stein discrepancy, the set $$\mathcal{F}$$ is also referred to as the Stein set. Although we are trying to calculate the discrepancy between $$\mathbb{P}$$ and $$\mathbb{Q}$$, you may notice that the Stein discrepancy doesn't to seem to explicitly involve $$\mathbb{P}$$. It is actually incorporated in our Stein operator $$\mathcal{A}$$.
+Notice that only when $$\mathbb{P} = \mathbb{Q}$$, the Stein discrepancy evaluates to zero, as we expect. For the Stein discrepancy, the set $$\mathcal{F}$$ is also referred to as the Stein set. Although we are trying to calculate the discrepancy between $$\mathbb{P}$$ and $$\mathbb{Q}$$, you may notice that the Stein discrepancy doesn't seem to explicitly involve $$\mathbb{P}$$. It is actually incorporated in our Stein operator $$\mathcal{A}$$.
 
 ### The Langevin Stein Operator
 
@@ -117,7 +117,7 @@ Now that we have a concrete example of a Stein operator, let's discuss methods o
 
 By choosing the Stein set $$\mathcal{F}$$ as the unit-ball of a reproducing kernel Hilbert space (RKHS), we can take advantage of kernel methods to compute the Langevin Stein discrepancy. 
 
-A unique kernel is defined by a chosen RKHS, defining the dot product:
+A unique kernel is defined by a chosen RKHS, having the dot product:
 
 $$k(x, y) = \langle f(x), f(y)\rangle_{\mathcal{RKHS}}$$
 
@@ -131,7 +131,7 @@ Deriving the corresponding Langevin Stein kernel ([[A3]](#A3) for full derivatio
 
 $$k_{\mathbb{P}}(x, y) = \nabla_y \log p(y)^T\nabla_x \log p(x) k(x, y) + \nabla_y \log p(y)^T\nabla_x k(x, y) + \nabla_x \log p(x)^T \nabla_y k(x, y) +  Tr(\nabla_x \nabla_y k(x,y))$$
 
-The Langevin Stein kernel is a modification of the kernel with $$p(x)$$, the density of $$\mathbb{P}$$.
+The Langevin Stein kernel is a modification of a kernel with $$p(x)$$, the density of $$\mathbb{P}$$.
 
 ### Numerical Convergence
 
@@ -139,16 +139,19 @@ We can verify our Stein identity using the Langevin Stein Kernel:
 
 $$\mathbb{E}_{X \sim \mathbb{P}}[k_{\mathbb{P}}(x, X)] = 0 \Leftrightarrow X \sim \mathbb{P}$$
 
-where $$x \in \mathbb{R}^d$$, by plotting the distribution of expectations of samples of $$k_{\mathbb{P}}(X, x)$$. The below plot compares $$X \sim \mathbb{P}$$ and $$X \sim \mathbb{Q}$$, where $$\mathbb{P}$$ is a Gaussian distribution and $$\mathbb{Q}$$ is a Laplace distribution. For $$\mathbb{P}$$, the distribution of the kernel centers around zero, while the distribution for $$\mathbb{Q}$$ has a non-zero mean, as we expect. Moreover, the effect of the law of large numbers shows how the histograms narrow as the sample size increases. 
+where $$x \in \mathbb{R}^d$$, by plotting the distribution of expectations of samples of $$k_{\mathbb{P}}(X, x)$$. The below plot compares $$X \sim \mathbb{P}$$ and $$X \sim \mathbb{Q}$$, where $$\mathbb{P}$$ is a Gaussian distribution and $$\mathbb{Q}$$ is a Laplace distribution. 
 
 <figure class="image" align="center">
   <img src="the-kernel-stein-discrepancy/stein_convergence.gif" width="50%">
+  <figcaption>
+  For P (matching the density in the Stein kernel), the histogram of the kernel expectation centers around zero, while the histogram for Q has a non-zero mean, as we expect. Moreover, the effect of the law of large numbers shows how the spread of the histogram narrow as the sample size increases. 
+  <\figcaption>
 </figure>
 
 
 ## The Langevin Kernel Stein Discrepancy
 
-We have essentially arrived at the common formulation of the Langevin KSD. Formally, it is defined as [[1]](#1):
+We have essentially arrived at the formulation of the Langevin KSD. It is defined as [[1]](#1):
 
 $$\operatorname{KSD}^2 = \mathbb{E}_{X, \tilde{X} \sim \mathbb{Q}}[k_{\mathbb{P}}(X, \tilde{X})]$$
 
@@ -174,7 +177,7 @@ Because of their complex formulation, it can be difficult to have an intuitive u
 $$k_{\mathbb{P}}(x, y) = \nabla_y \log p(y)^T\nabla_x \log p(x) k(x, y) + \nabla_y \log p(y)^T\nabla_x k(x, y) + \nabla_x \log p(x)^T \nabla_y k(x, y) +  Tr(\nabla_x \nabla_y k(x,y))$$
 
 
-Below, we first plot the distribution and base kernel $$k(x,y=y')$$. This is followed by a breakdown of the terms in the Stein kernel, each calculated through the product of a distribution component and a kernel component. Finally, the resulting Stein kernel is visualised as the sum of the four terms. 
+Below, we first plot the distribution and base kernel $$k(x,y=y')$$. This is followed by a breakdown of the four terms in the Stein kernel, each calculated through the product of a distribution component and a kernel component. Finally, the resulting Stein kernel is visualised as the sum of these four terms. 
 
 <!-- Here is breakdown of a Stein kernel with a Laplace distribution and Gaussian base kernel: -->
 
@@ -194,7 +197,7 @@ Here is breakdown of a Stein kernel with a Cauchy distribution and inverse multi
 
 ### Sampling Techniques
 
-For many complex distributions, sampling techniques (i.e. MCMC) are important tools for tractablility. Through the development of these samplers, we need to ensure that they generate data points that are genuinely representative of the underlying distribution. The KSD can evaluate the quality of a sampler, ensuring that it isn't biased [[4]](#4). 
+For many complex distributions, sampling techniques (i.e. MCMC) are important tools. Through the development of these samplers, we need to ensure that they generate data points that are genuinely representative of the underlying distribution. The KSD can help evaluate the quality of a sampler [[4]](#4). 
 
 <!-- In addition to evaluating sampler quality, the KSD can also be used "correct" the samples of a biased sampler. This correction can be done by applying weight to each sample and minimising the KSD with respect to these sample weights. We can therefore continue to use a biased sampler that might be more computationally efficient by simply reweighting its samples with the KSD. -->
 
