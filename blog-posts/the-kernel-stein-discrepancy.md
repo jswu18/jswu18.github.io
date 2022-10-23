@@ -214,7 +214,9 @@ where $$x_i \sim \mathbb{Q}$$, the unknown distribution that we want to estimate
 
 ## Some Last Thoughts
 
-Hopefully this was a helpful introduction to the KSD and Stein kernels! The visualisations in this blog were generated using [my github repository](https://github.com/jswu18/distribution-discrepancies) for distribution discrepancies. Feel free to check it out!
+Hopefully this was a helpful introduction to the KSD and Stein kernels! The visualisations in this blog were generated using [my github repository](https://github.com/jswu18/distribution-discrepancies) for distribution discrepancies. Feel free to check it out! 
+
+Finally, I'd like to thank [Oscar Key](https://oscarkey.github.io) for helping me these past few months as I tried to wrap my head around most of these concepts. Thank you for your patience and constant feedback!
 
 ## References
 <a id="1">[1]</a> 
