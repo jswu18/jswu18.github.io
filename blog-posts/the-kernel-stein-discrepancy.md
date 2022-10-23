@@ -323,7 +323,7 @@ Knowing that $$\|\mu_{\mathbb{P}}\|^2_H = \langle \mathbb{E}[k(\cdot, X)], \math
 
 $$\operatorname{MMD}^2 =  \mathbb{E}_{X, \tilde{X} \sim \mathbb{P}}[k(X,\tilde{X})]-2\mathbb{E}_{X \sim \mathbb{P},Y \sim \mathbb{Q}}[k(X,Y)]+\mathbb{E}_{Y, \tilde{Y} \sim \mathbb{Q}}[k(Y,\tilde{Y})]$$ -->
 
-### <a id="A1">[A1]</a>  Stein Identity Proof for the Langevin Stein Kernel
+### <a id="A1"> Appendix 1: Stein Identity Proof for the Langevin Stein Kernel </a> 
 
 Inserting into the Stein identity, we can check that it holds:
 
@@ -344,7 +344,7 @@ $$[f(x)p(x)]_{-\infty}^{\infty}$$
 Assuming that as $$x \rightarrow \pm\infty$$ the quantities $$p(x) \rightarrow 0$$ and $$f(x) \rightarrow 0$$, we have satisfied the Stein Identity.
 
 
-### <a id="A2">[A2]</a>  Langevin Stein Operator Derivation
+### <a id="A2">Appendix 2: Langevin Stein Operator Derivation</a>
 
 Unpacking the Langevin Stein operator: 
 
@@ -362,7 +362,7 @@ Defining the second term as a dot product, we have our desired formulation of th
 
 $$(\mathcal{A}f)(x) = \langle \nabla_x \log p(x), f(x) \rangle_H + \nabla_x f(x)$$
 
-### <a id="A3">[A3]</a>  Langevin Stein Kernel Derivation
+### <a id="A3">Appendix 3: Langevin Stein Kernel Derivation</a>
 
 Starting with:
 
