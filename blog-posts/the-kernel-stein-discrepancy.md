@@ -18,7 +18,7 @@ and
 
 $$\operatorname{SD}(\mathbb{P}, \mathbb{Q}) \geq 0$$
 
-One common form of SDs is the Langevin Kernel Stein discrepancy (KSD), which we will describe in some detail. The KSD calculates the divergence of an unnormalised density function with samples from an unknown distribution. In many applications of statistics and machine learning, the existence of a statistical quantity with these properties is very useful. In many cases, using an unnormalised density can mitigate model intractability. We also don't require assumptions on our unknown distribution, calculating the divergence directly from the samples. Stein discrepancies have been the source of many important research directions including the improvement of sampling techniques, testing goodness of fit, and parameter estimation. 
+One common form of SDs is the Langevin Kernel Stein discrepancy (KSD), which we will describe in some detail. The KSD calculates the divergence of an unnormalised density function with samples from an unknown distribution. In many applications of statistics and machine learning, the existence of a statistical quantity with these properties is very useful. In many cases, using an unnormalised density can mitigate model intractability. We also don't require assumptions on our unknown distribution, calculating the divergence directly from the samples. Stein discrepancies have been the source of many important research directions including the evaluation of sampling techniques and testing goodness of fit. 
 
 We will first introduce the formulation of Stein disrepancies through the lens of integral probability metrics (IPMs). Afterwards, we will go into some details of the KSD. 
 
