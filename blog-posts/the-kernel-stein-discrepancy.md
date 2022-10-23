@@ -143,7 +143,7 @@ where $$x \in \mathbb{R}^d$$, by plotting the distribution of expectations of sa
 
 <figure class="image" align="center">
   <img src="the-kernel-stein-discrepancy/stein_convergence.gif" width="50%">
-  <figcaption> For P (matching the density in the Stein kernel), the histogram of the kernel expectation centers around zero, while the histogram for Q has a non-zero mean, as we expect. Moreover, the effect of the law of large numbers shows how the spread of the histogram narrow as the sample size increases. 
+  <figcaption> For P (matching the density in the Stein kernel), the histogram of the kernel expectation centers around zero, while the histogram for Q has a non-zero mean, as we expect. Moreover, the effect of the law of large numbers shows how the spread of the histogram narrows as the sample size increases. 
   </figcaption> 
 </figure>
 
@@ -221,20 +221,20 @@ Hopefully this was a helpful introduction to the KSD and Stein kernels! The visu
 Finally, I'd like to thank [Oscar Key](https://oscarkey.github.io) for helping me these past few months as I tried to wrap my head around most of these concepts. Thank you for your patience and constant feedback!
 
 ## References
-<a id="1">[1]</a> 
+<a id="1">[1]</a>
 Anastasiou, A., Barp, A., Briol, F. X., Ebner, B., Gaunt, R. E., Ghaderinezhad, F., ... & Swan, Y. (2021). Stein's Method Meets Statistics: A Review of Some Recent Developments. arXiv preprint arXiv:2105.03481.
 
-<a id="2">[2]</a> 
+<a id="2">[2]</a>
 Barp, A., Briol, F. X., Duncan, A., Girolami, M., & Mackey, L. (2019). Minimum stein discrepancy estimators. Advances in Neural Information Processing Systems, 32.
 
-<a id="3">[3]</a> 
+<a id="3">[3]</a>
 Müller, A. (1997). Integral probability metrics and their generating classes of functions. Advances in Applied Probability, 29(2), 429-443.
 Chicago	
 
-<a id="4">[4]</a> 
+<a id="4">[4]</a>
 Gorham, J., & Mackey, L. (2017, July). Measuring sample quality with kernels. In International Conference on Machine Learning (pp. 1292-1301). PMLR.
 
-<a id="5">[5]</a> 
+<a id="5">[5]</a>
 Liu, Q., Lee, J., & Jordan, M. (2016, June). A kernelized Stein discrepancy for goodness-of-fit tests. In International conference on machine learning (pp. 276-284). PMLR.
 Chicago	
 
