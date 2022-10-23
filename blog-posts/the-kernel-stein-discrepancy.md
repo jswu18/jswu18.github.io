@@ -143,9 +143,8 @@ where $$x \in \mathbb{R}^d$$, by plotting the distribution of expectations of sa
 
 <figure class="image" align="center">
   <img src="the-kernel-stein-discrepancy/stein_convergence.gif" width="50%">
-  <figcaption>
-  For P (matching the density in the Stein kernel), the histogram of the kernel expectation centers around zero, while the histogram for Q has a non-zero mean, as we expect. Moreover, the effect of the law of large numbers shows how the spread of the histogram narrow as the sample size increases. 
-  <\figcaption>
+  <figcaption> For P (matching the density in the Stein kernel), the histogram of the kernel expectation centers around zero, while the histogram for Q has a non-zero mean, as we expect. Moreover, the effect of the law of large numbers shows how the spread of the histogram narrow as the sample size increases. 
+  </figcaption> 
 </figure>
 
 
