@@ -175,14 +175,14 @@ $$k_{\mathbb{P}}(x, y) = \nabla_y \log p(y)^T\nabla_x \log p(x) k(x, y) + \nabla
 
 
 Below, we first plot the distribution and base kernel $$k(x,y=y')$$. This is followed by a breakdown of the terms in the Stein kernel, each calculated through the product of a distribution component and a kernel component. Finally, the resulting Stein kernel is visualised as the sum of the four terms. 
-<!-- 
-Here is breakdown of a Stein kernel with a Laplace distribution and Gaussian base kernel:
 
-<figure class="image" align="center">
+<!-- Here is breakdown of a Stein kernel with a Laplace distribution and Gaussian base kernel: -->
+
+<!-- <figure class="image" align="center">
   <img src="the-kernel-stein-discrepancy/laplace_stein_kernel_decomposed.gif" width="100%">
-</figure>
+</figure> -->
 
-Another breakdown of a Stein kernel with a Cauchy distribution and inverse multi-quadratic base kernel: -->
+<!-- Another breakdown of a Stein kernel with a Cauchy distribution and inverse multi-quadratic base kernel: -->
 
 Here is breakdown of a Stein kernel with a Cauchy distribution and inverse multi-quadratic base kernel:
 
