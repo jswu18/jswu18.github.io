@@ -4,7 +4,7 @@ layout: post
 
 # Gaussian Processes
 
-There are many online posts explaining Gaussian Processes. After reading through few of these, here's a way of introducing the topic that I found quite helpful and intuitive for myself. This post will include python code from the following packages:
+There are many online resources for understanding Gaussian Processes. Here's one way of introducing the topic that I found quite helpful and intuitive for myself. This post will include python code from the following packages:
 
 ```python
 import math
