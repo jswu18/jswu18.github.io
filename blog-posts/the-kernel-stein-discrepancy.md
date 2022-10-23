@@ -8,15 +8,9 @@ layout: post
 
 Stein discrepancies (SDs) calculate a statistical divergence between a known density $$\mathbb{P}$$ and samples from an unknown distribution $$\mathbb{Q}$$. We can express Stein discrepancies as [[1]](#1):
 
-## References
-<a id="1">[1]</a> 
-Dijkstra, E. W. (1968). 
-Go to statement considered harmful. 
-Communications of the ACM, 11(3), 147-148.
-
 $$\operatorname{SD}(\mathbb{P}, \mathbb{Q})$$
 
-They have the properties:
+Under mild regularity conditons, the Stein discsrepancy has the statistical divergence properties [[2]](#2):
 
 $$\operatorname{SD}(\mathbb{P}, \mathbb{Q}) = 0 \Leftrightarrow \mathbb{P} = \mathbb{Q}$$
 
@@ -38,7 +32,7 @@ We will first introduce the formulation of Stein disrepancies through the lens o
 
 (iii) $$d(\mathbb{P}_1, \mathbb{P}_3) \leq d(\mathbb{P}_1, \mathbb{P}_2)+d(\mathbb{P}_2, \mathbb{P}_3)$$ -->
 
-The IPM is defined as:
+The IPM is defined as [[3]](#3):
 
 $$\operatorname{IPM}_\mathcal{F} = \sup_{f\in \mathcal{F}} \| \mathbb{E}_{x \sim \mathbb{P}}[f(x)] - \mathbb{E}_{y \sim \mathbb{Q}}[f(y)] \|$$
 
@@ -92,11 +86,11 @@ The KSD quantifies the descrepancy between a known density $$\mathbb{P}$$ and sa
 
 ### The Stein Identity
 
-Suppose we want to find an operator $$\mathcal{A_\mathbb{P}}$$ such that:
+Suppose we want to find an operator $$\mathcal{A_\mathbb{P}}$$ such that [[1]](#1):
 
-$$\mathbb{E}_{x \sim \mathbb{P}}[(\mathcal{A}f)(X)] = 0,  \forall f \Leftrightarrow X \sim \mathbb{P}$$ 
+$$\mathbb{E}_{x \sim \mathbb{P}}[(\mathcal{A}f)(X)] = 0,  \forall f \in \mathcal{F} \Leftrightarrow X \sim \mathbb{P}$$ 
 
-This is known as the Stein Identity. Any operator $$\mathcal{A}$$ that satisfies the Stein identity is called a Stein operator. Using our IPM equation and applying a Stein operator to $$f$$, the first term evaluates to zero using the Stein Identity and we get the Stein discrepancy:
+This is known as the Stein Identity. Any operator $$\mathcal{A}$$ that satisfies the Stein identity is called a Stein operator. Using our IPM equation and applying a Stein operator to $$f$$, the first term evaluates to zero using the Stein Identity and we get the Stein discrepancy [[1]](#1):
 
 
 $$\operatorname{SD}_\mathcal{F} = \sup_{f\in \mathcal{F}} \|\mathbb{E}_{y \sim \mathbb{Q}}[(\mathcal{A}f)(y)] \|$$
@@ -105,7 +99,7 @@ Notice that only when $$\mathbb{P} = \mathbb{Q}$$, the Stein discrepancy evaluat
 
 ### The Langevin Stein Operator
 
-Understanding Stein operators that satisfy the Stein equation remains an open problem, but there have been many formulations of $$\mathcal{A}$$. One is the Langevin Stein operator (see the proof in the Appendix): 
+Understanding Stein operators that satisfy the Stein equation remains an open problem, but there have been many formulations of $$\mathcal{A}$$. One is the Langevin Stein operator [[4]](#4) (proof in [[A1]](#A1)): 
 
 $$(\mathcal{A}f)(x) := \dfrac{1}{p(x)} \dfrac{d}{dx}(f(x)p(x))$$
 
@@ -113,7 +107,7 @@ where $$p(x)$$ is the density of $$\mathbb{P}$$. In machine learning, this is of
 
 $$\operatorname{SD}_\mathcal{F} = \sup_{f \in \mathcal{F}} \|\mathbb{E}_{y \sim \mathbb{Q}}[(\mathcal{A_{\mathbb{P}}}f)(y)] \|$$
 
-From the definition of the Langevin Stein operator, we can rewrite (see the derivation in the Appendix):
+From the definition of the Langevin Stein operator, we can rewrite (derivation in [[A2]](#A2)):
 
 $$(\mathcal{A_{\mathbb{P}}}f)(x) = \langle \nabla_x \log p(x), f(x) \rangle_H + \nabla_x f(x)$$
 
@@ -133,7 +127,7 @@ Applying our Langevin Stein operator:
 
 $$k_{\mathbb{P}}(x, y) = \langle (\mathcal{A}_\mathbb{P} f)(x), (\mathcal{A}_\mathbb{P} f)(y)\rangle_{\mathcal{H}}$$
 
-Deriving the corresponding Langevin Stein kernel (see appendix for full derivation):
+Deriving the corresponding Langevin Stein kernel ([[A3]](#A3) for full derivation):
 
 $$k_{\mathbb{P}}(x, y) = \nabla_y \log p(y)^T\nabla_x \log p(x) k(x, y) + \nabla_y \log p(y)^T\nabla_x k(x, y) + \nabla_x \log p(x)^T \nabla_y k(x, y) +  Tr(\nabla_x \nabla_y k(x,y))$$
 
@@ -154,13 +148,13 @@ where $$x \in \mathbb{R}^d$$, by plotting the distribution of expectations of sa
 
 ## The Langevin Kernel Stein Discrepancy
 
-We have essentially arrived at the common formulation of the Langevin KSD. Formally, it is defined as:
+We have essentially arrived at the common formulation of the Langevin KSD. Formally, it is defined as [[1]](#1):
 
 $$\operatorname{KSD}^2 = \mathbb{E}_{X, \tilde{X} \sim \mathbb{Q}}[k_{\mathbb{P}}(X, \tilde{X})]$$
 
 where $$k_{\mathbb{P}}$$ is the Stein kernel.
 
-An unbiased estimate:
+An unbiased estimate [[5]](#5):
 
 $$\hat{\operatorname{KSD}}^2 = \frac{1}{m(m-1)}\sum_{i=1}^{m}\sum_{j\neq i}^{m}k_{\mathbb{P}}(x_i, x_j)$$
 
@@ -200,26 +194,49 @@ Here is breakdown of a Stein kernel with a Cauchy distribution and inverse multi
 
 ### Sampling Techniques
 
-For many complex distributions, sampling techniques (i.e. MCMC) are important tools for tractablility. Through the development of these samplers, we need to ensure that they generate data points that are genuinely representative of the underlying distribution. The KSD can evaluate the quality of a sampler, ensuring that it isn't biased. 
+For many complex distributions, sampling techniques (i.e. MCMC) are important tools for tractablility. Through the development of these samplers, we need to ensure that they generate data points that are genuinely representative of the underlying distribution. The KSD can evaluate the quality of a sampler, ensuring that it isn't biased [[4]](#4). 
 
-In addition to evaluating sampler quality, the KSD can also be used "correct" the samples of a biased sampler. This correction can be done by applying weight to each sample and minimising the KSD with respect to these sample weights. We can therefore continue to use a biased sampler that might be more computationally efficient by simply reweighting its samples with the KSD.
+<!-- In addition to evaluating sampler quality, the KSD can also be used "correct" the samples of a biased sampler. This correction can be done by applying weight to each sample and minimising the KSD with respect to these sample weights. We can therefore continue to use a biased sampler that might be more computationally efficient by simply reweighting its samples with the KSD. -->
 
-### Goodness of Fit and Paramter Estimation
-The goodness of fit of a statistical model is fundamental to hypothesis testing in statistics. It involves quantifying the discrepancy between an observed dataset $$D = \{x_i\}_{i=1}^{N}$$ and a statistical model $$\mathbb{P}_\theta$$. The KSD lends itself very well to hypothesis testing where we can compute:
+### Goodness of Fit
+The goodness of fit of a statistical model is fundamental to hypothesis testing in statistics. It involves quantifying the discrepancy between samples $$D = \{x_i\}_{i=1}^{N}$$ and a statistical model $$\mathbb{P}_\theta$$. We can compute the KSD:
 
 $$\operatorname{KSD}_{\mathbb{P}_\theta}(\{x_i\}_{i=1}^{N})$$
 
-This is a powerful tool that we can build on through estimation of $$\theta$$. We can estimate the parameters $$\theta$$ from a distribution family $$\mathbb{P}_{\theta}, \theta \in \Theta$$:
+which can be used for hypothesis testing [[5]](#5).
+
+
+<!-- This is a powerful tool that we can build on through estimation of $$\theta$$. We can estimate the parameters $$\theta$$ from a distribution family $$\mathbb{P}_{\theta}, \theta \in \Theta$$:
 
 $$\arg \min_{\theta \in \Theta} \operatorname{KSD}_{\mathbb{P}_\theta}(\{x_i\}_{i=1}^{N})$$
 
-where $$x_i \sim \mathbb{Q}$$, the unknown distribution that we want to estimate.
+where $$x_i \sim \mathbb{Q}$$, the unknown distribution that we want to estimate. -->
 
 ## Some Last Thoughts
 
 Hopefully this was a helpful introduction to the KSD and Stein kernels! The visualisations in this blog were generated using [my github repository](https://github.com/jswu18/distribution-discrepancies) for distribution discrepancies. Feel free to check it out!
 
-## Appendix 
+## References
+<a id="1">[1]</a> 
+Anastasiou, A., Barp, A., Briol, F. X., Ebner, B., Gaunt, R. E., Ghaderinezhad, F., ... & Swan, Y. (2021). Stein's Method Meets Statistics: A Review of Some Recent Developments. arXiv preprint arXiv:2105.03481.
+
+<a id="2">[2]</a> 
+Barp, A., Briol, F. X., Duncan, A., Girolami, M., & Mackey, L. (2019). Minimum stein discrepancy estimators. Advances in Neural Information Processing Systems, 32.
+
+<a id="3">[3]</a> 
+Müller, A. (1997). Integral probability metrics and their generating classes of functions. Advances in Applied Probability, 29(2), 429-443.
+Chicago	
+
+<a id="4">[4]</a> 
+Gorham, J., & Mackey, L. (2017, July). Measuring sample quality with kernels. In International Conference on Machine Learning (pp. 1292-1301). PMLR.
+
+<a id="5">[5]</a> 
+Liu, Q., Lee, J., & Jordan, M. (2016, June). A kernelized Stein discrepancy for goodness-of-fit tests. In International conference on machine learning (pp. 276-284). PMLR.
+Chicago	
+
+
+
+## Appendices 
 <!-- ### MMD Derivation
 
 Starting with the IPM definition:
@@ -306,7 +323,7 @@ Knowing that $$\|\mu_{\mathbb{P}}\|^2_H = \langle \mathbb{E}[k(\cdot, X)], \math
 
 $$\operatorname{MMD}^2 =  \mathbb{E}_{X, \tilde{X} \sim \mathbb{P}}[k(X,\tilde{X})]-2\mathbb{E}_{X \sim \mathbb{P},Y \sim \mathbb{Q}}[k(X,Y)]+\mathbb{E}_{Y, \tilde{Y} \sim \mathbb{Q}}[k(Y,\tilde{Y})]$$ -->
 
-### Stein Identity Proof for the Langevin Stein Kernel
+### <a id="A1">[A1]</a>  Stein Identity Proof for the Langevin Stein Kernel
 
 Inserting into the Stein identity, we can check that it holds:
 
@@ -327,7 +344,7 @@ $$[f(x)p(x)]_{-\infty}^{\infty}$$
 Assuming that as $$x \rightarrow \pm\infty$$ the quantities $$p(x) \rightarrow 0$$ and $$f(x) \rightarrow 0$$, we have satisfied the Stein Identity.
 
 
-### Langevin Stein Operator Derivation
+### <a id="A2">[A2]</a>  Langevin Stein Operator Derivation
 
 Unpacking the Langevin Stein operator: 
 
@@ -345,7 +362,7 @@ Defining the second term as a dot product, we have our desired formulation of th
 
 $$(\mathcal{A}f)(x) = \langle \nabla_x \log p(x), f(x) \rangle_H + \nabla_x f(x)$$
 
-### Langevin Stein Kernel Derivation
+### <a id="A3">[A3]</a>  Langevin Stein Kernel Derivation
 
 Starting with:
 
