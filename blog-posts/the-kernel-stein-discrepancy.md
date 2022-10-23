@@ -6,7 +6,13 @@ layout: post
 
 ## Motivations
 
-Stein discrepancies (SDs) calculate a statistical divergence between a known density $$\mathbb{P}$$ and samples from an unknown distribution $$\mathbb{Q}$$. We can express Stein discrepancies as:
+Stein discrepancies (SDs) calculate a statistical divergence between a known density $$\mathbb{P}$$ and samples from an unknown distribution $$\mathbb{Q}$$. We can express Stein discrepancies as [[1]](#1):
+
+## References
+<a id="1">[1]</a> 
+Dijkstra, E. W. (1968). 
+Go to statement considered harmful. 
+Communications of the ACM, 11(3), 147-148.
 
 $$\operatorname{SD}(\mathbb{P}, \mathbb{Q})$$
 
@@ -18,7 +24,7 @@ and
 
 $$\operatorname{SD}(\mathbb{P}, \mathbb{Q}) \geq 0$$
 
-One common form of SDs is the Langevin Kernel Stein discrepancy (KSD), which we will describe in some detail. The KSD calculates the divergence of an unnormalised density function with samples with an unknown distribution. In many applications of statistics and machine learning, the existence of a statistical quantity with these properties is very useful. In many cases, using an unnormalised density can mitigate model intractability. We also don't require assumptions on our unknown distribution, calculating the divergence directly from the samples. Stein discrepancies have been the source of many important research directions including the improvement of sampling techniques, testing goodness of fit, and approximate inference. 
+One common form of SDs is the Langevin Kernel Stein discrepancy (KSD), which we will describe in some detail. The KSD calculates the divergence of an unnormalised density function with samples from an unknown distribution. In many applications of statistics and machine learning, the existence of a statistical quantity with these properties is very useful. In many cases, using an unnormalised density can mitigate model intractability. We also don't require assumptions on our unknown distribution, calculating the divergence directly from the samples. Stein discrepancies have been the source of many important research directions including the improvement of sampling techniques, testing goodness of fit, and parameter estimation. 
 
 We will first introduce the formulation of Stein disrepancies through the lens of integral probability metrics (IPMs). Afterwards, we will go into some details of the KSD. 
 
@@ -34,17 +40,19 @@ We will first introduce the formulation of Stein disrepancies through the lens o
 
 The IPM is defined as:
 
-$$\operatorname{IPM}_\mathcal{F} = \sup_{f\in \mathcal{F}} \{ \mathbb{E}_{x \sim \mathbb{P}}[f(x)] - \mathbb{E}_{y \sim \mathbb{Q}}[f(y)] \}$$
+$$\operatorname{IPM}_\mathcal{F} = \sup_{f\in \mathcal{F}} \| \mathbb{E}_{x \sim \mathbb{P}}[f(x)] - \mathbb{E}_{y \sim \mathbb{Q}}[f(y)] \|$$
 
-It is a comparison of two distribution after they are mapped with $$f$$, used to expose the differences between $$\mathbb{P}$$ and $$\mathbb{Q}$$. In particular, we search for $$f^*$$, called the witness function, a mapping that *maximimally* exposes the differences of $$\mathbb{P}$$ and $$\mathbb{Q}$$. We can visualise possible witness functions when $$\mathbb{P}$$ is Gaussian and $$\mathbb{Q}$$ follows a Laplace distribution:
+It is a comparison of two distribution under the transformation of some $$f$$ in $$\mathcal{F}$$. In particular, we search for $$f^*$$, called the witness function, a transformation that *maximimally* exposes the differences of $$x \sim \mathbb{P}$$ and $$y \sim \mathbb{Q}$$. We can visualise possible witness functions when $$\mathbb{P}$$ is Gaussian and $$\mathbb{Q}$$ follows a Laplace distribution:
 
 <figure class="image" align="center">
   <img src="the-kernel-stein-discrepancy/ipm_witness_function_example.gif" width="60%">
+  <figcaption> Notice that when f(x)=0,  p(x) = q(x). Moreover, when p(x) > q(x), f(x) > 0 and the same vice versa. This increases the quantity in the absolute value and ensures that the IPM is non-zero, indicating that the two distributons are different.
+  </figcaption> 
 </figure>
 
-Notice that when $$f(x)=0$$,  $$p(x) = q(x)$$. Moreover, when $$p(x) > q(x)$$, $$f(x) > 0$$ and the same vice versa. This increases the quantity $$\mathbb{E}_{x \sim \mathbb{P}}[f(x)] - \mathbb{E}_{y \sim \mathbb{Q}}[f(y)]$$ and ensures that the IPM is non-zero, indicating that $$\mathbb{P} \neq \mathbb{Q}$$ as expected.
 
-To find a meaningful $$f^*$$, $$\mathcal{F}$$ must be a large set of functions to ensure that the IPM is a metric. As you may be familiar with divergences (i.e. the Kullback Leiber Divergence), a metric is a divergence with the additional properties of symmetry and the triangle inequality. For example, if we chose $$\mathcal{F}: \{f(x) = 0\}$$, then $$\mathbb{E}_{x \sim \mathbb{P}}[f(x)] - \mathbb{E}_{y \sim \mathbb{Q}}[f(y)]$$ would always be zero. This would not be a metric. Another choice of $$\mathcal{F}$$ is $$\mathcal{C}_b(\mathcal{X})$$, the set of bounded continuous functions. This is a large enough set to ensure that the IPM is a metric. There are many other choices of $$\mathcal{F}$$ that can formulate valid IPMs.
+
+To find a meaningful $$f^*$$, $$\mathcal{F}$$ must be a large set of functions to ensure that the IPM is a metric. As you may be familiar with divergences (i.e. the Kullback Leiber Divergence), a metric is a divergence with the additional properties of symmetry and the triangle inequality. For example, if we chose $$\mathcal{F}: \{f(x) = 0\}$$, then $$\mathbb{E}_{x \sim \mathbb{P}}[f(x)] - \mathbb{E}_{y \sim \mathbb{Q}}[f(y)]$$ would always be zero. This would not be a metric. Another choice of $$\mathcal{F}$$ is $$\mathcal{C}_b(\mathcal{X})$$, the set of bounded continuous functions. This is a large enough set to ensure that the IPM is a metric, though it should be noted that the supremum in this case is not easily computable. There are many other choices of $$\mathcal{F}$$ that can formulate valid IPMs.
 
 
 
@@ -80,7 +88,7 @@ Samples from the same digit have lower MMDs (the diagonal) and we have higher MM
 ## Stein Discrepancies
 
 <!-- The MNIST example showed that when $$\mathbb{P}$$ and $$\mathbb{Q}$$ are unknown, the MMD is very effective. However, we often have samples from an unknown $$\mathbb{Q}$$ that we want to compare to a known $$\mathbb{P}$$. In this case, the MMD would have us sampling both $$\mathbb{P}$$ and $$\mathbb{Q}$$, a pretty inefficient approach. The Kernel Stein Discrepancy (KSD) solves this problem by incorporating the density function of $$\mathbb{P}$$ into the discrepancy calculation.  -->
-The KSD quantifies the descrepancy between a known density $$\mathbb{P}$$ and samples from an unknown distribution $$\mathbb{Q}$$. It does this by modifying the mapping $$f$$ from the IPM with a Stein Operator satisfying the Stein Identity.
+The KSD quantifies the descrepancy between a known density $$\mathbb{P}$$ and samples from an unknown distribution $$\mathbb{Q}$$. It does this by modifying $$f$$ from the IPM with a Stein Operator satisfying the Stein Identity.
 
 ### The Stein Identity
 
@@ -91,7 +99,7 @@ $$\mathbb{E}_{x \sim \mathbb{P}}[(\mathcal{A}f)(X)] = 0,  \forall f \Leftrightar
 This is known as the Stein Identity. Any operator $$\mathcal{A}$$ that satisfies the Stein identity is called a Stein operator. Using our IPM equation and applying a Stein operator to $$f$$, the first term evaluates to zero using the Stein Identity and we get the Stein discrepancy:
 
 
-$$\operatorname{SD}_\mathcal{F} = \sup_{f\in \mathcal{F}} \{\mathbb{E}_{y \sim \mathbb{Q}}[(\mathcal{A}f)(y)] \}$$
+$$\operatorname{SD}_\mathcal{F} = \sup_{f\in \mathcal{F}} \|\mathbb{E}_{y \sim \mathbb{Q}}[(\mathcal{A}f)(y)] \|$$
 
 Notice that only when $$\mathbb{P} = \mathbb{Q}$$, the Stein discrepancy evaluates to zero, as we expect. For the Stein discrepancy, the set $$\mathcal{F}$$ is also referred to as the Stein set. Although we are trying to calculate the discrepancy between $$\mathbb{P}$$ and $$\mathbb{Q}$$, you may notice that the Stein discrepancy doesn't to seem to explicitly involve $$\mathbb{P}$$. It is actually incorporated in our Stein operator $$\mathcal{A}$$.
 
@@ -101,13 +109,13 @@ Understanding Stein operators that satisfy the Stein equation remains an open pr
 
 $$(\mathcal{A}f)(x) := \dfrac{1}{p(x)} \dfrac{d}{dx}(f(x)p(x))$$
 
-where $$p(x)$$ is the density function of $$\mathbb{P}$$. In machine learning, this is often called *the* Stein operator. As we expect, $$\mathbb{P}$$ is still present in our Stein discrepancy, but embedded into our Stein operator. We will denote the Stein operator $$\mathcal{A_{\mathbb{P}}}$$ to indicate this explicitly: 
+where $$p(x)$$ is the density of $$\mathbb{P}$$. In machine learning, this is often called *the* Stein operator. As we expect, $$\mathbb{P}$$ is still present in our Stein discrepancy, but embedded into our Stein operator. We will denote the Stein operator $$\mathcal{A_{\mathbb{P}}}$$ to indicate this explicitly: 
 
-$$\operatorname{SD}_\mathcal{F} = \sup_{f \in \mathcal{F}} \{\mathbb{E}_{y \sim \mathbb{Q}}[(\mathcal{A_{\mathbb{P}}}f)(y)] \}$$
+$$\operatorname{SD}_\mathcal{F} = \sup_{f \in \mathcal{F}} \|\mathbb{E}_{y \sim \mathbb{Q}}[(\mathcal{A_{\mathbb{P}}}f)(y)] \|$$
 
 From the definition of the Langevin Stein operator, we can rewrite (see the derivation in the Appendix):
 
-$$(\mathcal{A_{\mathbb{P}}}f)(x) = \langle \nabla_x \log p(x), f(x) \rangle + \nabla_x f(x)$$
+$$(\mathcal{A_{\mathbb{P}}}f)(x) = \langle \nabla_x \log p(x), f(x) \rangle_H + \nabla_x f(x)$$
 
 Now that we have a concrete example of a Stein operator, let's discuss methods of calculating $$(\mathcal{A_{\mathbb{P}}}f)$$ on $$\mathbb{Q}$$ samples.
 
@@ -115,15 +123,15 @@ Now that we have a concrete example of a Stein operator, let's discuss methods o
 
 By choosing the Stein set $$\mathcal{F}$$ as the unit-ball of a reproducing kernel Hilbert space (RKHS), we can take advantage of kernel methods to compute the Langevin Stein discrepancy. 
 
-A unique kernel is defined by a chosen RKHS, which can be expressed (non-uniquely) with a mapping $$f$$:
+A unique kernel is defined by a chosen RKHS, defining the dot product:
 
-$$k(x, y) = \langle f(x), f(y)\rangle$$
+$$k(x, y) = \langle f(x), f(y)\rangle_{\mathcal{RKHS}}$$
 
-where $$f$$ is restricted in the unit-ball, $$\|f\|_{\mathcal{RKHS}} \leq 1$$.
+where $$f$$ is the set of functions restricted in the unit-ball, $$\|f\|_{\mathcal{RKHS}} \leq 1$$.
 
-Applying our Langevin Stein operator to $$f$$:
+Applying our Langevin Stein operator:
 
-$$k_{\mathbb{P}}(x, y) = \langle (\mathcal{A}_\mathbb{P} f)(x), (\mathcal{A}_\mathbb{P} f)(y)\rangle$$
+$$k_{\mathbb{P}}(x, y) = \langle (\mathcal{A}_\mathbb{P} f)(x), (\mathcal{A}_\mathbb{P} f)(y)\rangle_{\mathcal{H}}$$
 
 Deriving the corresponding Langevin Stein kernel (see appendix for full derivation):
 
@@ -137,9 +145,7 @@ We can verify our Stein identity using the Langevin Stein Kernel:
 
 $$\mathbb{E}_{X \sim \mathbb{P}}[k_{\mathbb{P}}(x, X)] = 0 \Leftrightarrow X \sim \mathbb{P}$$
 
-where $$x \in \mathbb{R}^d$$.
-
-We can numerically verify this by plotting the distribution of expectations of samples of $$k_{\mathbb{P}}(X, x)$$. The below plot compares $$X \sim \mathbb{P}$$ and $$X \sim \mathbb{Q}$$, where $$\mathbb{P}$$ is a Gaussian distribution and $$\mathbb{Q}$$ is a Laplace distribution. For $$\mathbb{P}$$, the distribution of the kernel centers around zero, while the distribution for $$\mathbb{Q}$$ has a non-zero mean, as we expect. Moreover, the effect of the law of large numbers shows how the histograms narrow as the sample size increases. 
+where $$x \in \mathbb{R}^d$$, by plotting the distribution of expectations of samples of $$k_{\mathbb{P}}(X, x)$$. The below plot compares $$X \sim \mathbb{P}$$ and $$X \sim \mathbb{Q}$$, where $$\mathbb{P}$$ is a Gaussian distribution and $$\mathbb{Q}$$ is a Laplace distribution. For $$\mathbb{P}$$, the distribution of the kernel centers around zero, while the distribution for $$\mathbb{Q}$$ has a non-zero mean, as we expect. Moreover, the effect of the law of large numbers shows how the histograms narrow as the sample size increases. 
 
 <figure class="image" align="center">
   <img src="the-kernel-stein-discrepancy/stein_convergence.gif" width="50%">
@@ -175,14 +181,16 @@ $$k_{\mathbb{P}}(x, y) = \nabla_y \log p(y)^T\nabla_x \log p(x) k(x, y) + \nabla
 
 
 Below, we first plot the distribution and base kernel $$k(x,y=y')$$. This is followed by a breakdown of the terms in the Stein kernel, each calculated through the product of a distribution component and a kernel component. Finally, the resulting Stein kernel is visualised as the sum of the four terms. 
-
+<!-- 
 Here is breakdown of a Stein kernel with a Laplace distribution and Gaussian base kernel:
 
 <figure class="image" align="center">
   <img src="the-kernel-stein-discrepancy/laplace_stein_kernel_decomposed.gif" width="100%">
 </figure>
 
-Another breakdown of a Stein kernel with a Cauchy distribution and inverse multi-quadratic base kernel:
+Another breakdown of a Stein kernel with a Cauchy distribution and inverse multi-quadratic base kernel: -->
+
+Here is breakdown of a Stein kernel with a Cauchy distribution and inverse multi-quadratic base kernel:
 
 <figure class="image" align="center">
   <img src="the-kernel-stein-discrepancy/cauchy_stein_kernel_decomposed.gif" width="100%">
@@ -192,34 +200,24 @@ Another breakdown of a Stein kernel with a Cauchy distribution and inverse multi
 
 ### Sampling Techniques
 
-For many complex distributions, sampling techniques (i.e. MCMC) are important tools for tractablility. Through the development of these samplers, we need to ensure that they generate data points that are genuinely representative of the underlying distribution. The KSD can evaluate the quality of a sampler, ensuring that it isn't biased. For a given density $$\mathbb{P}$$ and $$N$$ samples $$\{x_i\}_{i=1}^{N}$$ from a sampler, we can calculate $$KSD_{\mathbb{P}}(\{x_i\}_{i=1}^{N})$$ and use this to determine the convergence of $$\{x_i\}_{i=1}^{N}$$ as $$N \rightarrow \infty$$. 
+For many complex distributions, sampling techniques (i.e. MCMC) are important tools for tractablility. Through the development of these samplers, we need to ensure that they generate data points that are genuinely representative of the underlying distribution. The KSD can evaluate the quality of a sampler, ensuring that it isn't biased. 
 
 In addition to evaluating sampler quality, the KSD can also be used "correct" the samples of a biased sampler. This correction can be done by applying weight to each sample and minimising the KSD with respect to these sample weights. We can therefore continue to use a biased sampler that might be more computationally efficient by simply reweighting its samples with the KSD.
 
-### Goodness of Fit and Approximate Inference
+### Goodness of Fit and Paramter Estimation
 The goodness of fit of a statistical model is fundamental to hypothesis testing in statistics. It involves quantifying the discrepancy between an observed dataset $$D = \{x_i\}_{i=1}^{N}$$ and a statistical model $$\mathbb{P}_\theta$$. The KSD lends itself very well to hypothesis testing where we can compute:
 
 $$\operatorname{KSD}_{\mathbb{P}_\theta}(\{x_i\}_{i=1}^{N})$$
 
-This is a powerful tool that we can build on through inference on $$\theta$$. We can finding the best params $$\theta$$ from a distribution family $$\mathbb{P}_{\theta}, \theta \in \Theta$$ to represent the data and by extension, the data generating process:
+This is a powerful tool that we can build on through estimation of $$\theta$$. We can estimate the parameters $$\theta$$ from a distribution family $$\mathbb{P}_{\theta}, \theta \in \Theta$$:
 
 $$\arg \min_{\theta \in \Theta} \operatorname{KSD}_{\mathbb{P}_\theta}(\{x_i\}_{i=1}^{N})$$
 
-where $$x_i \sim \mathbb{Q}$$, the unknown distribution or data generating process that we want to approximate.
-
-We can also perform inference on a more expressive set of distributions by defining $$T$$, a measure transport on a simple distribution $$\mathbb{P}$$:
-
-$$\arg \min_{T \in \mathcal{T}} \operatorname{KSD}_{(T_{\#}\mathbb{P})}(\{x_i\}_{i=1}^{N})$$
-
-where $$\mathcal{T}$$ is our space of measure transports. 
+where $$x_i \sim \mathbb{Q}$$, the unknown distribution that we want to estimate.
 
 ## Some Last Thoughts
 
-Hopefully this was a helpful introduction to the KSD and Stein kernels! The visualisations in this blog were generated using my [github repository](https://github.com/jswu18/distribution-discrepancies) for distribution discrepancies. Here are also some links that could be of interest:
-
-- [Measuring Sample Quality with Kernels](http://proceedings.mlr.press/v70/gorham17a/gorham17a.pdf)
-
-- [Measure Transport with Kernel Stein Discrepancy](http://proceedings.mlr.press/v130/fisher21a/fisher21a.pdf)
+Hopefully this was a helpful introduction to the KSD and Stein kernels! The visualisations in this blog were generated using [my github repository](https://github.com/jswu18/distribution-discrepancies) for distribution discrepancies. Feel free to check it out!
 
 ## Appendix 
 <!-- ### MMD Derivation
@@ -345,17 +343,17 @@ $$\dfrac{d}{dx}(f(x))+ f(x)\dfrac{d}{dx}\log p(x)$$
 
 Defining the second term as a dot product, we have our desired formulation of the Langevin Stein operator:
 
-$$(\mathcal{A}f)(x) = \langle \nabla_x \log p(x), f(x) \rangle + \nabla_x f(x)$$
+$$(\mathcal{A}f)(x) = \langle \nabla_x \log p(x), f(x) \rangle_H + \nabla_x f(x)$$
 
 ### Langevin Stein Kernel Derivation
 
 Starting with:
 
-$$k_{\mathbb{P}}(x, y) = \langle (\mathcal{A}_\mathbb{P} f)(x), (\mathcal{A}_\mathbb{P} f)(y)\rangle$$
+$$k_{\mathbb{P}}(x, y) = \langle (\mathcal{A}_\mathbb{P} f)(x), (\mathcal{A}_\mathbb{P} f)(y)\rangle_H$$
 
 From linearity:
 
-$$k_{\mathbb{P}}(x, y) = \mathcal{A}_\mathbb{P}^y \mathcal{A}_\mathbb{P}^x \langle f(x),f(y)\rangle$$
+$$k_{\mathbb{P}}(x, y) = \mathcal{A}_\mathbb{P}^y \mathcal{A}_\mathbb{P}^x \langle f(x),f(y)\rangle_H$$
 
 $$k_{\mathbb{P}}(x, y) = \mathcal{A}_\mathbb{P}^y \mathcal{A}_\mathbb{P}^x k(x, y)$$
 
@@ -365,15 +363,15 @@ Applying $$\mathcal{A}_\mathbb{P}^x$$:
 
 $$k_{\mathbb{P}}(x, y) = \mathcal{A}_\mathbb{P}^y (\nabla_x \log p(x) k(x, y) + \nabla_x k(x, y))$$
 
-Note that $$\nabla_x k(x, y) = \langle \nabla_x f(x), f(y) \rangle$$:
+Note that $$\nabla_x k(x, y) = \langle \nabla_x f(x), f(y) \rangle_H$$:
 
-$$k_{\mathbb{P}}(x, y) = \mathcal{A}_\mathbb{P}^y (\nabla_x \log p(x) k(x, y) + \langle \nabla_x f(x), f(y) \rangle)$$
+$$k_{\mathbb{P}}(x, y) = \mathcal{A}_\mathbb{P}^y (\nabla_x \log p(x) k(x, y) + \langle \nabla_x f(x), f(y) \rangle_H)$$
 
 Applying $$\mathcal{A}_\mathbb{P}^y$$:
 
-$$k_{\mathbb{P}}(x, y) = \nabla_y \log p(y)^T\nabla_x \log p(x) k(x, y) + \nabla_y \log p(y)^T\nabla_x k(x, y) + \nabla_x \log p(x)^T \nabla_y k(x, y) +  \langle \nabla_x f(x), \nabla_y f(y)\rangle$$
+$$k_{\mathbb{P}}(x, y) = \nabla_y \log p(y)^T\nabla_x \log p(x) k(x, y) + \nabla_y \log p(y)^T\nabla_x k(x, y) + \nabla_x \log p(x)^T \nabla_y k(x, y) +  \langle \nabla_x f(x), \nabla_y f(y)\rangle_H$$
 
-We can rewrite $$\langle \nabla_x f(x), \nabla_y f(y)\rangle = \sum_i \frac{\partial k(x,y)}{\partial x_i \partial y_i} = Tr(\nabla_x \nabla_y k(x,y))$$. 
+We can rewrite $$\langle \nabla_x f(x), \nabla_y f(y)\rangle_H = \sum_i \frac{\partial k(x,y)}{\partial x_i \partial y_i} = Tr(\nabla_x \nabla_y k(x,y))$$. 
 
 We arrive at the Langevin Stein Kernel:
 
