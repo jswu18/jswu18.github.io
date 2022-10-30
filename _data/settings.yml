@@ -1,7 +1,7 @@
 menu:
 - {name: 'Publications', url: '/publications'}
 - {name: 'Blog Posts', url: '/blog-posts'}
-- {name: 'Resumé', url: '/assets/james-wu-resume.pdf'}
+- {name: 'Resume', url: '/assets/james-wu-resume.pdf'}
 - {name: 'About', url: '/about'}
 
 social:
