@@ -10,7 +10,7 @@ Stein discrepancies (SDs) calculate a statistical divergence between a known den
 
 $$\operatorname{SD}(\mathbb{P}, \mathbb{Q})$$
 
-Under mild regularity conditons, the Stein discsrepancy has the statistical divergence properties [[2]](#2):
+Under mild regularity conditons, the Stein discrepancy has the statistical divergence properties [[2]](#2):
 
 $$\operatorname{SD}(\mathbb{P}, \mathbb{Q}) = 0 \Leftrightarrow \mathbb{P} = \mathbb{Q}$$
 
