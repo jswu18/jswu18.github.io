@@ -1,7 +1,9 @@
 featured:
+- {name: 'Expectation Maximisation', url: 'expectation-maximisation.html'}
 - {name: 'The Kernel Stein Discrepancy', url: 'the-kernel-stein-discrepancy.html'}
 - {name: 'Gaussian Processes', url: 'gaussian-processes.html'}
 
 index:
+- {name: 'Expectation Maximisation', url: 'expectation-maximisation.html'}
 - {name: 'The Kernel Stein Discrepancy', url: 'the-kernel-stein-discrepancy.html'}
 - {name: 'Gaussian Processes', url: 'gaussian-processes.html'}
