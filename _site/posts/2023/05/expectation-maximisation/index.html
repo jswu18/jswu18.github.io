@@ -1,0 +1,557 @@
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+
+<meta charset="utf-8">
+
+
+
+<!-- begin SEO -->
+
+
+
+
+
+
+
+
+
+<title>Expectation Maximisation - James Wu</title>
+
+
+
+
+
+
+
+<meta property="og:locale" content="en-US">
+<meta property="og:site_name" content="James Wu">
+<meta property="og:title" content="Expectation Maximisation">
+
+
+  <link rel="canonical" href="http://localhost:4000/posts/2023/05/expectation-maximisation/">
+  <meta property="og:url" content="http://localhost:4000/posts/2023/05/expectation-maximisation/">
+
+
+
+  <meta property="og:description" content="Expectation maximisation is a powerful algorithm for maximum likelihood estimation in the presence of missing data. It is a general algorithm that can be applied to a wide variety of problems, including clustering, mixture models, and hidden Markov models. In this post, I will present the general formulation of the algorithm, and applying it to the k-means clustering problem as an example.">
+
+
+
+
+
+  
+
+  
+
+
+
+
+
+  <meta property="og:type" content="article">
+  <meta property="article:published_time" content="2023-05-21T00:00:00-07:00">
+
+
+
+
+
+
+
+
+  <script type="application/ld+json">
+    {
+      "@context" : "http://schema.org",
+      "@type" : "Person",
+      "name" : "James Wu",
+      "url" : "http://localhost:4000",
+      "sameAs" : null
+    }
+  </script>
+
+
+
+
+
+
+<!-- end SEO -->
+
+
+<link href="http://localhost:4000/feed.xml" type="application/atom+xml" rel="alternate" title="James Wu Feed">
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="http://localhost:4000/assets/css/main.css">
+
+<meta http-equiv="cleartype" content="on">
+    
+
+<!-- start custom head snippets -->
+
+<link rel="apple-touch-icon" sizes="57x57" href="http://localhost:4000/images/apple-touch-icon-57x57.png?v=M44lzPylqQ">
+<link rel="apple-touch-icon" sizes="60x60" href="http://localhost:4000/images/apple-touch-icon-60x60.png?v=M44lzPylqQ">
+<link rel="apple-touch-icon" sizes="72x72" href="http://localhost:4000/images/apple-touch-icon-72x72.png?v=M44lzPylqQ">
+<link rel="apple-touch-icon" sizes="76x76" href="http://localhost:4000/images/apple-touch-icon-76x76.png?v=M44lzPylqQ">
+<link rel="apple-touch-icon" sizes="114x114" href="http://localhost:4000/images/apple-touch-icon-114x114.png?v=M44lzPylqQ">
+<link rel="apple-touch-icon" sizes="120x120" href="http://localhost:4000/images/apple-touch-icon-120x120.png?v=M44lzPylqQ">
+<link rel="apple-touch-icon" sizes="144x144" href="http://localhost:4000/images/apple-touch-icon-144x144.png?v=M44lzPylqQ">
+<link rel="apple-touch-icon" sizes="152x152" href="http://localhost:4000/images/apple-touch-icon-152x152.png?v=M44lzPylqQ">
+<link rel="apple-touch-icon" sizes="180x180" href="http://localhost:4000/images/apple-touch-icon-180x180.png?v=M44lzPylqQ">
+<link rel="icon" type="image/png" href="http://localhost:4000/images/favicon-32x32.png?v=M44lzPylqQ" sizes="32x32">
+<link rel="icon" type="image/png" href="http://localhost:4000/images/android-chrome-192x192.png?v=M44lzPylqQ" sizes="192x192">
+<link rel="icon" type="image/png" href="http://localhost:4000/images/favicon-96x96.png?v=M44lzPylqQ" sizes="96x96">
+<link rel="icon" type="image/png" href="http://localhost:4000/images/favicon-16x16.png?v=M44lzPylqQ" sizes="16x16">
+<link rel="manifest" href="http://localhost:4000/images/manifest.json?v=M44lzPylqQ">
+<link rel="mask-icon" href="http://localhost:4000/images/safari-pinned-tab.svg?v=M44lzPylqQ" color="#000000">
+<link rel="shortcut icon" href="/images/favicon.ico?v=M44lzPylqQ">
+<meta name="msapplication-TileColor" content="#000000">
+<meta name="msapplication-TileImage" content="http://localhost:4000/images/mstile-144x144.png?v=M44lzPylqQ">
+<meta name="msapplication-config" content="http://localhost:4000/images/browserconfig.xml?v=M44lzPylqQ">
+<meta name="theme-color" content="#ffffff">
+<link rel="stylesheet" href="http://localhost:4000/assets/css/academicons.css"/>
+
+<script type="text/x-mathjax-config"> MathJax.Hub.Config({ TeX: { equationNumbers: { autoNumber: "all" } } }); </script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=TeX-MML-AM_CHTML' async></script>
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        <button><div class="navicon"></div></button>
+        <ul class="visible-links">
+          <li class="masthead__menu-item masthead__menu-item--lg"><a href="http://localhost:4000/">James Wu</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/publications/">Publications</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/year-archive/">Blog Posts</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/files/james-wu-resume.pdf">CV</a></li>
+          
+        </ul>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+    
+
+
+
+
+
+<div id="main" role="main">
+  
+
+
+  <div class="sidebar sticky">
+  
+
+
+
+<div itemscope itemtype="http://schema.org/Person">
+
+  <div class="author__avatar">
+    
+    	<img src="http://localhost:4000/images/profile.png" class="author__avatar" alt="James Wu">
+    
+  </div>
+
+  <div class="author__content">
+    <h3 class="author__name">James Wu</h3>
+    <p class="author__bio">Computational Statistics & Machine Learning @ UCL</p>
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li><i class="fa fa-fw fa-map-marker" aria-hidden="true"></i> London, UK</li>
+      
+      
+      
+      
+        <li><a href="mailto:jian.wu.22@ucl.ac.uk"><i class="fas fa-fw fa-envelope" aria-hidden="true"></i> Email</a></li>
+      
+      
+       
+      
+      
+      
+      
+        <li><a href="https://www.linkedin.com/in/jswu18"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> LinkedIn</a></li>
+      
+      
+      
+      
+      
+      
+        <li><a href="https://github.com/jswu18"><i class="fab fa-fw fa-github" aria-hidden="true"></i> Github</a></li>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+  <article class="page" itemscope itemtype="http://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Expectation Maximisation">
+    <meta itemprop="description" content="Expectation maximisation is a powerful algorithm for maximum likelihood estimation in the presence of missing data. It is a general algorithm that can be applied to a wide variety of problems, including clustering, mixture models, and hidden Markov models. In this post, I will present the general formulation of the algorithm, and applying it to the k-means clustering problem as an example.">
+    <meta itemprop="datePublished" content="May 21, 2023">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 class="page__title" itemprop="headline">Expectation Maximisation
+</h1>
+          
+            <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+  
+	  5 minute read
+	
+</p>
+          
+        
+        
+        
+          <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Published:</strong> <time datetime="2023-05-21T00:00:00-07:00">May 21, 2023</time></p>
+        
+        
+             
+<!--        -->
+    
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        <p>Expectation maximisation is a powerful algorithm for maximum likelihood estimation in the presence of missing data. It is a general algorithm that can be applied to a wide variety of problems, including clustering, mixture models, and hidden Markov models. In this post, I will present the general formulation of the algorithm, and applying it to the k-means clustering problem as an example.</p>
+
+<p>Consider a \(\textit{general}\) model/distribution \(P(\mathcal{X}, \mathcal{Z}\vert \theta)\) where \(\mathcal{X}\) is the observation data space, \(\mathcal{Z}\) is the latent or missing data space, and \(\theta\) are the model/distribution parameters from a parameter space \(\Theta\). As an example, the k-means clustering model fits into this general structure:</p>
+
+\[P(\mathcal{X}, \mathcal{Z}\vert \theta) = \prod_{n=1}^{N} \left( \sum_{k=1}^K \frac{1}{K} \delta \left(z_{n, k}, \arg\min_{\ell \in \{1, \dots, K\}} \|\mathbf{x}_n - \mathbf{\mu}_{\ell}\|_2^2\right)\right)\]
+
+<p>where \(\delta(i, j)\) is the Kronecker delta function:</p>
+
+\[\delta(i, j) = \begin{cases}
+1 ,  &amp; \text{if } i=j\\
+0 , &amp; \text{if } i \neq j\\
+\end{cases}\]
+
+<p>For \(N\) observations and \(\mathbf{x}_n \in \mathbb{R}^{D}\), we can choose \(\mathcal{X}\) as \(\mathbb{R}^{N\times D}\), \(\mathcal{Z}\) as \(\{0, 1\}^{K \times N}\) for \(K\) cluster allocations, and \(\Theta\) as \(\mathbb{R}^{K\times D}\) for the \(\mu_{\ell}\)’s, the mean vectors of each cluster.</p>
+
+<p>We wish to find \(\hat{\theta}\), parameters \(\textit{maximising}\) \(P(\mathcal{X}, \mathcal{Z}\vert \theta)\), the parameters for which the data is most likely. In \(P(\mathcal{X}\vert \theta)\) settings without latent variables, a standard approach would be to solve for \(\hat{\theta}\) by setting \(\frac{\partial}{\partial \theta}P(\mathcal{X}\vert \theta) = 0\). But for \(\mathcal{Z}\), a latent space without observations, we can’t perform the same maximisation. We need to maximise the distribution after \(\textit{marginalisation}\) \({\theta \in \Theta} \int_{\mathcal{Z}}P(\mathcal{X}, z\vert \theta) dz\) which is often an intractable integral or computationally intractable. In the case of k-means, we see that an integral over \(\mathcal{Z}\) is a summation over \(K^N\) possible configurations, which becomes computationally intractable as \(N\) and \(K\) grow. To circumvent this issue, we define a \(\textit{lower bound}\) on the integral. This begins by first reformulating the problem, defining the loss function \(\ell (\theta) = \log \int_{\mathcal{Z}}P(\mathcal{X}, z\vert \theta) dz\). The logarithm is monotonic, so solving for \(\theta\) which maximises \(\ell\) will also maximise our marginalised distribution.</p>
+
+<p>We can choose any distribution on \(\mathcal{Z}\) parameterised by \(\theta' \in \Theta'\), \(Q_{\theta'}(\mathcal{Z})\) such that:</p>
+
+\[\begin{align}
+    \ell({\theta}) = \log \int_{\mathcal{Z}}Q_{\theta'}(z) \frac{P(\mathcal{X}, z\vert \theta)}{Q_{\theta'}(z)} dz &amp; = \log \left(\mathbb{E}_{z \sim Q_{\theta'}}\left[ \frac{P(\mathcal{X}, z\vert \theta)}{Q_{\theta'}(z)} \right]\right)\\
+    &amp; \geq  \mathbb{E}_{z \sim Q_{\theta'}}\left[ \log \left(\frac{P(\mathcal{X}, z\vert \theta)}{Q_{\theta'}(z)}\right) \right] = \mathcal{F}(\theta', \theta)
+\end{align}\]
+
+<p>We have a lower bound on \(\ell(\theta)\) by Jensen’s inequality given that \(\log\) is concave. \(\mathcal{F}(\theta', \theta)\) is known as the free energy or evidence lower bound (ELBO). Instead of trying to maximise an intractable loss, we maximise our loss indirectly by finding the parameters \(\theta'\) and \(\theta\) that maximise the free energy lower bound:</p>
+
+\[\max_{\theta' \in \Theta', \theta \in \Theta} \mathcal{F}(\theta', \theta) \leq \max_{ \theta \in \Theta} \ell(\theta)\]
+
+<p>Rewriting the free energy:</p>
+
+\[\mathcal{F}(\theta', \theta) = \mathbb{E}_{z \sim Q_{\theta'}}\left[ \log \left(P(\mathcal{X}, z\vert \theta)\right) \right] - \mathbb{E}_{z \sim Q_{\theta'}}\left[ \log \left(Q_{\theta'}(z)\right) \right]\]
+
+<p>we see that optimising with respect to \(\theta'\) and \(\theta\) \(\textit{simultaneously}\) is complicated due to the coupling of \(Q_{\theta'}(z)\) and \(P(\mathcal{X}, z\vert \theta)\) through \(z\). For example, attempting to optimise \(\theta'\) will change the expectation over \(P(\mathcal{X}, z\vert \theta)\), and thus changing the optimal parameters of \(\theta\). To maximise the free energy, we use the \(\textbf{expectation maximisation (EM)}\) algorithm, which \(\textit{iteratively}\) optimises for \(\theta'\) or \(\theta\) at each step \(t\), while the other remains fixed.</p>
+
+<p>The \(\textbf{expectation}\) (E) step optimises \(\theta'\) while holding \(\theta\) fixed such that \(\theta'^{(t)} = \arg\max_{\theta' \in \Theta'} \mathcal{F}(\theta', \theta^{(t-1)})\).</p>
+
+<p>For our k-means model, this involves maximising the probability when holding \(\mu_{\ell}\)’s fixed by choosing \(z_{n, k}\) to be the one hot encoding of \(\arg\min_{\ell \in \{1, \dots, K\}} \|\mathbf{x}_n - \mathbf{\mu}_{\ell}\|_2^2\). We can see that:</p>
+
+\[\begin{align}
+    \ell(\theta) \geq \mathcal{F}(\theta', \theta) &amp;= \mathbb{E}_{z \sim Q_{\theta'}}\left[ \log \left(\frac{P(\mathcal{X}, z\vert \theta)}{Q_{\theta'}(z)}\right) \right]\\
+    &amp;= \mathbb{E}_{z \sim Q_{\theta'}}\left[ \log \left(\frac{P(z \vert \mathcal{X}, \theta) P(\mathcal{X}\vert \theta)}{Q_{\theta'}(z)}\right) \right] \\
+    &amp;= \int_{\mathcal{Z}} Q_{\theta'}(z) \log P(\mathcal{X}\vert \theta)dz +  \int_{\mathcal{Z}} Q_{\theta'}(z) \log \left(\frac{P(z \vert \mathcal{X}, \theta)}{Q_{\theta'}(z)}\right) dz \\
+    &amp;= \log P(\mathcal{X}\vert \theta) -  \mathbf{KL}\left[Q_{\theta'}(z) \| P(z \vert \mathcal{X}, \theta) \right]\\
+    &amp;= \ell(\theta) -  \mathbf{KL}\left[Q_{\theta'}(z) \| P(z \vert \mathcal{X}, \theta) \right]
+\end{align}\]
+
+<p>The E step as minimising the Kullback-Leiberg divergence between \(Q_{\theta'}(z)\) and \(P(z \vert \mathcal{X}, \theta)\), \(\textit{raises}\) the free energy lower bound on \(\ell(\theta)\).</p>
+
+<p>The \(\textbf{maximisation}\) (M) step optimises \(\theta\) while holding \(\theta'\) fixed, \(\theta^{(t)} = \arg\max_{\theta \in \Theta} \mathcal{F}(\theta'^{(t)}, \theta)\). For our k-means model, this involves recalculating the cluster means \(\mu_{\ell}\) given the cluster assignments \(z_{n, k}\) from \(\theta'^{(t)}\). To understand the M step, we can see:</p>
+
+\[\begin{align}
+\arg\max_{\theta \in \Theta} \mathcal{F}(\theta'^{(t)}, \theta) &amp;= \arg\max_{\theta \in \Theta}\left( \mathbb{E}_{z \sim Q_{\theta'}}\left[ \log \left(P(\mathcal{X}, z\vert \theta)\right) \right] - \mathbb{E}_{z \sim Q_{\theta'}}\left[ \log \left(Q_{\theta'}(z)\right) \right]\right)\\
+&amp;= \arg\max_{\theta \in \Theta}\mathbb{E}_{z \sim Q_{\theta'}}\left[ \log \left(P(\mathcal{X}, z\vert \theta)\right) \right] 
+\end{align}\]
+
+<p>Unlike in the E step, where we chose \(\theta'\) to reach the upper bound on the free energy \(\ell(\theta)\), in the M step, we are \(\textit{raising}\) the upper bound \(\ell(\theta)\) by \(\textit{maximising}\) the loss under expectation of \(Q_{\theta'}\). Combining, we can see that:</p>
+
+\[\ell(\theta^{(t-1}) \stackrel{(i)}{=} \mathcal{F}(\theta'^{(t)}, \theta^{(t-1)}) \stackrel{(ii)}{\leq} \mathcal{F}(\theta'^{(t)}, \theta^{(t)}) \stackrel{(iii)}{\leq} \ell(\theta^{(t)})\]
+
+<p>where \((i)\) is the E step, choosing \(\theta'^{(t)}\) to match the current upper bound \(\ell(\theta^{(t-1})\), \((ii)\) is the M step, choosing \(\theta^{(t)}\) to raise the upper bound to \(\ell(\theta^{(t)})\) by Jensen’s inequality in \((iii)\). This guarantees that the EM algorithm  monotonically increases the loss. However, it should be noted that these inequalites are not strict, thus there is no guarantee that EM will find the global optimum.</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+  
+
+
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="http://localhost:4000/tags/#expectation-maximisation" class="page__taxonomy-item" rel="tag">Expectation Maximisation</a>
+    
+    </span>
+  </p>
+
+
+
+
+      </footer>
+
+      
+
+<section class="page__share">
+  
+    <h4 class="page__share-title">Share on</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=http://localhost:4000/posts/2023/05/expectation-maximisation/" class="btn btn--twitter" title="Share on Twitter"><i class="fab fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/posts/2023/05/expectation-maximisation/" class="btn btn--facebook" title="Share on Facebook"><i class="fab fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http://localhost:4000/posts/2023/05/expectation-maximisation/" class="btn btn--linkedin" title="Share on LinkedIn"><i class="fab fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+      
+
+
+  <nav class="pagination">
+    
+      <a href="http://localhost:4000/posts/2022/10/kernel-stein-discrepancy/" class="pagination--pager" title="The Kernel Stein Discrepancy
+">Previous</a>
+    
+    
+      <a href="#" class="pagination--pager disabled">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      
+        <h4 class="page__related-title">You May Also Enjoy</h4>
+      
+      <div class="grid__wrapper">
+        
+          
+
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/posts/2022/10/kernel-stein-discrepancy/" rel="permalink">The Kernel Stein Discrepancy
+</a>
+      
+    </h2>
+    
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+  
+	  11 minute read
+	
+</p>
+    
+
+        
+         <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Published:</strong> <time datetime="2022-10-12T00:00:00-07:00">October 12, 2022</time></p>
+        
+
+    
+    <p class="archive__item-excerpt" itemprop="description"><p>In this post, we will introduce the Stein discrepancy, in particular the Langevin Kernel Stein Discrepancy (KSD), a common form of Stein discrepancy. Stein discrepancies (SDs) calculate a statistical divergence between a known density \(\mathbb{P}\) and samples from an unknown distribution \(\mathbb{Q}\).</p>
+
+</p>
+    
+
+<!--    -->
+
+  </article>
+</div>
+
+        
+          
+
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/posts/2021/06/images/gaussian-processes/" rel="permalink">Gaussian Processes: A Hands On Introduction
+</a>
+      
+    </h2>
+    
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+  
+	  6 minute read
+	
+</p>
+    
+
+        
+         <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Published:</strong> <time datetime="2021-06-18T00:00:00-07:00">June 18, 2021</time></p>
+        
+
+    
+    <p class="archive__item-excerpt" itemprop="description"><p>There are many online resources for understanding Gaussian Processes. In this post, I present a more hands on way of introducing the topic that I found quite helpful and intuitive for myself.</p>
+
+</p>
+    
+
+<!--    -->
+
+  </article>
+</div>
+
+        
+      </div>
+    </div>
+  
+</div>
+
+
+    <div class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+<a href="/sitemap/">Sitemap</a>
+<!-- end custom footer snippets -->
+
+        
+
+<div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+<!--    -->
+<!--    -->
+    
+      <li><a href="http://github.com/jswu18"><i class="fab fa-github" aria-hidden="true"></i> GitHub</a></li>
+    
+<!--    -->
+    <li><a href="http://localhost:4000/feed.xml"><i class="fa fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2023 James Wu. Powered by <a href="http://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://github.com/academicpages/academicpages.github.io">AcademicPages</a>, a fork of <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    <script src="http://localhost:4000/assets/js/main.min.js"></script>
+
+
+
+
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', '', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+  </body>
+</html>
+
