@@ -5,7 +5,7 @@ permalink: /posts/2023/05/expectation-maximisation/
 tags:
   - Expectation Maximisation
 ---
-Expectation maximisation is a powerful algorithm for maximum likelihood estimation in the presence of missing data. It is a general algorithm that can be applied to a wide variety of problems, including clustering, mixture models, and hidden Markov models. In this post, I will present the general formulation of the algorithm, and applying it to the k-means clustering problem as an example.
+Expectation maximisation is a powerful algorithm that can be applied to a wide variety of problems, including clustering, mixture models, and hidden Markov models. In this post, I will present the general formulation of the algorithm, and applying it to the k-means clustering problem as an example.
 
 Consider a $$\textit{general}$$ model/distribution $$P(\mathcal{X}, \mathcal{Z}\vert \theta)$$ where $$\mathcal{X}$$ is the observation data space, $$\mathcal{Z}$$ is the latent or missing data space, and $$\theta$$ are the model/distribution parameters from a parameter space $$\Theta$$. As an example, the k-means clustering model fits into this general structure:
 
