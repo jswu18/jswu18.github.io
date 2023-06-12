@@ -6,7 +6,7 @@ tags:
   - Kernel Stein Discrepancy
 ---
 
-In this post, we will introduce the Stein discrepancy, in particular the Langevin Kernel Stein Discrepancy (KSD), a common form of Stein discrepancy. Stein discrepancies (SDs) calculate a statistical divergence between a known density $$\mathbb{P}$$ and samples from an unknown distribution $$\mathbb{Q}$$. 
+Stein discrepancies (SDs) calculate a statistical divergence between a known density $$\mathbb{P}$$ and samples from an unknown distribution $$\mathbb{Q}$$. In this post, we will introduce the Stein discrepancy, in particular the Langevin Kernel Stein Discrepancy (KSD), a common form of Stein discrepancy. 
 
 We can express Stein discrepancies as [[1]](#1):
 
