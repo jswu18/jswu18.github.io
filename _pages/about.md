@@ -15,5 +15,5 @@ Previously, I was a Senior Machine Learning Engineer at <a href="https://www.rev
 
 My research interests lie in the areas of statistical inference and variational methods. 
 
-Download my CV [here.](/files/james-wu-resume.pdf)
+Download my CV [here](/files/james-wu-resume.pdf).
 
