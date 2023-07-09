@@ -94,15 +94,11 @@ $$\begin{align}
 By defining $$q_t = (1-t)\delta_{\theta_A} + t\delta_{\theta_B}$$ for $$t \in [0, 1]$$:
 $$\begin{align}
     \label{show-linear-defn}
-    \int \left( \sum_{n=1}^N\ell_n(x_n, \theta)\right) dq_t(\theta) = \int \left( \sum_{n=1}^N\ell_n(x_n, \theta)\right) d\left\big((1-t)\delta_{\theta_A} + t\delta_{\theta_B}\right\big)
-\end{align}$$
-$$\begin{align}
+    \int \left( \sum_{n=1}^N\ell_n(x_n, \theta)\right) dq_t(\theta) &= \int \left( \sum_{n=1}^N\ell_n(x_n, \theta)\right) d\left((1-t)\delta_{\theta_A} + t\delta_{\theta_B}\right)\\
     \label{show-linear-linear-operator}
-    \int \left( \sum_{n=1}^N\ell_n(x_n, \theta)\right) dq_t(\theta) = (1-t)\int \left( \sum_{n=1}^N\ell_n(x_n, \theta)\right) d\delta_{\theta_A} + t \int \left( \sum_{n=1}^N\ell_n(x_n, \theta)\right) d\delta_{\theta_B}
-\end{align}$$
-$$\begin{align}
+    &= (1-t)\int \left( \sum_{n=1}^N\ell_n(x_n, \theta)\right) d\delta_{\theta_A} + t \int \left( \sum_{n=1}^N\ell_n(x_n, \theta)\right) d\delta_{\theta_B}\\
     \label{show-linear-minimisers}
-    \int \left( \sum_{n=1}^N\ell_n(x_n, \theta)\right) dq_t(\theta) = \min_{Q \in \mathcal{P}(\mathbb{R}^J)} \int \left( \sum_{n=1}^N\ell_n(x_n, \theta)\right) dq(\theta)
+    &= \min_{Q \in \mathcal{P}(\mathbb{R}^J)} \int \left( \sum_{n=1}^N\ell_n(x_n, \theta)\right) dq(\theta)
 \end{align}$$
 where ($$\ref{show-linear-linear-operator}$$) follows by linearity and ($$\ref{show-linear-minimisers}$$) follows from ($$\ref{ex-risk-minimisers}$$). Thus ($$\ref{risk-minimisation}$$) is a linear problem in $$q$$. 
 ### Convexification through Regularisation
