@@ -108,7 +108,7 @@ Wild, V. D., Ghalebikesabi, S., Sejdinovic, D., & Knoblauch, J. (2023). A Rigoro
 ## Appendix
 ### <a id="A1"> Appendix 1: Probabilistic Lifting Constructs a Linear Problem </a> 
 
-To show that the in ($$\ref{risk-minimisation}$$) results in a linear problem in $q$, consider two minimisers $$\theta_A$$ and $$\theta_B$$ such that:
+To show that the probabilistic lifting in ($$\ref{risk-minimisation}$$) results in a linear problem in $q$, consider two minimisers $$\theta_A$$ and $$\theta_B$$ such that:
 $$\begin{align}
     \sum_{n=1}^N\ell_n(x_n, \theta_A) = \sum_{n=1}^N\ell_n(x_n, \theta_B) = \min_{\theta \in \Theta} \sum_{n=1}^N\ell_n(x_n, \theta), \text{ where } \theta_A \neq \theta_B
 \end{align}$$
