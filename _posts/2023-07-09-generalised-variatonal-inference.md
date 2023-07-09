@@ -82,26 +82,7 @@ $$\begin{align}
     \min_{Q \in \mathcal{P}(\mathbb{R}^J)} \int \left( \sum_{n=1}^N\ell_n(x_n, \theta)\right) dq(\theta)
 \label{risk-minimisation}
 \end{align}$$
-where $$\hat{q}$$, minimisers of (\ref{risk-minimisation}), can correspond to  $$\hat{\theta}$$, minimisers of (\ref{loss-minimisation}), through the Dirac measure $$\hat{q}(\theta) = \delta_{\hat{\theta}} (\theta)$$. This first reformulation changes a non-convex problem with respect to $$\theta$$ to a linear problem with respect to $$q$$. 
-\\To show this, consider two minimisers $$\theta_A$$ and $$\theta_B$$ such that:
-$$\begin{align}
-    \sum_{n=1}^N\ell_n(x_n, \theta_A) = \sum_{n=1}^N\ell_n(x_n, \theta_B) = \min_{\theta \in \Theta} \sum_{n=1}^N\ell_n(x_n, \theta), \text{ where } \theta_A \neq \theta_B
-\end{align}$$
-with corresponding measures $$\delta_{\theta_A}, \delta_{\theta_B} \in \mathcal{P}(\mathbb{R}^J)$$ such that:
-$$\begin{align}
-    \int \left( \sum_{n=1}^N\ell_n(x_n, \theta)\right) d\delta_{\theta_A} = \int \left( \sum_{n=1}^N\ell_n(x_n, \theta)\right) d\delta_{\theta_B} = \min_{q \in \mathcal{P}(\mathbb{R}^J)} \int \left( \sum_{n=1}^N\ell_n(x_n, \theta)\right) dq(\theta)
-    \label{ex-risk-minimisers}
-\end{align}$$
-By defining $$q_t = (1-t)\delta_{\theta_A} + t\delta_{\theta_B}$$ for $$t \in [0, 1]$$:
-$$\begin{align}
-    \label{show-linear-defn}
-    \int \left( \sum_{n=1}^N\ell_n(x_n, \theta)\right) dq_t(\theta) &= \int \left( \sum_{n=1}^N\ell_n(x_n, \theta)\right) d\left((1-t)\delta_{\theta_A} + t\delta_{\theta_B}\right)\\
-    \label{show-linear-linear-operator}
-    &= (1-t)\int \left( \sum_{n=1}^N\ell_n(x_n, \theta)\right) d\delta_{\theta_A} + t \int \left( \sum_{n=1}^N\ell_n(x_n, \theta)\right) d\delta_{\theta_B}\\
-    \label{show-linear-minimisers}
-    &= \min_{Q \in \mathcal{P}(\mathbb{R}^J)} \int \left( \sum_{n=1}^N\ell_n(x_n, \theta)\right) dq(\theta)
-\end{align}$$
-where ($$\ref{show-linear-linear-operator}$$) follows by linearity and ($$\ref{show-linear-minimisers}$$) follows from ($$\ref{ex-risk-minimisers}$$). Thus ($$\ref{risk-minimisation}$$) is a linear problem in $$q$$. 
+where $$\hat{q}$$, minimisers of (\ref{risk-minimisation}), can correspond to  $$\hat{\theta}$$, minimisers of (\ref{loss-minimisation}), through the Dirac measure $$\hat{q}(\theta) = \delta_{\hat{\theta}} (\theta)$$. This first reformulation changes a non-convex problem with respect to $$\theta$$ to a linear problem with respect to $$q$$ (See [[A1]](#A1) for a proof).
 ### Convexification through Regularisation
 By adding a strictly convex and positive regulariser $$D_r(q\| \pi)$$ to our linear objective ($$\ref{risk-minimisation}$$), we ensure a strictly convex objective, guaranteeing the existence of a $$\textit{unique}$$ minimiser:
 $$\begin{align}
@@ -123,3 +104,26 @@ Knoblauch, J., Jewson, J., & Damoulas, T. (2022). An optimization-centric view o
 
 <a id="2">[2]</a>
 Wild, V. D., Ghalebikesabi, S., Sejdinovic, D., & Knoblauch, J. (2023). A Rigorous Link between Deep Ensembles and (Variational) Bayesian Methods. arXiv preprint arXiv:2305.15027.
+
+## Appendix
+### <a id="A1"> Appendix 1: Probabilistic Lifting Constructs a Linear Problem </a> 
+
+To show that the in ($$\ref{risk-minimisation}$$) results in a linear problem in $q$, consider two minimisers $$\theta_A$$ and $$\theta_B$$ such that:
+$$\begin{align}
+    \sum_{n=1}^N\ell_n(x_n, \theta_A) = \sum_{n=1}^N\ell_n(x_n, \theta_B) = \min_{\theta \in \Theta} \sum_{n=1}^N\ell_n(x_n, \theta), \text{ where } \theta_A \neq \theta_B
+\end{align}$$
+with corresponding measures $$\delta_{\theta_A}, \delta_{\theta_B} \in \mathcal{P}(\mathbb{R}^J)$$ such that:
+$$\begin{align}
+    \int \left( \sum_{n=1}^N\ell_n(x_n, \theta)\right) d\delta_{\theta_A} = \int \left( \sum_{n=1}^N\ell_n(x_n, \theta)\right) d\delta_{\theta_B} = \min_{q \in \mathcal{P}(\mathbb{R}^J)} \int \left( \sum_{n=1}^N\ell_n(x_n, \theta)\right) dq(\theta)
+    \label{ex-risk-minimisers}
+\end{align}$$
+By defining $$q_t = (1-t)\delta_{\theta_A} + t\delta_{\theta_B}$$ for $$t \in [0, 1]$$:
+$$\begin{align}
+    \label{show-linear-defn}
+    \int \left( \sum_{n=1}^N\ell_n(x_n, \theta)\right) dq_t(\theta) &= \int \left( \sum_{n=1}^N\ell_n(x_n, \theta)\right) d\left((1-t)\delta_{\theta_A} + t\delta_{\theta_B}\right)\\
+    \label{show-linear-linear-operator}
+    &= (1-t)\int \left( \sum_{n=1}^N\ell_n(x_n, \theta)\right) d\delta_{\theta_A} + t \int \left( \sum_{n=1}^N\ell_n(x_n, \theta)\right) d\delta_{\theta_B}\\
+    \label{show-linear-minimisers}
+    &= \min_{Q \in \mathcal{P}(\mathbb{R}^J)} \int \left( \sum_{n=1}^N\ell_n(x_n, \theta)\right) dq(\theta)
+\end{align}$$
+where ($$\ref{show-linear-linear-operator}$$) follows by linearity and ($$\ref{show-linear-minimisers}$$) follows from ($$\ref{ex-risk-minimisers}$$). Thus ($$\ref{risk-minimisation}$$) is a linear problem in $$q$$. 
