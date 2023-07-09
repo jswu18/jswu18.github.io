@@ -6,6 +6,7 @@ tags:
   - Generalised Variational Inference
   - Bayesian Inference
 ---
+Generalised Variational Inference (GVI) is a framework for generalising Bayesian inference that is motivated by the breakdown of the Bayesian posterior in larger-scaled models like Bayesian Neural Netowrks. In this post, I will discuss the assumptions behind the Bayesian posterior and how they breakdown in larger-scaled models. I will then discuss how GVI addresses these issues by re-framing Bayesian inference as an optimisation problem. Finally, I will discuss how the GVI posterior ensures the existience of a unique minimister, providing theoretical guarantees that can be used for understanding larger-scaled modelling in the context of learning theory.
 
 ## The Bayesian Posterior
 Statistical modelling is traditionally focused on characterising an underlying data generation process. In a Bayesian context, this involves updating the beliefs on a model's parameterisation. Given a model parameterised by $$\theta$$, Bayesian inference can be viewed as an update rule on $$\pi(\theta)$$, the prior belief of $$\theta$$. For new observations $$x_{1:N}$$ and a likelihood function $$p(x_{1:N}|\theta)$$, the belief for $$\theta$$ is updated as:
@@ -112,6 +113,9 @@ where $$\lambda > 0$$. The solution of ($$\ref{regularised-risk-minimisation}$$)
 Choosing $$\Pi =\mathcal{P}(\mathbb{R}^J)$$, $$\ell(\theta) = \sum_{n=1}^N\ell_n(x_n, \theta)$$, and $$D(q\| \pi) = \lambda D_r(q\| \pi)$$, we see that ($$\ref{regularised-risk-minimisation}$$) fits into the general form of ($$\ref{general-posterior}$$), recovering the GVI posterior. 
 ### Uniqueness of the GVI posterior
 Through probabilistic lifting and convexification, we can formulate a GVI posterior that guarantees a unique minimiser for the non-convex problem in (\ref{loss-minimisation}). This posterior is a unique weighted averaging of the local and global minima of (\ref{loss-minimisation}), and equivalently (\ref{risk-minimisation}) where each minima is weighted by the discrepancy from the prior reference measure $$\lambda D_r(q \| \pi)$$. By guaranteeing a unique minimiser, the GVI framework can provide theoretical guarantees for learning larger-scaled machine learning models.
+
+## Closing Thoughts
+The GVI framework provides a new perspective on variational inference, and can be used to provide theoretical guarantees for learning larger-scaled machine learning models. Practically, GVI is a framework that can be used to derive and understand new forms of posteriors for variational inference beyond that of the traditional Bayesian posterior.
 
 ## References
 <a id="1">[1]</a>
