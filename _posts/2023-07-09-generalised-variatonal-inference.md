@@ -36,7 +36,7 @@ Larger-scaled models are often over-parameterised black box models, such as the 
 ### The Likelihood Model is Mis-specified
 Although model mis-specification occurs in traditional Bayesian inference, techniques such as hypothesis testing, residual analysis, and domain expertise can help guide the construction of a reasonably well-specified setting. However, the intentions behind using larger-scaled models is completely different. It is not to $$\textit{understand}$$ the data generating process, but rather to have superior $$\textit{predictive performance}$$. With over-parameterisation, these black box models are most definitely mis-specified but often provide high prediction accuracy. As such, model parameters are typically chosen through an optimisation process (i.e. gradient descent), no longer adhering to the spirit of traditional Bayesian inference. For larger-scaled models, it is almost never fair to assume that $$x_n \sim p(x\vert\theta)$$ for $$\textit{any}$$ $$\theta \in \Theta$$.
 
-### The Normaliser is Intractability
+### The Normaliser is Intractable
 The use of conjugate priors is the only case when there exists closed form expressions for $$\int_{\Theta} p(x_{1:N}|\theta) d \pi(\theta)$$ to ensure tractable evaluation of $$q_B^*(\theta)$$. For over-parameterised black-box models, $$q_B^*(\theta)$$ will need to be approximated either through sampling approximations of the normaliser or variational approximations of $$q_B^*(\theta)$$.
 
 Samplers such as Metropolis Hastings or Markov Chain Monte Carlo only have convergence guarantees in the infinite limit. Acheiving this limit would require access to infinite computational resources and time, clearly impractical. 
