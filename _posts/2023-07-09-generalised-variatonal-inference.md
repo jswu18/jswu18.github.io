@@ -38,10 +38,10 @@ Although model mis-specification occurs in traditional Bayesian inference, techn
 
 ### The Normaliser is Intractability
 The use of conjugate priors is the only case when there exists closed form expressions for $$\int_{\Theta} p(x_{1:N}|\theta) d \pi(\theta)$$ to ensure tractable evaluation of $$q_B^*(\theta)$$. For over-parameterised black-box models, $$q_B^*(\theta)$$ will need to be approximated either through sampling approximations of the normaliser or variational approximations of $$q_B^*(\theta)$$.
-\newline
-\\Samplers such as Metropolis Hastings or Markov Chain Monte Carlo only have convergence guarantees in the infinite limit. Acheiving this limit would require access to infinite computational resources and time, clearly impractical. 
-\newline
-\\Approximating $$q_B^*(\theta)$$ involves solving for $$q_A^*(\theta) \in \mathcal{Q}_{A}$$, where $$\mathcal{Q}_{A}$$ is often viewed as distributions of a simpler form. For example mean field approximations define a family of distributions $$\mathcal{Q}_{MF} = \left\{\prod_i q_i(\theta_i)\right\}$$, a product of independent distributions. Variational inference is motivated to finding a $$q_A^*(\theta) \in \mathcal{Q}_{A}$$ that $$\textit{approximates}$$ $$q_B^*(\theta)$$, through the minimisation of some divergence between the two, $$D(q_A^*(\theta)\| q_B^*(\theta))$$. However the space of distributions $$\mathcal{Q}_{A}$$ is usually severely restrictive in its expressiveness and $$q_A^*(\theta)$$ is almost never a fair depiction of the structure of $$q_B^*(\theta)$$. Realistically, $$\mathcal{Q}_{A}$$ is chosen purely for computational convenience. With larger-scaled models, it is often no longer reasonable to assume that the normaliser of the Bayesian posterior will be tractable or that $$q_B^*(\theta)$$ can be reasonably approximated in a tractable manner.
+
+Samplers such as Metropolis Hastings or Markov Chain Monte Carlo only have convergence guarantees in the infinite limit. Acheiving this limit would require access to infinite computational resources and time, clearly impractical. 
+
+Approximating $$q_B^*(\theta)$$ involves solving for $$q_A^*(\theta) \in \mathcal{Q}_{A}$$, where $$\mathcal{Q}_{A}$$ is often viewed as distributions of a simpler form. For example mean field approximations define a family of distributions $$\mathcal{Q}_{MF} = \left\{\prod_i q_i(\theta_i)\right\}$$, a product of independent distributions. Variational inference is motivated to finding a $$q_A^*(\theta) \in \mathcal{Q}_{A}$$ that $$\textit{approximates}$$ $$q_B^*(\theta)$$, through the minimisation of some divergence between the two, $$D(q_A^*(\theta)\| q_B^*(\theta))$$. However the space of distributions $$\mathcal{Q}_{A}$$ is usually severely restrictive in its expressiveness and $$q_A^*(\theta)$$ is almost never a fair depiction of the structure of $$q_B^*(\theta)$$. Realistically, $$\mathcal{Q}_{A}$$ is chosen purely for computational convenience. With larger-scaled models, it is often no longer reasonable to assume that the normaliser of the Bayesian posterior will be tractable or that $$q_B^*(\theta)$$ can be reasonably approximated in a tractable manner.
 
 ## The Generalised Posterior 
 Interpreting the mechanism behind calculating the Bayesian posterior in the context of optimisation can provide a more reasonable depiction of $$q_B^*(\theta)$$ for larger-scaled models. It can be shown that $$q_B^*(\theta)$$ solves a special case of a general variational inference (GVI) problem:
@@ -73,8 +73,8 @@ $$\begin{align}
 \min_{\theta \in \Theta} \sum_{n=1}^N\ell_n(x_n, \theta)
 \label{loss-minimisation}
 \end{align}$$
-where $$\ell_n(x_n, \theta)$$ quantifies the predictive performance of a model's parameterisation $$\theta$$ for training observation $$(x_n, y_n)$$, such as the squared loss $$\ell_{sq}(\theta) = \sum_{n=1}^N \left(y_n - f_{\theta}(x_n)\right)^2$$. Typically $$\theta^*$$, the minimiser of (\ref{loss-minimisation}), is in $$ \mathbb{R}^J$$ a finite dimensional space where $$J$$ is the number of parameters in $$f_{\theta}$$.\\
-\newline
+where $$\ell_n(x_n, \theta)$$ quantifies the predictive performance of a model's parameterisation $$\theta$$ for training observation $$(x_n, y_n)$$, such as the squared loss $$\ell_{sq}(\theta) = \sum_{n=1}^N \left(y_n - f_{\theta}(x_n)\right)^2$$. Typically $$\theta^*$$, the minimiser of (\ref{loss-minimisation}), is in $$ \mathbb{R}^J$$ a finite dimensional space where $$J$$ is the number of parameters in $$f_{\theta}$$.
+
 In practice a reasonable local minima can achieve high predictive performance, and so the non-convex nature of the parameter space is often ignored. However without the guaranteed existence of a unique minimiser, learning theory is unable to make theoretical claims about these larger-scaled models. By convexifying (\ref{loss-minimisation}), we recover the minimisation problem of the form ($$\ref{general-posterior}$$). Thus the GVI posterior is also a reframing of modern machine learning models sp that we can understand them in the context of learning theory.
 ### Probabilistic Lifting
 To convexify ($$\ref{loss-minimisation}$$), we begin by lifting the problem from a finite-dimensional parameter space $$\mathbb{R}^J$$ to an infinite-dimensional probability space $$\mathcal{P}(\mathbb{R}^J)$$, the space of measures on $$\mathbb{R}^J$$:
@@ -108,8 +108,8 @@ $$\begin{align}
     q^* = \arg\min_{q \in \mathcal{P}(\mathbb{R}^J)} \left\{\int \left( \sum_{n=1}^N\ell_n(x_n, \theta)\right) dq(\theta) + \lambda D_r(q \| \pi)\right\}
 \label{regularised-risk-minimisation}
 \end{align}$$
-where $$\lambda > 0$$. The solution of ($$\ref{regularised-risk-minimisation}$$) is no longer a minimiser of ($$\ref{risk-minimisation}$$). But rather, $$\lambda$$ balances the tradeoff between the empirical risk minimisation of ($$\ref{risk-minimisation}$$) and deviance from a prior measure $$\pi$$, which in this context we can view as a reference measure.\\
-\newline 
+where $$\lambda > 0$$. The solution of ($$\ref{regularised-risk-minimisation}$$) is no longer a minimiser of ($$\ref{risk-minimisation}$$). But rather, $$\lambda$$ balances the tradeoff between the empirical risk minimisation of ($$\ref{risk-minimisation}$$) and deviance from a prior measure $$\pi$$, which in this context we can view as a reference measure.
+
 Choosing $$\Pi =\mathcal{P}(\mathbb{R}^J)$$, $$\ell(\theta) = \sum_{n=1}^N\ell_n(x_n, \theta)$$, and $$D(q\| \pi) = \lambda D_r(q\| \pi)$$, we see that ($$\ref{regularised-risk-minimisation}$$) fits into the general form of ($$\ref{general-posterior}$$), recovering the GVI posterior. 
 ### Uniqueness of the GVI posterior
 Through probabilistic lifting and convexification, we can formulate a GVI posterior that guarantees a unique minimiser for the non-convex problem in (\ref{loss-minimisation}). This posterior is a unique weighted averaging of the local and global minima of (\ref{loss-minimisation}), and equivalently (\ref{risk-minimisation}) where each minima is weighted by the discrepancy from the prior reference measure $$\lambda D_r(q \| \pi)$$. By guaranteeing a unique minimiser, the GVI framework can provide theoretical guarantees for learning larger-scaled machine learning models.
