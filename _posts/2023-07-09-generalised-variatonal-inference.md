@@ -124,4 +124,4 @@ $$\begin{align}
     \label{show-linear-minimisers}
     &= \min_{Q \in \mathcal{P}(\mathbb{R}^J)} \int \left( \sum_{n=1}^N\ell_n(x_n, \theta)\right) dq(\theta)
 \end{align}$$
-where ($$\ref{show-linear-linear-operator}$$) follows by linearity and ($$\ref{show-linear-minimisers}$$) follows from ($$\ref{ex-risk-minimisers}$$). Thus ($$\ref{risk-minimisation}$$) is a linear problem in $$q$$. 
+where ($$\ref{show-linear-linear-operator}$$) follows by linearity of the integral operator and ($$\ref{show-linear-minimisers}$$) follows from ($$\ref{ex-risk-minimisers}$$). Thus ($$\ref{risk-minimisation}$$) is a linear problem in $$q$$. 
