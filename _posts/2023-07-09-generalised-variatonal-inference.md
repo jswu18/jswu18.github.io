@@ -39,7 +39,7 @@ Although model mis-specification occurs in traditional Bayesian inference, techn
 ### The Normaliser is Intractable
 The use of conjugate priors is the only case when there exists closed form expressions for $$\int_{\Theta} p(x_{1:N}|\theta) d \pi(\theta)$$ to ensure tractable evaluation of $$q_B^*(\theta)$$. For over-parameterised black-box models, $$q_B^*(\theta)$$ will need to be approximated either through sampling approximations of the normaliser or variational approximations of $$q_B^*(\theta)$$.
 
-Samplers such as Metropolis Hastings or Markov Chain Monte Carlo only have convergence guarantees in the infinite limit. Acheiving this limit would require access to infinite computational resources and time, clearly impractical. 
+Samplers such as Metropolis Hastings or Markov Chain Monte Carlo only have convergence guarantees in the infinite limit. For small/moderately sized models, large enough samples will practically converge to the desired posterior. However, larger-scaled models generally require access to much more computational resources and time that is often impractical. 
 
 Approximating $$q_B^*(\theta)$$ involves solving for $$q_A^*(\theta) \in \mathcal{Q}_{A}$$, where $$\mathcal{Q}_{A}$$ is often viewed as distributions of a simpler form. For example mean field approximations define a family of distributions $$\mathcal{Q}_{MF} = \left\{\prod_i q_i(\theta_i)\right\}$$, a product of independent distributions. Variational inference is motivated to finding a $$q_A^*(\theta) \in \mathcal{Q}_{A}$$ that $$\textit{approximates}$$ $$q_B^*(\theta)$$, through the minimisation of some divergence between the two, $$D(q_A^*(\theta)\| q_B^*(\theta))$$. However the space of distributions $$\mathcal{Q}_{A}$$ is usually severely restrictive in its expressiveness and $$q_A^*(\theta)$$ is almost never a fair depiction of the structure of $$q_B^*(\theta)$$. Realistically, $$\mathcal{Q}_{A}$$ is chosen purely for computational convenience. With larger-scaled models, it is often no longer reasonable to assume that the normaliser of the Bayesian posterior will be tractable or that $$q_B^*(\theta)$$ can be reasonably approximated in a tractable manner.
 
@@ -70,7 +70,7 @@ By $$\textit{generalising}$$ the Bayesian posterior update mechanism to an optim
 ## Theoretical Guarantees from GVI 
 Loss minimisation of larger-scaled machine learning models is typically over a highly non-convex optimisation problem. The parameters of these models $$f_{\theta}$$ are typically trained through the minimisation:
 $$\begin{align}
-\min_{\theta \in \Theta} \sum_{n=1}^N\ell_n(x_n, \theta)
+\min_{\theta \in \Theta} \frac{1}{N} \sum_{n=1}^N\ell_n(x_n, \theta)
 \label{loss-minimisation}
 \end{align}$$
 where $$\ell_n(x_n, \theta)$$ quantifies the predictive performance of a model's parameterisation $$\theta$$ for training observation $$(x_n, y_n)$$, such as the squared loss $$\ell_{sq}(\theta) = \sum_{n=1}^N \left(y_n - f_{\theta}(x_n)\right)^2$$. Typically $$\theta^*$$, the minimiser of (\ref{loss-minimisation}), is in $$ \mathbb{R}^J$$ a finite dimensional space where $$J$$ is the number of parameters in $$f_{\theta}$$.
