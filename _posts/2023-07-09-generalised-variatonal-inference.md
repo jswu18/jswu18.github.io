@@ -46,7 +46,7 @@ Approximating $$q_B^*(\theta)$$ involves solving for $$q_A^*(\theta) \in \mathca
 ## The Generalised Posterior 
 Interpreting the mechanism behind calculating the Bayesian posterior in the context of optimisation can provide a more reasonable depiction of $$q_B^*(\theta)$$ for larger-scaled models. It can be shown that $$q_B^*(\theta)$$ solves a special case of a general variational inference (GVI) problem:
 $$\begin{align}
-q^*(\theta) = \arg\min_{q \in \Pi} \left\{ \mathbb{E}_{q(\theta)}\left[\sum_{n=1}^N \ell(\theta, x_n)\right] + D(q\|\pi)\right\}
+q^*(\theta) = \arg\min_{q \in \Pi} \left\{ \mathbb{E}_{q(\theta)}\left[\frac{1}{N}\sum_{n=1}^N \ell(\theta, x_n)\right] + D(q\|\pi)\right\}
 \label{general-posterior}
 \end{align}$$
 where $$q_B^*(\theta)$$ is recovered by choosing the negative log-likelihood loss $$\ell(\theta, \cdot) = -\log p(\cdot | \theta)$$, the Kullback-Leibler divergence $$D(\cdot \| \pi) = KLD(\cdot \| \pi)$$, and the feasible set $$\Pi = \mathcal{P}(\Theta)$$ (see [[1]](#1) for more details). No longer deriving $$q_B^*(\theta)$$ from a belief update, we are no longer burdened to fulfill the assumptions required for the Bayesian interpretation of $$q_B^*(\theta)$$. We can re-interpret the role of the prior, likelihood, and the choosing of tractable normaliser approximations, in the context of an optimisation problem.
@@ -57,7 +57,7 @@ In the optimisation context of (\ref{general-posterior}), we can see that the pr
 ### The Likelihood is a Loss
 From (\ref{general-posterior}), the likelihood term exists only in the expectation. Note that the empirical risk is defined as:
 $$\begin{align}
-\mathcal{E}(\theta) = \mathbb{E}_{q(\theta)}\left[\sum_{n=1}^N \ell\left(x_n, \theta\right)\right]
+\mathcal{E}(\theta) = \mathbb{E}_{q(\theta)}\left[\frac{1}{N}\sum_{n=1}^N \ell\left(x_n, \theta\right)\right]
 \label{empirical-risk}
 \end{align}$$
 where $$\ell$$ is some loss function. We can see that defining $$\ell$$ as the negative log-likelihood, we recover an empirical risk of the model over empirical data that is equivalent to the expectation term of (\ref{general-posterior}). This interprets the likelihood function as a special loss definition for an optimisation problem. In other words, $$q_B^*(\theta)$$ is the minimiser of a regularised empirical risk with a log-likelihood loss, defined with respect to its predictive performance rather than its belief updates on model parameters. By pivoting from the Bayesian interpretation of $$q_B^*(\theta)$$, we no longer need to have a well-specified likelihood function because we can view the posterior as empirical risk minimisation for a special loss definition.
@@ -70,26 +70,26 @@ By $$\textit{generalising}$$ the Bayesian posterior update mechanism to an optim
 ## Theoretical Guarantees from GVI 
 Loss minimisation of larger-scaled machine learning models is typically over a highly non-convex optimisation problem. The parameters of these models $$f_{\theta}$$ are typically trained through the minimisation:
 $$\begin{align}
-\min_{\theta \in \Theta} \frac{1}{N} \sum_{n=1}^N\ell_n(x_n, \theta)
+\min_{\theta \in \Theta} \frac{1}{N}\sum_{n=1}^N\ell_n(x_n, \theta)
 \label{loss-minimisation}
 \end{align}$$
-where $$\ell_n(x_n, \theta)$$ quantifies the predictive performance of a model's parameterisation $$\theta$$ for training observation $$(x_n, y_n)$$, such as the squared loss $$\ell_{sq}(\theta) = \sum_{n=1}^N \left(y_n - f_{\theta}(x_n)\right)^2$$. Typically $$\theta_N^*$$, the minimiser of the empirical loss in (\ref{loss-minimisation}), is in $$ \mathbb{R}^J$$ a finite dimensional space where $$J$$ is the number of parameters in $$f_{\theta}$$.
+where $$\ell_n(x_n, \theta)$$ quantifies the predictive performance of a model's parameterisation $$\theta$$ for training observation $$(x_n, y_n)$$, such as the squared loss $$\ell_{sq, n}(\theta) = \left(y_n - f_{\theta}(x_n)\right)^2$$. Typically $$\theta_N^*$$, the minimiser of the empirical loss in (\ref{loss-minimisation}), is in $$ \mathbb{R}^J$$ a finite dimensional space where $$J$$ is the number of parameters in $$f_{\theta}$$.
 
 In practice a reasonable local minima can achieve high predictive performance, and so the non-convex nature of the loss space is often ignored. However without the guaranteed existence of a unique minimiser, learning theory is unable to make theoretical claims about these larger-scaled models. By convexifying (\ref{loss-minimisation}), we recover the minimisation problem of the form ($$\ref{general-posterior}$$). Thus the GVI posterior is also a reframing of modern machine learning models so that we can understand them in the context of learning theory.
 ### Probabilistic Lifting
 To convexify ($$\ref{loss-minimisation}$$), we begin by lifting the problem from a finite-dimensional parameter space $$\mathbb{R}^J$$ to an infinite-dimensional probability space $$\mathcal{P}(\mathbb{R}^J)$$, the space of measures on $$\mathbb{R}^J$$:
 $$\begin{align}
-    \min_{Q \in \mathcal{P}(\mathbb{R}^J)} \int \left( \sum_{n=1}^N\ell_n(x_n, \theta)\right) dq(\theta)
+    \min_{Q \in \mathcal{P}(\mathbb{R}^J)} \int \left( \frac{1}{N}\sum_{n=1}^N\ell_n(x_n, \theta)\right) dq(\theta)
 \label{risk-minimisation}
 \end{align}$$
 where $$\hat{q}$$, minimisers of (\ref{risk-minimisation}), can correspond to  $$\hat{\theta}$$, minimisers of (\ref{loss-minimisation}), through the Dirac measure $$\hat{q}(\theta) = \delta_{\hat{\theta}} (\theta)$$. This first reformulation changes a non-convex problem with respect to $$\theta$$ to a linear problem with respect to $$q$$ (see [[A1]](#A1) for a proof).
 ### Convexification through Regularisation
 By adding a strictly convex and positive regulariser $$D_r(q\| \pi)$$ to our linear objective ($$\ref{risk-minimisation}$$), we ensure a strictly convex objective, guaranteeing the existence of a $$\textit{unique}$$ minimiser:
 $$\begin{align}
-    q^* = \arg\min_{q \in \mathcal{P}(\mathbb{R}^J)} \left\{\int \left( \sum_{n=1}^N\ell_n(x_n, \theta)\right) dq(\theta) + \lambda D_r(q \| \pi)\right\}
+    q^* = \arg\min_{q \in \mathcal{P}(\mathbb{R}^J)} \left\{\int \left( \frac{1}{N}\sum_{n=1}^N\ell_n(x_n, \theta)\right) dq(\theta) + \lambda D_r(q \| \pi)\right\}
 \label{regularised-risk-minimisation}
 \end{align}$$
-where $$\lambda > 0$$. Note that the solution of ($$\ref{regularised-risk-minimisation}$$) is no longer a minimiser of ($$\ref{risk-minimisation}$$), but rather $$\lambda$$ balances the tradeoff between the empirical risk minimisation of ($$\ref{risk-minimisation}$$) and deviance from a prior measure $$\pi$$, which in this context we can view as a reference measure. Choosing $$\Pi =\mathcal{P}(\mathbb{R}^J)$$, $$\ell(\theta) = \sum_{n=1}^N\ell_n(x_n, \theta)$$, and $$D(q\| \pi) = \lambda D_r(q\| \pi)$$, we see that ($$\ref{regularised-risk-minimisation}$$) fits into the general form of ($$\ref{general-posterior}$$), recovering the GVI posterior. 
+where $$\lambda > 0$$. Note that the solution of ($$\ref{regularised-risk-minimisation}$$) is no longer a minimiser of ($$\ref{risk-minimisation}$$), but rather $$\lambda$$ balances the tradeoff between the empirical risk minimisation of ($$\ref{risk-minimisation}$$) and deviance from a prior measure $$\pi$$, which in this context we can view as a reference measure. Choosing $$\Pi =\mathcal{P}(\mathbb{R}^J)$$, $$\ell(\theta) = \frac{1}{N}\sum_{n=1}^N\ell_n(x_n, \theta)$$, and $$D(q\| \pi) = \lambda D_r(q\| \pi)$$, we see that ($$\ref{regularised-risk-minimisation}$$) fits into the general form of ($$\ref{general-posterior}$$), recovering the GVI posterior. 
 ### Uniqueness of the GVI posterior
 Through probabilistic lifting and convexification, we can formulate a GVI posterior that guarantees a unique minimiser for the non-convex problem in (\ref{loss-minimisation}). This posterior is a unique weighted averaging of the local and global minima of (\ref{loss-minimisation}), and equivalently (\ref{risk-minimisation}), where each minima is weighted by the discrepancy from the prior reference measure $$\lambda D_r(q \| \pi)$$. By guaranteeing a unique minimiser, formulating problems as GVI posteriors can provide theoretical guarantees for learning larger-scaled machine learning models.
 
@@ -108,20 +108,20 @@ Wild, V. D., Ghalebikesabi, S., Sejdinovic, D., & Knoblauch, J. (2023). A Rigoro
 
 To show that the probabilistic lifting in ($$\ref{risk-minimisation}$$) results in a linear problem in $q$, consider two minimisers $$\theta_A$$ and $$\theta_B$$ such that:
 $$\begin{align}
-    \sum_{n=1}^N\ell_n(x_n, \theta_A) = \sum_{n=1}^N\ell_n(x_n, \theta_B) = \min_{\theta \in \Theta} \sum_{n=1}^N\ell_n(x_n, \theta), \text{ where } \theta_A \neq \theta_B
+    \frac{1}{N}\sum_{n=1}^N\ell_n(x_n, \theta_A) = \frac{1}{N}\sum_{n=1}^N\ell_n(x_n, \theta_B) = \min_{\theta \in \Theta} \frac{1}{N}\sum_{n=1}^N\ell_n(x_n, \theta), \text{ where } \theta_A \neq \theta_B
 \end{align}$$
 with corresponding measures $$\delta_{\theta_A}, \delta_{\theta_B} \in \mathcal{P}(\mathbb{R}^J)$$ such that:
 $$\begin{align}
-    \int \left( \sum_{n=1}^N\ell_n(x_n, \theta)\right) d\delta_{\theta_A} = \int \left( \sum_{n=1}^N\ell_n(x_n, \theta)\right) d\delta_{\theta_B} = \min_{q \in \mathcal{P}(\mathbb{R}^J)} \int \left( \sum_{n=1}^N\ell_n(x_n, \theta)\right) dq(\theta)
+    \int \left(\frac{1}{N} \sum_{n=1}^N\ell_n(x_n, \theta)\right) d\delta_{\theta_A} = \int \left(\frac{1}{N} \sum_{n=1}^N\ell_n(x_n, \theta)\right) d\delta_{\theta_B} = \min_{q \in \mathcal{P}(\mathbb{R}^J)} \int \left(\frac{1}{N} \sum_{n=1}^N\ell_n(x_n, \theta)\right) dq(\theta)
     \label{ex-risk-minimisers}
 \end{align}$$
 By defining $$q_t = (1-t)\delta_{\theta_A} + t\delta_{\theta_B}$$ for $$t \in [0, 1]$$:
 $$\begin{align}
     \label{show-linear-defn}
-    \int \left( \sum_{n=1}^N\ell_n(x_n, \theta)\right) dq_t(\theta) &= \int \left( \sum_{n=1}^N\ell_n(x_n, \theta)\right) d\left((1-t)\delta_{\theta_A} + t\delta_{\theta_B}\right)\\
+    \int \left(\frac{1}{N} \sum_{n=1}^N\ell_n(x_n, \theta)\right) dq_t(\theta) &= \int \left(\frac{1}{N} \sum_{n=1}^N\ell_n(x_n, \theta)\right) d\left((1-t)\delta_{\theta_A} + t\delta_{\theta_B}\right)\\
     \label{show-linear-linear-operator}
-    &= (1-t)\int \left( \sum_{n=1}^N\ell_n(x_n, \theta)\right) d\delta_{\theta_A} + t \int \left( \sum_{n=1}^N\ell_n(x_n, \theta)\right) d\delta_{\theta_B}\\
+    &= (1-t)\int \left(\frac{1}{N} \sum_{n=1}^N\ell_n(x_n, \theta)\right) d\delta_{\theta_A} + t \int \left(\frac{1}{N} \sum_{n=1}^N\ell_n(x_n, \theta)\right) d\delta_{\theta_B}\\
     \label{show-linear-minimisers}
-    &= \min_{Q \in \mathcal{P}(\mathbb{R}^J)} \int \left( \sum_{n=1}^N\ell_n(x_n, \theta)\right) dq(\theta)
+    &= \min_{Q \in \mathcal{P}(\mathbb{R}^J)} \int \left(\frac{1}{N} \sum_{n=1}^N\ell_n(x_n, \theta)\right) dq(\theta)
 \end{align}$$
 where ($$\ref{show-linear-linear-operator}$$) follows by linearity of the integral operator and ($$\ref{show-linear-minimisers}$$) follows from ($$\ref{ex-risk-minimisers}$$). Thus ($$\ref{risk-minimisation}$$) is a linear problem in $$q$$. 
