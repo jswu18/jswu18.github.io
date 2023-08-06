@@ -6,7 +6,7 @@ tags:
   - Generalised Variational Inference
   - Bayesian Inference
 ---
-Generalised Variational Inference (GVI) is a framework for generalising Bayesian inference that is motivated by the breakdown of the Bayesian posterior interpretation in larger-scaled models like Bayesian Neural Netowrks. In this post, I will discuss how GVI addresses this issue by re-framing Bayesian inference in a wider context of constrainted optimisation. I will also discuss how the GVI posterior ensures the existence of a unique minimiser, providing theoretical guarantees that can be used for understanding larger-scaled modelling in the context of learning theory.
+Generalised Variational Inference (GVI) is a framework motivated by the breakdown of the Bayesian posterior interpretation in larger-scaled models like Bayesian Neural Netowrks. In this post, I will discuss how GVI addresses this issue by re-framing Bayesian inference in a wider context of constrainted optimisation. I will also discuss how the GVI posterior ensures the existence of a unique minimiser, providing theoretical guarantees that can be used for understanding larger-scaled modelling in the context of learning theory.
 
 ## The Bayesian Posterior
 Statistical modelling is traditionally focused on characterising an underlying data generation process. In a Bayesian context, this involves updating the beliefs for a model's parameterisation. Given a model parameterised by $$\theta$$, Bayesian inference can be viewed as an update rule on $$\pi(\theta)$$, the prior belief of $$\theta$$. For new observations $$x_{1:N}$$ and a likelihood function $$p(x_{1:N}|\theta)$$, the belief for $$\theta$$ is updated as:
