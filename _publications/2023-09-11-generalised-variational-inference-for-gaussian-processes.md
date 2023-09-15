@@ -2,7 +2,7 @@
 title: "Generalised Variational Inference for Gaussian Processes (Msc. Thesis)"
 collection: publications
 permalink: /publication/2023-09-11-generalised-varational-inference-for-gaussian-processes
-excerpt: 'New learning frameworks for Gaussian processes within the context of generalised variational inference.'
+excerpt: 'Achieved linear time inference objectives for variational Gaussian processes compared to cubic complexity approaches in the literature.'
 date: 2023-09-11
 paperurl: '/files/james-wu-msc-thesis.pdf'
 citation: 'Your Name, You. (2009). &quot;Paper Title Number 1.&quot; <i>Journal 1</i>. 1(1).'
