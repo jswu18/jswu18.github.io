@@ -2,7 +2,7 @@
 title: "Robust Beat-To-Beat Detection Algorithm for Pulse Rate Variability Analysis from Wrist Photoplethysmography Signals"
 collection: publications
 permalink: /publication/2018-04-15-robust-beat-to-beat-detection-algorithm-for-pulse-rate-variability-analysis-from-wrist-photoplethysmography-signals
-excerpt: 'This paper provides a robust peak and onset detection algorithm for beat-to-beat (B2B) pulse interval analysis using PPG signals.'
+excerpt: 'Proposed a robust peak and onset detection algorithm for beat-to-beat (B2B) pulse interval analysis using photoplethysmography (PPG) heart signals.'
 date: 2018-04-15
 venue: 'IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)'
 paperurl: 'https://ieeexplore.ieee.org/document/8462286'

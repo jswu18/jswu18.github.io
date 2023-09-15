@@ -2,7 +2,7 @@
 title: "Power Optimization Using Embedded Automatic Gain Control Algorithm with Photoplethysmography Signal Quality Classification"
 collection: publications
 permalink: /publication/2020-04-09-power-optimization-using-embedded-automatic-gain-control-algorithm-with-photoplethysmography-signal-quality-classification
-excerpt: 'Designing and Implementing an Automatic Gain Control (AGC) embedded algorithm for photoplethysmographic (PPG) sensors.'
+excerpt: 'Designed and implemented an Automatic Gain Control (AGC) embedded algorithm for photoplethysmographic (PPG) heart sensors.'
 date: 2020-04-09
 venue: 'IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)'
 paperurl: 'https://ieeexplore.ieee.org/document/9053550'
