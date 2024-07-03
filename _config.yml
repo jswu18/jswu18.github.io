@@ -10,7 +10,7 @@ locale                   : "en-US"
 title                    : "James Wu"
 title_separator          : "-"
 name                     : &name "James Wu"
-description              : &description "Computational Statistics & Machine Learning @ UCL"
+description              : &description "Machine Learning Engineer @ Gridmatic"
 url                      : https://jswu18.github.io # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
 baseurl                  : "" # the subpath of your site, e.g. "/blog"
 repository               : "academicpages/academicpages.github.io"
@@ -82,8 +82,8 @@ analytics:
 author:
   name             : "James Wu"
   avatar           : "profile.png"
-  bio              : "Computational Statistics & Machine Learning @ UCL"
-  location         : "London, UK"
+  bio              : "Machine Learning Engineer @ Gridmatic"
+  location         : "San Francisco, CA"
   employer         :
   pubmed           :
   googlescholar    : "https://scholar.google.com/citations?hl=en&user=lCOb0YwAAAAJ&view_op=list_works&authuser=1&gmla=AOV7GLMaDRPOqCHbOZJGmojOIP9UNRyC_xNAPwgASdVEF5s-DTGWPbSp_tz57LFwBmAIuMX3_5_T6-ZvTmGXLElv"
