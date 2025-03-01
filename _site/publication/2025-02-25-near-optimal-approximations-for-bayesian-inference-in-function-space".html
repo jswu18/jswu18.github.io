@@ -19,7 +19,7 @@
 
 
 
-<title>Terms and Privacy Policy - James Wu</title>
+<title>Near-Optimal Approximations for Bayesian Inference in Function Space - James Wu</title>
 
 
 
@@ -29,13 +29,15 @@
 
 <meta property="og:locale" content="en-US">
 <meta property="og:site_name" content="James Wu">
-<meta property="og:title" content="Terms and Privacy Policy">
+<meta property="og:title" content="Near-Optimal Approximations for Bayesian Inference in Function Space">
 
 
-  <link rel="canonical" href="https://jswu18.github.io/terms/">
-  <meta property="og:url" content="https://jswu18.github.io/terms/">
+  <link rel="canonical" href="https://jswu18.github.io/publication/2025-02-25-near-optimal-approximations-for-bayesian-inference-in-function-space"">
+  <meta property="og:url" content="https://jswu18.github.io/publication/2025-02-25-near-optimal-approximations-for-bayesian-inference-in-function-space"">
 
 
+
+  <meta property="og:description" content="A scalable inference algorithm for Bayes posteriors defined on a reproducing kernel Hilbert space (RKHS).">
 
 
 
@@ -48,6 +50,9 @@
 
 
 
+
+  <meta property="og:type" content="article">
+  <meta property="article:published_time" content="2025-02-25T00:00:00-08:00">
 
 
 
@@ -245,80 +250,49 @@
 
 
   <article class="page" itemscope itemtype="http://schema.org/CreativeWork">
-    <meta itemprop="headline" content="Terms and Privacy Policy">
+    <meta itemprop="headline" content="Near-Optimal Approximations for Bayesian Inference in Function Space">
+    <meta itemprop="description" content="A scalable inference algorithm for Bayes posteriors defined on a reproducing kernel Hilbert space (RKHS).">
+    <meta itemprop="datePublished" content="February 25, 2025">
     
-    
-    <meta itemprop="dateModified" content="June 06, 2016">
 
     <div class="page__inner-wrap">
       
         <header>
-          <h1 class="page__title" itemprop="headline">Terms and Privacy Policy
+          <h1 class="page__title" itemprop="headline">Near-Optimal Approximations for Bayesian Inference in Function Space
 </h1>
           
         
-          <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Published:</strong> <time datetime="2016-06-06">June 06, 2016</time></p>
         
         
+          <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Published:</strong> <time datetime="2025-02-25T00:00:00-08:00">February 25, 2025</time></p>
         
         
              
+<!--        -->
+<!--          <p>Recommended citation: Your Name, You. (2009). &quot;Paper Title Number 1.&quot; <i>Journal 1</i>. 1(1). <a href="https://www.arxiv.org/abs/2502.18279"><u>https://www.arxiv.org/abs/2502.18279</u></a></p>-->
 <!--        -->
     
         </header>
       
 
       <section class="page__content" itemprop="text">
-        
-<aside class="sidebar__right">
-<nav class="toc">
-    <header><h4 class="nav__title"><i class="fa fa-file-text"></i> On This Page</h4></header>
-<ul class="toc__menu" id="markdown-toc">
-  <li><a href="#privacy-policy" id="markdown-toc-privacy-policy">Privacy Policy</a>    <ul>
-      <li><a href="#log-files" id="markdown-toc-log-files">Log Files</a></li>
-      <li><a href="#cookies-and-web-beacons" id="markdown-toc-cookies-and-web-beacons">Cookies and Web Beacons</a>        <ul>
-          <li><a href="#google-analytics" id="markdown-toc-google-analytics">Google Analytics</a></li>
-        </ul>
-      </li>
-    </ul>
-  </li>
-</ul>
+        <p>We propose a scalable inference algorithm for Bayes posteriors defined on a reproducing kernel Hilbert space (RKHS).
+%
+Given a likelihood function and a Gaussian random element representing the prior, the corresponding Bayes posterior measure $\Pi_{\text{B}}$ can be obtained as the stationary distribution of an RKHS-valued Langevin diffusion.
+%
+We approximate the infinite-dimensional Langevin diffusion via a projection onto the first $M$ components of the Kosambi–Karhunen–Loève expansion.
+%
+Exploiting the thus obtained approximate posterior for these $M$ components, we perform inference for $\Pi_{\text{B}}$ by relying on the law of total probability and a sufficiency assumption.
+%
+The resulting method scales as $O(M^3+JM^2)$, where $J$ is the number of samples produced from the posterior measure $\Pi_{\text{B}}$.
+Interestingly, the algorithm  recovers the posterior arising from the sparse variational Gaussian process (SVGP) \citep{titsias2009variational} as a special case—owed to the fact that the sufficiency assumption underlies both methods.
+However, whereas the SVGP is parametrically constrained to be a Gaussian process, our method is based on a non-parametric variational family $\mathcal{P}(\bbR^M)$ consisting of all  probability measures on $\bbR^M$.
+%
+As a result, our method is provably close to the optimal $M$-dimensional variational approximation of the Bayes posterior $\Pi_{\text{B}}$ in $\mathcal{P}(\bbR^M)$ for convex and Lipschitz continuous negative log likelihoods, and coincides with SVGP for the special case of a Gaussian error likelihood.</p>
 
-  </nav>
-</aside>
+<p>We also present our implementations available on <a href="https://github.com/jswu18/projected-langevin-sampling">GitHub</a>.</p>
 
-<h2 id="privacy-policy">Privacy Policy</h2>
-
-<p>The privacy of my visitors is extremely important. This Privacy Policy outlines the types of personal information that is received and collected and how it is used.</p>
-
-<p>First and foremost, I will never share your email address or any other personal information to anyone without your direct consent.</p>
-
-<h3 id="log-files">Log Files</h3>
-
-<p>Like many other websites, this site uses log files to help learn about when, from where, and how often traffic flows to this site. The information in these log files include:</p>
-
-<ul>
-  <li>Internet Protocol addresses (IP)</li>
-  <li>Types of browser</li>
-  <li>Internet Service Provider (ISP)</li>
-  <li>Date and time stamp</li>
-  <li>Referring and exit pages</li>
-  <li>Number of clicks</li>
-</ul>
-
-<p>All of this information is not linked to anything that is personally identifiable.</p>
-
-<h3 id="cookies-and-web-beacons">Cookies and Web Beacons</h3>
-
-<p>When you visit this site &#8220;convenience&#8221; cookies are stored on your computer when you submit a comment to help you log in faster to <a href="http://disqus.com">Disqus</a> the next time you leave a comment.</p>
-
-<p>Third-party advertisers may also place and read cookies on your browser and/or use web beacons to collect information. This site has no access or control over these cookies. You should review the respective privacy policies on any and all third-party ad servers for more information regarding their practices and how to opt-out.</p>
-
-<p>If you wish to disable cookies, you may do so through your web browser options. Instructions for doing so can be found on the specific web browsers&#8217; websites.</p>
-
-<h4 id="google-analytics">Google Analytics</h4>
-
-<p>Google Analytics is a web analytics tool I use to help understand how visitors engage with this website. It reports website trends using cookies and web beacons without identifying individual visitors. You can read <a href="http://www.google.com/analytics/learn/privacy.html">Google Analytics Privacy Policy</a>.</p>
+<p><a href="https://www.arxiv.org/abs/2502.18279">Download paper here</a></p>
 
         
       </section>
@@ -334,8 +308,30 @@
 
       
 
+<section class="page__share">
+  
+    <h4 class="page__share-title">Share on</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=https://jswu18.github.io/publication/2025-02-25-near-optimal-approximations-for-bayesian-inference-in-function-space"" class="btn btn--twitter" title="Share on Twitter"><i class="fab fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https://jswu18.github.io/publication/2025-02-25-near-optimal-approximations-for-bayesian-inference-in-function-space"" class="btn btn--facebook" title="Share on Facebook"><i class="fab fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https://jswu18.github.io/publication/2025-02-25-near-optimal-approximations-for-bayesian-inference-in-function-space"" class="btn btn--linkedin" title="Share on LinkedIn"><i class="fab fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
       
 
+
+  <nav class="pagination">
+    
+      <a href="https://jswu18.github.io/publication/2023-09-11-generalised-varational-inference-for-gaussian-processes" class="pagination--pager" title="Generalised Variational Inference for Gaussian Processes (Msc. Thesis)
+">Previous</a>
+    
+    
+      <a href="#" class="pagination--pager disabled">Next</a>
+    
+  </nav>
 
     </div>
 
