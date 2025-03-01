@@ -1,7 +1,7 @@
 ---
 title: "Near-Optimal Approximations for Bayesian Inference in Function Space"
 collection: publications
-permalink: /publication/2025-02-25-near-optimal-approximations-for-bayesian-inference-in-function-space"
+permalink: /publication/2025-02-25-near-optimal-approximations-for-bayesian-inference-in-function-space
 excerpt: 'A scalable inference algorithm for Bayes posteriors defined on a reproducing kernel Hilbert space (RKHS).'
 date: 2025-02-25
 paperurl: 'https://www.arxiv.org/abs/2502.18279'
